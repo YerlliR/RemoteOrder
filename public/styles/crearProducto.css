@@ -287,6 +287,45 @@ select.form-control {
     display: none; /* Se mostrará cuando se seleccione una imagen */
 }
 
+
+
+/* Estilos adicionales para el contenedor de upload de imagen */
+.image-upload {
+    position: relative;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Cuando hay una imagen seleccionada */
+.image-upload.has-image .image-upload-icon,
+.image-upload.has-image .image-upload-text,
+.image-upload.has-image .image-upload-hint {
+    display: none;
+}
+
+/* Estilo para cuando se arrastra un archivo sobre el área */
+.image-upload.drag-over {
+    background-color: #e0f2fe;
+    border-color: #3b82f6;
+}
+
+/* Mejora para la imagen de preview */
+.preview-image {
+    margin-top: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    object-fit: contain;
+}
+
+/* Animar la transición */
+.image-upload, .preview-image {
+    transition: all 0.3s ease;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

@@ -29,7 +29,7 @@
                 $empresasUsuario = findEmpresaByUserId($_SESSION['usuario']['id']);
 
                 foreach ( $empresasUsuario as $empresa ) {
-                    echo '<div class="company-card">
+                    echo '<div class="company-card tarjetaEmpresaJs " data-empresa-id="' . $empresa->getId() . '">
                             <div class="logo-container">
                                 <img src=" ../../' . $empresa->getRutaLogo() . '" alt="Logo Empresa ' . $empresa->getNombre() . '">
                             </div>

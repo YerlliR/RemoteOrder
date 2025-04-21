@@ -63,4 +63,22 @@ function findEmpresaByUserId($userId) {
     return $empresas;
 }
 
+function findById($empresaId) {
+    try {
+        $db = new conexionDb();
+        $conn = $db->getConnection();
+        $stmt = $conn->prepare("SELECT * FROM empresas WHERE id = :empresaId");
+        $stmt->bindParam(':empresaId', $empresaId);
+        $stmt->execute();
+        $empresa = $stmt->fetch(PDO::FETCH_ASSOC);
+        $db->closeConnection();
+    } catch (Exception $e) {
+        echo "Error al buscar la empresa: " . $e->getMessage();
+    }
+
+    return $empresa;
+}
+
+
+
 ?>

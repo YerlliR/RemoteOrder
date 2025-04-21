@@ -9,3 +9,7 @@ addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+function cambiarEmpresa(){
+    window.location.href = './seleccionEmpresa.php';
+}

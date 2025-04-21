@@ -1,3 +1,9 @@
+<?php 
+    session_start();
+    include_once '../dao/categoriaDao.php';
+        include_once '../model/categoria.php';
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,10 +26,10 @@
         <div class="form-container">
             <h1 class="form-title">Crear Nuevo Producto</h1>
             
-            <form id="productoForm" action="#" method="post" enctype="multipart/form-data">
+            <form id="productoForm" action="../actions/crearProducto.php" method="post" enctype="multipart/form-data">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="codigo_seguimiento">Código de Seguimiento</label>
+                        <label for="codigo_seguimiento">Código de Seguimiento *</label>
                         <input type="number" id="codigo_seguimiento" name="codigo_seguimiento" class="form-control" placeholder="Ej: 1234567890" required>
                         <span class="form-hint">Código único para seguimiento del producto</span>
                     </div>
@@ -36,7 +42,7 @@
                 
                 <div class="form-group">
                     <label for="descripcion">Descripción</label>
-                    <textarea id="descripcion" name="descripcion" class="form-control textarea-control" placeholder="Descripción detallada del producto"></textarea>
+                    <textarea id="descripcion" name="descripcion" class="form-control textarea-control" placeholder="Descripción detallada del producto" ></textarea>
                 </div>
                 
                 <div class="form-row">
@@ -44,11 +50,14 @@
                         <label for="categoria">Categoría</label>
                         <select id="categoria" name="id_categoria" class="form-control" required>
                             <option value="">Seleccionar categoría</option>
-                            <option value="1">Electrónicos</option>
-                            <option value="2">Hogar</option>
-                            <option value="3">Oficina</option>
-                            <option value="4">Alimentos</option>
-                            <option value="5">Ropa</option>
+                            <?php
+                                $idEmpresa = (string) $_SESSION['empresa']['id'];
+                                $categorias = findCategoriaByEmpresaId($idEmpresa[0]);
+
+                                foreach ($categorias as $categoria) {
+                                    echo '<option style="color: ' . $categoria->getColor() . '" value="' . $categoria->getId() . '">' . $categoria->getNombre() . '</option>';
+                                }
+                            ?>
                         </select>
                     </div>
                     
@@ -90,6 +99,7 @@
             </form>
         </div>
     </div>
+
 
     <script src="../../public/js/creacionProducto.js"></script>
     <script src="../../public/js/menuLateral.js"></script>
