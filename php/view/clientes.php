@@ -1,6 +1,6 @@
 <?php
     session_start();
-    // Aquí iría la lógica para cargar clientes
+    // Aquí iría la lógica para cargar las empresas disponibles
 ?>
 
 <!DOCTYPE html>
@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemoteOrder - Clientes</title>
+    <title>RemoteOrder - Explorador de Empresas</title>
     <link rel="stylesheet" href="../../public/styles/clientes.css">
     <link rel="stylesheet" href="../../public/styles/panelPrincipal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -21,56 +21,56 @@
     <!-- Sidebar / Menú lateral -->
     <?php include 'elements/menuLateral.php'; ?>
 
-    <!-- Contenido principal - Clientes -->
-    <div class="clientes-container">
-        <div class="clientes-header">
-            <h1 class="clientes-title">Gestión de Clientes</h1>
-            <div class="clientes-actions">
+    <!-- Contenido principal - Explorador de Empresas -->
+    <div class="empresas-container">
+        <div class="empresas-header">
+            <h1 class="empresas-title">Explorador de Empresas</h1>
+            <div class="empresas-actions">
                 <div class="search-container">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" class="search-input" placeholder="Buscar clientes...">
+                    <input type="text" class="search-input" placeholder="Buscar empresas...">
                 </div>
-                <button class="btn-add-cliente">
-                    <i class="fas fa-plus"></i>
-                    Nuevo Cliente
+                <button class="btn-view-favorites" id="btn-mis-favoritos">
+                    <i class="fas fa-star"></i>
+                    Mis Favoritos
+                </button>
+                <button class="btn-view-favorites" id="btn-mis-solicitudes">
+                    <i class="fas fa-envelope" style="color: #ffffff;"></i>
+                    Mis Solicitudes
                 </button>
             </div>
         </div>
 
         <div class="filters-container">
-            <select class="filter-select">
-                <option value="">Todos los tipos</option>
-                <option value="empresa">Empresa</option>
-                <option value="particular">Particular</option>
+            <select class="filter-select" id="filter-sector">
+                <option value="">Todos los sectores</option>
+                <option value="tecnologia">Tecnología</option>
+                <option value="servicios">Servicios Profesionales</option>
+                <option value="comercio">Comercio</option>
+                <option value="industria">Industria</option>
             </select>
-            <select class="filter-select">
-                <option value="">Estado</option>
-                <option value="activo">Activo</option>
-                <option value="inactivo">Inactivo</option>
+            <select class="filter-select" id="filter-rating">
+                <option value="">Todas las valoraciones</option>
+                <option value="5">5 estrellas</option>
+                <option value="4">4+ estrellas</option>
+                <option value="3">3+ estrellas</option>
             </select>
-            <select class="filter-select">
+            <select class="filter-select" id="filter-sort">
                 <option value="">Ordenar por</option>
-                <option value="nombre-asc">Nombre (A-Z)</option>
-                <option value="nombre-desc">Nombre (Z-A)</option>
+                <option value="popular">Más populares</option>
                 <option value="reciente">Más recientes</option>
-                <option value="antiguo">Más antiguos</option>
+                <option value="valoracion">Mejor valorados</option>
             </select>
         </div>
 
-        <!-- Vista de tabla -->
-        <div class="clientes-table-container">
-            <table class="clientes-table">
+        <!-- Vista de tabla para escritorio -->
+        <div class="empresas-table-container">
+            <table class="empresas-table">
                 <thead>
                     <tr>
                         <th>
                             <div class="th-content">
-                                <input type="checkbox" id="select-all">
-                                <label for="select-all"></label>
-                            </div>
-                        </th>
-                        <th>
-                            <div class="th-content">
-                                Cliente <i class="fas fa-sort"></i>
+                                Empresa <i class="fas fa-sort"></i>
                             </div>
                         </th>
                         <th>
@@ -80,401 +80,269 @@
                         </th>
                         <th>
                             <div class="th-content">
-                                CIF/NIF <i class="fas fa-sort"></i>
+                                Sector <i class="fas fa-sort"></i>
                             </div>
                         </th>
                         <th>
                             <div class="th-content">
-                                Tipo <i class="fas fa-sort"></i>
-                            </div>
-                        </th>
-                        <th>
-                            <div class="th-content">
-                                Estado <i class="fas fa-sort"></i>
+                                Valoración <i class="fas fa-sort"></i>
                             </div>
                         </th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Ejemplo de datos -->
                     <tr>
                         <td>
-                            <div class="td-content">
-                                <input type="checkbox" id="select-1">
-                                <label for="select-1"></label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="cliente-info">
-                                <div class="cliente-avatar">EG</div>
-                                <div class="cliente-details">
-                                    <div class="cliente-name">Empresa Global S.L.</div>
-                                    <div class="cliente-email">contacto@empresaglobal.com</div>
+                            <div class="empresa-info">
+                                <div class="empresa-avatar">EG</div>
+                                <div class="empresa-details">
+                                    <div class="empresa-name">Empresa Global S.L.</div>
+                                    <div class="empresa-description">Servicios tecnológicos integrales</div>
                                 </div>
                             </div>
                         </td>
                         <td>
-                            <div class="cliente-contact">
-                                <div>María Rodríguez</div>
+                            <div class="empresa-contact">
+                                <div>contacto@empresaglobal.com</div>
                                 <div>+34 612 345 678</div>
                             </div>
                         </td>
-                        <td>B12345678</td>
-                        <td><span class="tag tag-empresa">Empresa</span></td>
-                        <td><span class="status status-active">Activo</span></td>
+                        <td><span class="tag tag-tecnologia">Tecnología</span></td>
+                        <td>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span>4.5</span>
+                            </div>
+                        </td>
                         <td>
                             <div class="actions-container">
-                                <button class="btn-action btn-view" title="Ver detalles">
+                                <button class="btn-action btn-view" title="Ver perfil">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="btn-action btn-edit" title="Editar">
-                                    <i class="fas fa-pen"></i>
-                                </button>
-                                <button class="btn-action btn-delete" title="Eliminar">
-                                    <i class="fas fa-trash"></i>
+                                <button class="btn-action btn-favorite" title="Añadir a favoritos">
+                                    <i class="far fa-star"></i>
                                 </button>
                             </div>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <div class="td-content">
-                                <input type="checkbox" id="select-2">
-                                <label for="select-2"></label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="cliente-info">
-                                <div class="cliente-avatar">TP</div>
-                                <div class="cliente-details">
-                                    <div class="cliente-name">Tecnologías Profesionales</div>
-                                    <div class="cliente-email">info@tecnopro.com</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="cliente-contact">
-                                <div>Carlos Sánchez</div>
-                                <div>+34 623 456 789</div>
-                            </div>
-                        </td>
-                        <td>B87654321</td>
-                        <td><span class="tag tag-empresa">Empresa</span></td>
-                        <td><span class="status status-active">Activo</span></td>
-                        <td>
-                            <div class="actions-container">
-                                <button class="btn-action btn-view" title="Ver detalles">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="btn-action btn-edit" title="Editar">
-                                    <i class="fas fa-pen"></i>
-                                </button>
-                                <button class="btn-action btn-delete" title="Eliminar">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="td-content">
-                                <input type="checkbox" id="select-3">
-                                <label for="select-3"></label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="cliente-info">
-                                <div class="cliente-avatar">JL</div>
-                                <div class="cliente-details">
-                                    <div class="cliente-name">Juan López García</div>
-                                    <div class="cliente-email">juanlopez@email.com</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="cliente-contact">
-                                <div>Juan López</div>
-                                <div>+34 634 567 890</div>
-                            </div>
-                        </td>
-                        <td>12345678A</td>
-                        <td><span class="tag tag-particular">Particular</span></td>
-                        <td><span class="status status-active">Activo</span></td>
-                        <td>
-                            <div class="actions-container">
-                                <button class="btn-action btn-view" title="Ver detalles">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="btn-action btn-edit" title="Editar">
-                                    <i class="fas fa-pen"></i>
-                                </button>
-                                <button class="btn-action btn-delete" title="Eliminar">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="td-content">
-                                <input type="checkbox" id="select-4">
-                                <label for="select-4"></label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="cliente-info">
-                                <div class="cliente-avatar">DS</div>
-                                <div class="cliente-details">
-                                    <div class="cliente-name">Distribuciones Sur</div>
-                                    <div class="cliente-email">ventas@distsur.com</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="cliente-contact">
-                                <div>Ana Martínez</div>
-                                <div>+34 645 678 901</div>
-                            </div>
-                        </td>
-                        <td>B98765432</td>
-                        <td><span class="tag tag-empresa">Empresa</span></td>
-                        <td><span class="status status-inactive">Inactivo</span></td>
-                        <td>
-                            <div class="actions-container">
-                                <button class="btn-action btn-view" title="Ver detalles">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="btn-action btn-edit" title="Editar">
-                                    <i class="fas fa-pen"></i>
-                                </button>
-                                <button class="btn-action btn-delete" title="Eliminar">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="td-content">
-                                <input type="checkbox" id="select-5">
-                                <label for="select-5"></label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="cliente-info">
-                                <div class="cliente-avatar">LR</div>
-                                <div class="cliente-details">
-                                    <div class="cliente-name">Laura Ruiz Fernández</div>
-                                    <div class="cliente-email">lauraruiz@email.com</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="cliente-contact">
-                                <div>Laura Ruiz</div>
-                                <div>+34 656 789 012</div>
-                            </div>
-                        </td>
-                        <td>87654321B</td>
-                        <td><span class="tag tag-particular">Particular</span></td>
-                        <td><span class="status status-active">Activo</span></td>
-                        <td>
-                            <div class="actions-container">
-                                <button class="btn-action btn-view" title="Ver detalles">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="btn-action btn-edit" title="Editar">
-                                    <i class="fas fa-pen"></i>
-                                </button>
-                                <button class="btn-action btn-delete" title="Eliminar">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+
                 </tbody>
             </table>
         </div>
 
         <!-- Vista de tarjetas para móvil -->
-        <div class="clientes-cards">
-            <!-- Cliente 1 -->
-            <div class="cliente-card">
-                <div class="cliente-card-header">
-                    <div class="cliente-info">
-                        <div class="cliente-avatar">EG</div>
-                        <div class="cliente-details">
-                            <div class="cliente-name">Empresa Global S.L.</div>
-                            <div class="cliente-email">contacto@empresaglobal.com</div>
+        <div class="empresas-cards">
+            <!-- Empresa 1 -->
+            <div class="empresa-card" data-id="1">
+                <div class="empresa-card-header">
+                    <div class="empresa-info">
+                        <div class="empresa-avatar">EG</div>
+                        <div class="empresa-details">
+                            <div class="empresa-name">Empresa Global S.L.</div>
+                            <div class="empresa-description">Servicios tecnológicos integrales</div>
                         </div>
                     </div>
-                    <span class="status status-active">Activo</span>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span>4.5</span>
+                    </div>
                 </div>
-                <div class="cliente-card-body">
+                <div class="empresa-card-body">
                     <div class="info-row">
-                        <div class="info-label">Contacto:</div>
-                        <div class="info-value">María Rodríguez</div>
+                        <div class="info-label">Email:</div>
+                        <div class="info-value">contacto@empresaglobal.com</div>
                     </div>
                     <div class="info-row">
                         <div class="info-label">Teléfono:</div>
                         <div class="info-value">+34 612 345 678</div>
                     </div>
                     <div class="info-row">
-                        <div class="info-label">CIF/NIF:</div>
-                        <div class="info-value">B12345678</div>
+                        <div class="info-label">Sector:</div>
+                        <div class="info-value"><span class="tag tag-tecnologia">Tecnología</span></div>
                     </div>
                     <div class="info-row">
-                        <div class="info-label">Tipo:</div>
-                        <div class="info-value"><span class="tag tag-empresa">Empresa</span></div>
+                        <div class="info-label">Servicios:</div>
+                        <div class="info-value">Desarrollo web, Consultoría IT, Cloud</div>
                     </div>
                 </div>
-                <div class="cliente-card-footer">
-                    <button class="btn-action btn-view" title="Ver detalles">
+                <div class="empresa-card-footer">
+                    <button class="btn-action btn-view" title="Ver perfil">
                         <i class="fas fa-eye"></i>
                     </button>
-                    <button class="btn-action btn-edit" title="Editar">
-                        <i class="fas fa-pen"></i>
+                    <button class="btn-action btn-contact" title="Solicitar servicio">
+                        <i class="fas fa-envelope"></i>
                     </button>
-                    <button class="btn-action btn-delete" title="Eliminar">
-                        <i class="fas fa-trash"></i>
+                    <button class="btn-action btn-favorite" title="Añadir a favoritos">
+                        <i class="far fa-star"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Cliente 2 -->
-            <div class="cliente-card">
-                <div class="cliente-card-header">
-                    <div class="cliente-info">
-                        <div class="cliente-avatar">JL</div>
-                        <div class="cliente-details">
-                            <div class="cliente-name">Juan López García</div>
-                            <div class="cliente-email">juanlopez@email.com</div>
+            <!-- Empresa 2 -->
+            <div class="empresa-card" data-id="2">
+                <div class="empresa-card-header">
+                    <div class="empresa-info">
+                        <div class="empresa-avatar">TP</div>
+                        <div class="empresa-details">
+                            <div class="empresa-name">Tecnologías Profesionales</div>
+                            <div class="empresa-description">Desarrollo de software a medida</div>
                         </div>
                     </div>
-                    <span class="status status-active">Activo</span>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <span>5.0</span>
+                    </div>
                 </div>
-                <div class="cliente-card-body">
+                <div class="empresa-card-body">
                     <div class="info-row">
-                        <div class="info-label">Contacto:</div>
-                        <div class="info-value">Juan López</div>
+                        <div class="info-label">Email:</div>
+                        <div class="info-value">info@tecnopro.com</div>
                     </div>
                     <div class="info-row">
                         <div class="info-label">Teléfono:</div>
-                        <div class="info-value">+34 634 567 890</div>
+                        <div class="info-value">+34 623 456 789</div>
                     </div>
                     <div class="info-row">
-                        <div class="info-label">CIF/NIF:</div>
-                        <div class="info-value">12345678A</div>
+                        <div class="info-label">Sector:</div>
+                        <div class="info-value"><span class="tag tag-tecnologia">Tecnología</span></div>
                     </div>
                     <div class="info-row">
-                        <div class="info-label">Tipo:</div>
-                        <div class="info-value"><span class="tag tag-particular">Particular</span></div>
+                        <div class="info-label">Servicios:</div>
+                        <div class="info-value">Desarrollo de software, Apps móviles</div>
                     </div>
                 </div>
-                <div class="cliente-card-footer">
-                    <button class="btn-action btn-view" title="Ver detalles">
+                <div class="empresa-card-footer">
+                    <button class="btn-action btn-view" title="Ver perfil">
                         <i class="fas fa-eye"></i>
                     </button>
-                    <button class="btn-action btn-edit" title="Editar">
-                        <i class="fas fa-pen"></i>
+                    <button class="btn-action btn-contact" title="Solicitar servicio">
+                        <i class="fas fa-envelope"></i>
                     </button>
-                    <button class="btn-action btn-delete" title="Eliminar">
-                        <i class="fas fa-trash"></i>
+                    <button class="btn-action btn-favorite" title="Añadir a favoritos">
+                        <i class="far fa-star"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Paginación -->
-        <div class="pagination">
-            <div class="page-item disabled">
-                <i class="fas fa-chevron-left"></i>
-            </div>
-            <div class="page-item active">1</div>
-            <div class="page-item">2</div>
-            <div class="page-item">3</div>
-            <div class="page-item">
-                <i class="fas fa-chevron-right"></i>
-            </div>
-        </div>
+
     </div>
 
-    <!-- Modal para añadir/editar cliente -->
-    <div id="modal-cliente" class="modal">
-        <div class="modal-content">
+    <!-- Modal para ver perfil detallado -->
+    <div id="modal-perfil" class="modal">
+        <div class="modal-content modal-perfil-content">
             <div class="modal-header">
-                <h2>Nuevo Cliente</h2>
+                <h2>Perfil de Empresa</h2>
                 <button class="modal-close"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
-                <form id="form-cliente">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="tipo-cliente">Tipo de Cliente</label>
-                            <select id="tipo-cliente" class="form-control" required>
-                                <option value="">Seleccionar tipo</option>
-                                <option value="empresa">Empresa</option>
-                                <option value="particular">Particular</option>
-                            </select>
+                <div class="perfil-header">
+                    <div class="empresa-avatar perfil-avatar">EG</div>
+                    <div class="perfil-info">
+                        <h3 id="perfil-nombre">Empresa Global S.L.</h3>
+                        <div class="perfil-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>4.5</span> (127 opiniones)
                         </div>
-                        <div class="form-group">
-                            <label for="cif-nif">CIF/NIF</label>
-                            <input type="text" id="cif-nif" class="form-control" placeholder="CIF/NIF" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="nombre-cliente">Nombre/Razón Social</label>
-                        <input type="text" id="nombre-cliente" class="form-control" placeholder="Nombre completo o razón social" required>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="email-cliente">Email</label>
-                            <input type="email" id="email-cliente" class="form-control" placeholder="correo@ejemplo.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="telefono-cliente">Teléfono</label>
-                            <input type="tel" id="telefono-cliente" class="form-control" placeholder="+34 XXX XXX XXX">
+                        <div class="perfil-metadata">
+                            <span class="tag tag-tecnologia">Tecnología</span>
+                            <span class="metadata-item"><i class="fas fa-map-marker-alt"></i> Madrid, España</span>
+                            <span class="metadata-item"><i class="fas fa-calendar-alt"></i> Desde 2015</span>
                         </div>
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label for="direccion-cliente">Dirección</label>
-                        <input type="text" id="direccion-cliente" class="form-control" placeholder="Calle, número, piso...">
+                <div class="perfil-section">
+                    <h4>Sobre la empresa</h4>
+                    <p id="perfil-descripcion">Empresa Global S.L. es una empresa líder en servicios tecnológicos que ofrece soluciones integrales para negocios de todos los tamaños. Especializada en desarrollo web, consultoría IT y servicios cloud, con más de 8 años de experiencia en el sector.</p>
+                </div>
+
+                <div class="perfil-section">
+                    <h4>Servicios</h4>
+                    <div class="servicios-tags">
+                        <span class="service-tag">Desarrollo Web</span>
+                        <span class="service-tag">Consultoría IT</span>
+                        <span class="service-tag">Cloud Computing</span>
+                        <span class="service-tag">Seguridad Informática</span>
+                        <span class="service-tag">Soporte Técnico</span>
                     </div>
+                </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="ciudad-cliente">Ciudad</label>
-                            <input type="text" id="ciudad-cliente" class="form-control" placeholder="Ciudad">
+                <div class="perfil-section">
+                    <h4>Contacto</h4>
+                    <div class="contacto-info">
+                        <div class="contacto-item">
+                            <i class="fas fa-envelope"></i>
+                            <span id="perfil-email">contacto@empresaglobal.com</span>
                         </div>
-                        <div class="form-group">
-                            <label for="cp-cliente">Código Postal</label>
-                            <input type="text" id="cp-cliente" class="form-control" placeholder="Código postal">
+                        <div class="contacto-item">
+                            <i class="fas fa-phone"></i>
+                            <span id="perfil-telefono">+34 612 345 678</span>
+                        </div>
+                        <div class="contacto-item">
+                            <i class="fas fa-globe"></i>
+                            <span id="perfil-web">www.empresaglobal.com</span>
                         </div>
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label for="contacto-nombre">Nombre de Contacto</label>
-                        <input type="text" id="contacto-nombre" class="form-control" placeholder="Nombre de la persona de contacto">
+                <div class="perfil-section">
+                    <h4>Valoraciones recientes</h4>
+                    <div class="valoraciones">
+                        <div class="valoracion-item">
+                            <div class="valoracion-header">
+                                <div class="valoracion-autor">María L.</div>
+                                <div class="valoracion-estrellas">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="valoracion-fecha">Hace 2 semanas</div>
+                            <div class="valoracion-texto">
+                                Excelente servicio. El desarrollo web superó nuestras expectativas y el soporte posterior a la entrega ha sido impecable.
+                            </div>
+                        </div>
+                        <div class="valoracion-item">
+                            <div class="valoracion-header">
+                                <div class="valoracion-autor">Carlos P.</div>
+                                <div class="valoracion-estrellas">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="valoracion-fecha">Hace 1 mes</div>
+                            <div class="valoracion-texto">
+                                Muy satisfecho con la migración cloud que realizaron. Profesionales y eficientes.
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="notas-cliente">Notas</label>
-                        <textarea id="notas-cliente" class="form-control textarea-control" placeholder="Información adicional sobre el cliente"></textarea>
-                    </div>
-
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="cliente-activo" checked>
-                        <label for="cliente-activo">Cliente activo</label>
-                    </div>
-                </form>
+                </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary modal-cancel">Cancelar</button>
-                <button class="btn btn-primary" id="guardar-cliente">Guardar Cliente</button>
+                <button class="btn btn-primary btn-solicitar-desde-perfil">Solicitar Servicio</button>
             </div>
         </div>
     </div>

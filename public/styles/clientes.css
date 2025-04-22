@@ -1,4 +1,4 @@
-/* Estilos para la vista de clientes */
+/* Estilos para el explorador de empresas */
 :root {
     --primary-color: #3b82f6;
     --secondary-color: #60a5fa;
@@ -17,20 +17,20 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.clientes-container {
+.empresas-container {
     padding: 20px;
     flex-grow: 1;
     animation: fadeIn 0.8s ease-out;
 }
 
-.clientes-header {
+.empresas-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
 }
 
-.clientes-title {
+.empresas-title {
     margin-bottom: 10px;
     font-size: 28px;
     color: #3b82f6;
@@ -39,7 +39,7 @@
     position: relative;
 }
 
-.clientes-title::after {
+.empresas-title::after {
     content: '';
     position: absolute;
     bottom: -6px;
@@ -50,12 +50,12 @@
     border-radius: 50px;
 }
 
-.clientes-actions {
+.empresas-actions {
     display: flex;
     gap: 15px;
 }
 
-.btn-add-cliente {
+.btn-view-favorites {
     padding: 10px 18px;
     background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
     color: white;
@@ -70,11 +70,12 @@
     box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
 }
 
-.btn-add-cliente i {
+.btn-view-favorites i {
     margin-right: 8px;
+    color: #FFC107;
 }
 
-.btn-add-cliente:hover {
+.btn-view-favorites:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
 }
@@ -139,7 +140,7 @@
 }
 
 /* Estilos para la tabla */
-.clientes-table-container {
+.empresas-table-container {
     background-color: white;
     border-radius: 16px;
     box-shadow: 0 8px 20px rgba(91, 164, 255, 0.12);
@@ -147,18 +148,18 @@
     margin-bottom: 30px;
 }
 
-.clientes-table {
+.empresas-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.clientes-table th, .clientes-table td {
+.empresas-table th, .empresas-table td {
     padding: 14px 20px;
     text-align: left;
     border-bottom: 1px solid var(--medium-gray);
 }
 
-.clientes-table th {
+.empresas-table th {
     background-color: var(--light-gray);
     font-weight: 600;
     color: var(--dark-gray);
@@ -182,18 +183,13 @@
     color: var(--primary-color);
 }
 
-.td-content {
-    display: flex;
-    align-items: center;
-}
-
-.cliente-info {
+.empresa-info {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.cliente-avatar {
+.empresa-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -206,38 +202,39 @@
     font-size: 14px;
 }
 
-.cliente-details {
+.empresa-details {
     display: flex;
     flex-direction: column;
 }
 
-.cliente-name {
+.empresa-name {
     font-weight: 600;
     color: var(--text-color);
     margin-bottom: 2px;
 }
 
-.cliente-email {
+.empresa-description {
     font-size: 13px;
     color: var(--dark-gray);
 }
 
-.cliente-contact {
+.empresa-contact {
     display: flex;
     flex-direction: column;
     gap: 2px;
 }
 
-.cliente-contact div:first-child {
+.empresa-contact div:first-child {
     font-weight: 500;
     color: var(--text-color);
 }
 
-.cliente-contact div:last-child {
+.empresa-contact div:last-child {
     font-size: 13px;
     color: var(--dark-gray);
 }
 
+/* Estilos para las etiquetas de sector */
 .tag {
     display: inline-block;
     padding: 4px 10px;
@@ -246,32 +243,47 @@
     font-weight: 600;
 }
 
-.tag-empresa {
+.tag-tecnologia {
     background-color: #e0f2fe;
     color: #0284c7;
 }
 
-.tag-particular {
+.tag-servicios {
     background-color: #fef3c7;
     color: #d97706;
 }
 
-.status {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
+.tag-logistica {
+    background-color: #e0e7ff;
+    color: #4f46e5;
+}
+
+.tag-industria {
+    background-color: #dcfce7;
+    color: #16a34a;
+}
+
+.tag-comercio {
+    background-color: #fce7f3;
+    color: #db2777;
+}
+
+/* Estrellas de valoración */
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.rating i {
+    color: #f59e0b;
+    font-size: 14px;
+}
+
+.rating span {
+    margin-left: 5px;
     font-weight: 600;
-}
-
-.status-active {
-    background-color: #d1fae5;
-    color: #059669;
-}
-
-.status-inactive {
-    background-color: #fee2e2;
-    color: #dc2626;
+    color: var(--text-color);
 }
 
 .actions-container {
@@ -301,30 +313,30 @@
     background-color: #e2e8f0;
 }
 
-.btn-edit {
+.btn-contact {
     background-color: #e0f2fe;
     color: #0284c7;
 }
 
-.btn-edit:hover {
+.btn-contact:hover {
     background-color: #bae6fd;
 }
 
-.btn-delete {
-    background-color: #fee2e2;
-    color: #dc2626;
+.btn-favorite {
+    background-color: #fef3c7;
+    color: #d97706;
 }
 
-.btn-delete:hover {
-    background-color: #fecaca;
+.btn-favorite:hover {
+    background-color: #fde68a;
 }
 
 /* Estilos para tarjetas en vista móvil */
-.clientes-cards {
+.empresas-cards {
     display: none;
 }
 
-.cliente-card {
+.empresa-card {
     background-color: white;
     border-radius: 16px;
     box-shadow: 0 8px 20px rgba(91, 164, 255, 0.12);
@@ -332,15 +344,15 @@
     margin-bottom: 20px;
 }
 
-.cliente-card-header {
+.empresa-card-header {
     padding: 16px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     border-bottom: 1px solid var(--medium-gray);
 }
 
-.cliente-card-body {
+.empresa-card-body {
     padding: 16px;
 }
 
@@ -361,7 +373,7 @@
     color: var(--text-color);
 }
 
-.cliente-card-footer {
+.empresa-card-footer {
     padding: 14px 16px;
     border-top: 1px solid var(--medium-gray);
     display: flex;
@@ -408,41 +420,7 @@
     cursor: not-allowed;
 }
 
-/* Estilos para checkbox personalizados */
-input[type="checkbox"] {
-    display: none;
-}
-
-input[type="checkbox"] + label {
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    background-color: white;
-    border: 1px solid var(--medium-gray);
-    border-radius: 4px;
-    cursor: pointer;
-    position: relative;
-    transition: all 0.2s;
-}
-
-input[type="checkbox"]:checked + label {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-input[type="checkbox"]:checked + label::after {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 6px;
-    width: 4px;
-    height: 8px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-}
-
-/* Estilos para el modal */
+/* Estilos para el modal de solicitud */
 .modal {
     display: none;
     position: fixed;
@@ -471,6 +449,10 @@ input[type="checkbox"]:checked + label::after {
     overflow: hidden;
     position: relative;
     animation: slideIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.modal-perfil-content {
+    max-width: 800px;
 }
 
 .modal-header {
@@ -581,6 +563,7 @@ input[type="checkbox"]:checked + label::after {
 }
 
 .checkbox-container input[type="checkbox"] {
+    display: inline-block;
     width: 18px;
     height: 18px;
     margin-right: 10px;
@@ -589,31 +572,13 @@ input[type="checkbox"]:checked + label::after {
 }
 
 .checkbox-container label {
+    display: inline;
+    width: auto;
+    height: auto;
     font-size: 14px;
     color: #64748b;
     cursor: pointer;
     margin-bottom: 0;
-}
-
-.checkbox-container input[type="checkbox"] {
-    display: inline-block;
-}
-
-.checkbox-container input[type="checkbox"] + label {
-    display: inline;
-    width: auto;
-    height: auto;
-    background-color: transparent;
-    border: none;
-    margin-left: 10px;
-}
-
-.checkbox-container input[type="checkbox"]:checked + label {
-    background-color: transparent;
-}
-
-.checkbox-container input[type="checkbox"]:checked + label::after {
-    content: none;
 }
 
 /* Botones del modal */
@@ -657,6 +622,141 @@ input[type="checkbox"]:checked + label::after {
     transform: translateY(-2px);
 }
 
+/* Estilos para el perfil detallado */
+.perfil-header {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.perfil-avatar {
+    width: 80px;
+    height: 80px;
+    font-size: 28px;
+}
+
+.perfil-info h3 {
+    font-size: 24px;
+    color: var(--text-color);
+    margin-bottom: 8px;
+}
+
+.perfil-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    color: var(--dark-gray);
+}
+
+.perfil-rating i {
+    color: #f59e0b;
+    font-size: 16px;
+}
+
+.perfil-metadata {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.metadata-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--dark-gray);
+    font-size: 14px;
+}
+
+.perfil-section {
+    margin-bottom: 25px;
+}
+
+.perfil-section h4 {
+    font-size: 18px;
+    color: var(--primary-color);
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.perfil-section p {
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.servicios-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.service-tag {
+    padding: 6px 14px;
+    background-color: var(--light-gray);
+    color: var(--text-color);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.contacto-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contacto-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.contacto-item i {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--light-gray);
+    color: var(--primary-color);
+    border-radius: 8px;
+}
+
+.valoraciones {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.valoracion-item {
+    background-color: var(--light-gray);
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.valoracion-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.valoracion-autor {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.valoracion-fecha {
+    font-size: 12px;
+    color: var(--dark-gray);
+    margin-bottom: 8px;
+}
+
+.valoracion-texto {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
 /* Animaciones */
 @keyframes fadeIn {
     from {
@@ -682,19 +782,19 @@ input[type="checkbox"]:checked + label::after {
 
 /* Media queries */
 @media (max-width: 1024px) {
-    .cliente-contact div:last-child {
+    .empresa-contact div:last-child {
         display: none;
     }
 }
 
 @media (max-width: 768px) {
-    .clientes-header {
+    .empresas-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
     }
     
-    .clientes-actions {
+    .empresas-actions {
         width: 100%;
         flex-wrap: wrap;
     }
@@ -703,11 +803,11 @@ input[type="checkbox"]:checked + label::after {
         width: 100%;
     }
     
-    .clientes-table-container {
+    .empresas-table-container {
         display: none;
     }
     
-    .clientes-cards {
+    .empresas-cards {
         display: block;
     }
     
@@ -722,5 +822,15 @@ input[type="checkbox"]:checked + label::after {
     .form-row {
         flex-direction: column;
         gap: 0;
+    }
+    
+    .perfil-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .perfil-metadata {
+        justify-content: center;
     }
 }

@@ -16,8 +16,6 @@
     <?php include 'elements/menuLateral.php'; ?>
 
     <!-- Contenido principal -->
-
-
         <div class="dashboard">
             <h2 class="dashboard-title">Resumen de Actividad</h2>
             
@@ -150,55 +148,7 @@
         </div>
     </div>
 
-    <script>
-        // Toggle sidebar on mobile
-        document.getElementById('toggleSidebar').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('active');
-        });
-
-        // Toggle user dropdown
-        document.getElementById('userButton').addEventListener('click', function() {
-            document.getElementById('userDropdown').classList.toggle('active');
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const userButton = document.getElementById('userButton');
-            const userDropdown = document.getElementById('userDropdown');
-            
-            if (!userButton.contains(event.target) && !userDropdown.contains(event.target)) {
-                userDropdown.classList.remove('active');
-            }
-        });
-
-        // Toggle submenu
-        const menuWithSubmenu = document.querySelector('.has-submenu');
-        const submenu = document.querySelector('.submenu');
-        
-        menuWithSubmenu.addEventListener('click', function() {
-            submenu.classList.toggle('submenu-active');
-            const chevron = this.querySelector('.fa-chevron-down');
-            chevron.style.transform = submenu.classList.contains('submenu-active') ? 'rotate(180deg)' : 'rotate(0)';
-        });
-
-        // Menu items click handler
-        const menuItems = document.querySelectorAll('.menu-item');
-        menuItems.forEach(item => {
-            if (!item.classList.contains('has-submenu')) {
-                item.addEventListener('click', function() {
-                    menuItems.forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            }
-        });
-
-        const submenuItems = document.querySelectorAll('.submenu-item');
-        submenuItems.forEach(item => {
-            item.addEventListener('click', function() {
-                menuItems.forEach(i => i.classList.remove('active'));
-                menuWithSubmenu.classList.add('active');
-            });
-        });
-    </script>
+    <!-- Incluir el archivo JavaScript del menú lateral -->
+    <script src="../../public/js/menuLateral.js"></script>
 </body>
 </html>

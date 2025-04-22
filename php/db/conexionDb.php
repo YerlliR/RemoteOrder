@@ -8,9 +8,9 @@
         /*
 
         private $host = '127.0.0.1:3306';
-        private $db = 'u248962232_factuPro';
-        private $user = 'u248962232_factuPro';
-        private $password = 'd41d8cd98f00b204e9800998ecf8427E';
+        private $db = 'u248962232_remoteorder';
+        private $user = 'u248962232_remoteorder';
+        private $password = 'u248962232_remoteordeR';
 
         */
 
