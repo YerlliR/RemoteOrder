@@ -10,8 +10,8 @@ $menu_items = [
     'productos' => 'Productos',
     'clientes' => 'Clientes',
     'proveedores' => 'Proveedores',
-    'proveedores2-1' => 'Proveedores 2.1',
-    'proveedores2-2' => 'Proveedores 2.2',
+    'misProveedores' => 'Mis Proveedores',
+    'explorarProveedores' => 'Explorar Proveedores',
     'facturacion' => 'Facturación'
 ];
 
@@ -19,7 +19,7 @@ $menu_items = [
 $in_pedidos_section = $current_page == 'pedidos-recibidos' || $current_page == 'pedidos-enviados';
 
 // Determinar si estamos en la sección de proveedores2
-$in_proveedores2_section = $current_page == 'proveedores2-1' || $current_page == 'proveedores2-2';
+$in_proveedores_section = $current_page == 'misProveedores' || $current_page == 'explorarProveedores';
 ?>
 
 <div class="sidebar" id="sidebar">
@@ -60,16 +60,16 @@ $in_proveedores2_section = $current_page == 'proveedores2-1' || $current_page ==
             <span>Clientes</span>
         </a>
         
-        <div class="menu-item has-submenu <?php echo ($in_proveedores2_section) ? 'active' : ''; ?>">
+        <div class="menu-item has-submenu <?php echo ($in_proveedores_section) ? 'active' : ''; ?>">
             <i class="fas fa-truck"></i>
             <span>Proveedores</span>
-            <i class="fas fa-chevron-down" style="margin-left: auto; transform: <?php echo ($in_proveedores2_section) ? 'rotate(180deg)' : 'rotate(0)'; ?>;"></i>
+            <i class="fas fa-chevron-down" style="margin-left: auto; transform: <?php echo ($in_proveedores_section) ? 'rotate(180deg)' : 'rotate(0)'; ?>;"></i>
         </div>
-        <div class="submenu <?php echo ($in_proveedores2_section) ? 'submenu-active' : ''; ?>">
-            <a href="../../php/view/misProveedores.php" class="submenu-item <?php echo ($current_page == 'proveedores2-1') ? 'active' : ''; ?>">
+        <div class="submenu <?php echo ($in_proveedores_section) ? 'submenu-active' : ''; ?>">
+            <a href="../../php/view/misProveedores.php" class="submenu-item <?php echo ($current_page == 'misProveedores') ? 'active' : ''; ?>">
                 Mis Proveedores
             </a>
-            <a href="../../php/view/explorarProveedores.php" class="submenu-item <?php echo ($current_page == 'proveedores2-2') ? 'active' : ''; ?>">
+            <a href="../../php/view/explorarProveedores.php" class="submenu-item <?php echo ($current_page == 'explorarProveedores') ? 'active' : ''; ?>">
                 Explorar Proveedores
             </a>
         </div>

@@ -10,7 +10,7 @@ include_once RUTA_DB;
 include_once RUTA_EMPRESA_MODEL;
 include_once RUTA_EMPRESA_DAO;
 
-if (isset($_POST['nombre']) && isset($_POST['sector']) && isset($_POST['numero_empleados']) && isset($_POST['descripcion']) && isset($_POST['telefono']) && isset($_POST['email']) && isset($_POST['sitio_web']) && isset($_POST['estado'])) {
+if (isset($_POST['nombre']) && isset($_POST['sector']) && isset($_POST['numero_empleados']) && isset($_POST['descripcion']) && isset($_POST['telefono']) && isset($_POST['email']) && isset($_POST['sitio_web']) && isset($_POST['estado']) && isset($_POST['pais']) && isset($_POST['ciudad'])) {
     $nombre = $_POST['nombre'] ?? '';
     $sector = $_POST['sector'] ?? '';
     $numero_empleados = $_POST['numero_empleados'] ?? 0;
@@ -19,6 +19,9 @@ if (isset($_POST['nombre']) && isset($_POST['sector']) && isset($_POST['numero_e
     $email = $_POST['email'] ?? '';
     $sitio_web = $_POST['sitio_web'] ?? '';
     $estado = isset($_POST['estado']) ? 'Activa' : 'Inactiva';
+    $pais = $_POST['pais'] ?? '';
+    $ciudad = $_POST['ciudad'] ?? '';
+
     
     if (isset($_SESSION['usuario']) && isset($_SESSION['usuario']['id'])) {
         $usuario_id = $_SESSION['usuario']['id'];
@@ -38,7 +41,7 @@ if (isset($_POST['nombre']) && isset($_POST['sector']) && isset($_POST['numero_e
         }
     }
 
-    $empresa = new Empresa(null, $nombre, $sector, $numero_empleados, $descripcion, $telefono, $email, $sitio_web, $estado, $ruta_logo, $usuario_id);
+    $empresa = new Empresa(null, $nombre, $sector, $numero_empleados, $descripcion, $telefono, $email, $sitio_web, $estado, $ruta_logo, $usuario_id, $pais, $ciudad);
     $result = crearEmpresa($empresa);
     
     if ($result > 0) {

@@ -12,9 +12,12 @@ class Empresa {
     public $estado;
     public $ruta_logo;
     public $usuario_id;
+    public $pais;
+    public $ciudad;
+
 
     // Constructor para inicializar los valores
-    public function __construct($id, $nombre, $sector, $numero_empleados, $descripcion, $telefono, $email, $sitio_web, $estado, $ruta_logo, $usuario_id) {
+    public function __construct($id, $nombre, $sector, $numero_empleados, $descripcion, $telefono, $email, $sitio_web, $estado, $ruta_logo, $usuario_id, $pais, $ciudad) {
         $this->id = $id;
         $this->nombre = $nombre;
         $this->sector = $sector;
@@ -26,6 +29,8 @@ class Empresa {
         $this->estado = $estado;
         $this->ruta_logo = $ruta_logo;
         $this->usuario_id = $usuario_id;
+        $this->pais = $pais;
+        $this->ciudad = $ciudad;
     }
 
 // Getter and Setter for 'nombre'
@@ -118,6 +123,24 @@ public function setUsuarioId($usuario_id) {
     $this->usuario_id = $usuario_id;
 }
 
+// Getter and Setter for 'pais'
+public function getPais() {
+    return $this->pais;
+}
+
+public function setPais($pais) {
+    $this->pais = $pais;
+}
+
+// Getter and Setter for 'ciudad'
+public function getCiudad() {
+    return $this->ciudad;
+}
+
+public function setCiudad($ciudad) {
+    $this->ciudad = $ciudad;
+}
+
 public function getId() {
     return $this->id;
 }
@@ -126,3 +149,4 @@ public function getId() {
 }
 
 ?>
+

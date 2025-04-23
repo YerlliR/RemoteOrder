@@ -5,12 +5,13 @@ if (!defined('RUTA_DB')) {
 }
 include_once RUTA_DB;
 include_once RUTA_EMPRESA_MODEL;
+
 function crearEmpresa(Empresa $empresa) {
 
     try {
         $db = new conexionDb();
         $conn = $db->getConnection();
-        $stmt = $conn->prepare("INSERT INTO empresas (nombre, sector, email, numero_empleados, descripcion, telefono, sitio_web, estado, ruta_logo, usuario_id) VALUES (:nombre, :sector, :email, :numero_empleados, :descripcion, :telefono, :sitio_web, :estado, :ruta_logo, :usuario_id)");
+        $stmt = $conn->prepare("INSERT INTO empresas (nombre, sector, email, numero_empleados, descripcion, telefono, sitio_web, estado, ruta_logo, usuario_id, pais, ciudad) VALUES (:nombre, :sector, :email, :numero_empleados, :descripcion, :telefono, :sitio_web, :estado, :ruta_logo, :usuario_id, :pais, :ciudad)");
         $stmt->execute([
             ':nombre' => $empresa->getNombre(),
             ':sector' => $empresa->getSector(),
@@ -21,7 +22,9 @@ function crearEmpresa(Empresa $empresa) {
             ':sitio_web' => $empresa->getSitioWeb(),
             ':estado' => $empresa->getEstado(),
             ':ruta_logo' => $empresa->getRutaLogo(),
-            ':usuario_id' => $empresa->getUsuarioId()
+            ':usuario_id' => $empresa->getUsuarioId(),
+            ':pais' => $empresa->getPais(),
+            ':ciudad' => $empresa->getCiudad()
         ]);
         $result = $stmt->rowCount();
         $db->closeConnection();
@@ -42,17 +45,19 @@ function findEmpresaByUserId($userId) {
         $stmt->execute();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $empresas[] = new Empresa(
-                $row['id'], 
-                $row['nombre'], 
-                $row['sector'], 
-                $row['numero_empleados'], 
-                $row['descripcion'], 
-                $row['telefono'], 
-                $row['email'], 
-                $row['sitio_web'], 
-                $row['estado'], 
-                $row['ruta_logo'], 
-                $row['usuario_id']
+                $row['id'],
+                $row['nombre'],
+                $row['sector'],
+                $row['numero_empleados'],
+                $row['descripcion'],
+                $row['telefono'],
+                $row['email'],
+                $row['sitio_web'],
+                $row['estado'],
+                $row['ruta_logo'],
+                $row['usuario_id'],
+                $row['pais'],
+                $row['ciudad']
             );
         }
         $db->closeConnection();
@@ -79,6 +84,36 @@ function findById($empresaId) {
     return $empresa;
 }
 
+function findAllEmpresas() {
+    $empresas = [];
+    try {
+        $db = new conexionDb();
+        $conn = $db->getConnection();
+        $stmt = $conn->prepare("SELECT * FROM empresas");
+        $stmt->execute();
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $empresas[] = new Empresa(
+                $row['id'],
+                $row['nombre'],
+                $row['sector'],
+                $row['numero_empleados'],
+                $row['descripcion'],
+                $row['telefono'],
+                $row['email'],
+                $row['sitio_web'],
+                $row['estado'],
+                $row['ruta_logo'],
+                $row['usuario_id'],
+                $row['pais'],
+                $row['ciudad']
+            );
+        }
+        $db->closeConnection();
+    } catch (Exception $e) {
+        echo "Error al buscar las empresas: " . $e->getMessage();
+    }
 
+    return $empresas;
+}
 
 ?>
