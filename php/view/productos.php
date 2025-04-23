@@ -15,9 +15,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RemoteOrder - Productos</title>
+    <link rel="stylesheet" href="../../public/styles/base.css">
+    <link rel="stylesheet" href="../../public/styles/menuLateral.css">
     <link rel="stylesheet" href="../../public/styles/productos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="../../public/styles/panelPrincipal.css">
 </head>
 <body>
     <!-- Formas flotantes decorativas -->

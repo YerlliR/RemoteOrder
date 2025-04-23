@@ -1,80 +1,5 @@
-/* Estilos para el explorador de proveedores - Estilo marketplace */
 
-/* Variables CSS */
-:root {
-    /* Colores principales */
-    --primary-color: #3b82f6;
-    --primary-light: #60a5fa;
-    --primary-dark: #2563eb;
-    --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
-    --secondary-color: #f59e0b;
-    --secondary-light: #fbbf24;
-    
-    /* Colores de texto y fondo */
-    --text-color: #334155;
-    --text-light: #64748b;
-    --bg-color: #f8fafc;
-    --bg-light: #ffffff;
-    --border-color: #e2e8f0;
-    
-    /* Colores de estado */
-    --success-color: #10b981;
-    --error-color: #ef4444;
-    
-    /* Colores de etiquetas */
-    --tag-tecnologia-bg: #dbeafe;
-    --tag-tecnologia-text: #2563eb;
-    --tag-alimentacion-bg: #fef3c7;
-    --tag-alimentacion-text: #d97706;
-    --tag-textil-bg: #f5d0fe;
-    --tag-textil-text: #a21caf;
-    --tag-construccion-bg: #dcfce7;
-    --tag-construccion-text: #16a34a;
-    --tag-logistica-bg: #e0e7ff;
-    --tag-logistica-text: #4f46e5;
-    --tag-servicios-bg: #ffedd5;
-    --tag-servicios-text: #c2410c;
-    
-    /* Radios de borde */
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 16px;
-    
-    /* Sombras */
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
-    
-    /* Transiciones y layout */
-    --transition: all 0.3s ease;
-    --sidebar-width: 260px; /* Ancho del menú lateral */
-}
-
-/* ===== RESET Y ESTILOS GENERALES ===== */
-html, body {
-    overflow-x: hidden;
-    width: 100%;
-    max-width: 100%;
-}
-
-body {
-    overflow-x: hidden;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.marketplace-container {
-    flex-grow: 1;
-    background-color: var(--bg-color);
-    min-height: 100vh;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-.marketplace-container * {
-    box-sizing: border-box;
-}
+/* Estilos específicos para el explorador de proveedores */
 
 /* ===== HERO SECTION ===== */
 .marketplace-hero {
@@ -123,21 +48,15 @@ body {
     opacity: 0.9;
 }
 
-/* ===== BÚSQUEDA ===== */
 .search-box {
     display: flex;
     align-items: center;
     background-color: white;
-    border-radius: var(--radius-lg);
+    border-radius: var(--border-radius-lg);
     padding: 5px 5px 5px 20px;
     box-shadow: var(--shadow-md);
     max-width: 650px;
     margin: 0 auto;
-}
-
-.search-icon {
-    color: var(--text-light);
-    margin-right: 10px;
 }
 
 #hero-search {
@@ -154,7 +73,7 @@ body {
     color: white;
     border: none;
     padding: 12px 24px;
-    border-radius: var(--radius-md);
+    border-radius: var(--border-radius-md);
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
@@ -163,10 +82,6 @@ body {
 .search-button:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-sm);
-}
-
-.search-container {
-    width: 350px;
 }
 
 /* ===== SECCIÓN DE CATEGORÍAS ===== */
@@ -195,7 +110,7 @@ body {
 
 .category-card {
     background-color: var(--bg-light);
-    border-radius: var(--radius-md);
+    border-radius: var(--border-radius-md);
     padding: 30px 20px;
     display: flex;
     flex-direction: column;
@@ -239,19 +154,12 @@ body {
 }
 
 /* ===== CONTENIDO PRINCIPAL ===== */
-.main-content {
-    width: calc(100% - var(--sidebar-width));
-    margin-left: var(--sidebar-width);
-    max-width: calc(100% - var(--sidebar-width));
-    padding: 0 !important;
-}
-
 .marketplace-content {
     display: flex;
     gap: 30px;
     padding: 0 30px 40px;
-    width: 100% !important;
-    max-width: 100% !important;
+    width: 100%;
+    max-width: 100%;
     margin: 0;
     box-sizing: border-box;
 }
@@ -260,7 +168,7 @@ body {
 .filters-sidebar {
     width: 250px;
     background-color: var(--bg-light);
-    border-radius: var(--radius-lg);
+    border-radius: var(--border-radius-lg);
     padding: 20px;
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-color);
@@ -389,7 +297,7 @@ body {
 .view-toggle {
     display: flex;
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
+    border-radius: var(--border-radius-sm);
     overflow: hidden;
 }
 
@@ -410,7 +318,7 @@ body {
 .sort-select {
     padding: 8px 30px 8px 12px;
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
+    border-radius: var(--border-radius-sm);
     background-color: var(--bg-light);
     color: var(--text-color);
     font-size: 14px;
@@ -429,9 +337,9 @@ body {
 /* ===== VISTA DE CUADRÍCULA DE PROVEEDORES ===== */
 .providers-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
-    gap: 20px !important;
-    width: 100% !important;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    width: 100%;
     margin-bottom: 30px;
 }
 
@@ -441,7 +349,7 @@ body {
 
 .provider-card {
     background-color: var(--bg-light);
-    border-radius: var(--radius-lg);
+    border-radius: var(--border-radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
     transition: var(--transition);
@@ -449,8 +357,7 @@ body {
     border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    width: 100% !important;
-    max-width: none !important;
+    width: 100%;
 }
 
 .provider-card:hover {
@@ -509,6 +416,13 @@ body {
     align-items: center;
     font-weight: 600;
     font-size: 18px;
+}
+
+.provider-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .provider-rating {
@@ -570,36 +484,81 @@ body {
     font-size: 12px;
     font-weight: 600;
 }
+.tag-agricola {
+    background-color: #f0fdf4;
+    color: #16a34a;
+}
+
+.tag-alimenticio {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.tag-comercio {
+    background-color: #e8f5e9;
+    color: #388e3c;
+}
+
+.tag-educacion {
+    background-color: #e3f2fd;
+    color: #1e88e5;
+}
+
+.tag-energia {
+    background-color: #fffde7;
+    color: #fbc02d;
+}
+
+.tag-finanzas {
+    background-color: #e3f2fd;
+    color: #0288d1;
+}
+
+.tag-industrial {
+    background-color: #f3e5f5;
+    color: #8e24aa;
+}
+
+.tag-inmobiliario {
+    background-color: #f1f8e9;
+    color: #33691e;
+}
+
+.tag-manufactura {
+    background-color: #f0f4c3;
+    color: #827717;
+}
+
+.tag-marketing {
+    background-color: #f9fbe7;
+    color: #afb42b;
+}
+
+.tag-salud {
+    background-color: #e0f7fa;
+    color: #00695c;
+}
 
 .tag-tecnologia {
-    background-color: var(--tag-tecnologia-bg);
-    color: var(--tag-tecnologia-text);
+    background-color: #dbeafe;
+    color: #2563eb;
 }
 
-.tag-alimentacion {
-    background-color: var(--tag-alimentacion-bg);
-    color: var(--tag-alimentacion-text);
+.tag-transporte {
+    background-color: #fff3e0;
+    color: #ef6c00;
 }
 
-.tag-textil {
-    background-color: var(--tag-textil-bg);
-    color: var(--tag-textil-text);
+.tag-turismo {
+    background-color: #ffebee;
+    color: #d32f2f;
 }
 
-.tag-construccion {
-    background-color: var(--tag-construccion-bg);
-    color: var(--tag-construccion-text);
+.tag-otros {
+    background-color: #ede7f6;
+    color: #5e35b1;
 }
 
-.tag-logistica {
-    background-color: var(--tag-logistica-bg);
-    color: var(--tag-logistica-text);
-}
-
-.tag-servicios {
-    background-color: var(--tag-servicios-bg);
-    color: var(--tag-servicios-text);
-}
 
 .provider-description {
     color: var(--text-light);
@@ -622,7 +581,7 @@ body {
     color: var(--primary-color);
     border: 1px solid var(--primary-color);
     padding: 8px 0;
-    border-radius: var(--radius-md);
+    border-radius: var(--border-radius-md);
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -644,74 +603,6 @@ body {
     background-color: var(--primary-dark);
 }
 
-/* ===== VISTA DE LISTA DE PROVEEDORES ===== */
-.providers-list {
-    display: none;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 30px;
-    width: 100% !important;
-}
-
-.providers-list.active-view {
-    display: flex;
-}
-
-.provider-list-item {
-    background-color: var(--bg-light);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    display: flex;
-    gap: 20px;
-    transition: var(--transition);
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--border-color);
-}
-
-.provider-list-item:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--primary-light);
-}
-
-.provider-list-logo {
-    flex-shrink: 0;
-}
-
-.provider-list-info {
-    flex-grow: 1;
-}
-
-.provider-list-info h3 {
-    color: var(--text-color);
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 8px;
-}
-
-.provider-list-details {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
-}
-
-.provider-list-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.provider-list-actions .btn-favorite {
-    margin-right: 5px;
-}
-
-.provider-list-actions .btn-view-profile,
-.provider-list-actions .btn-contact {
-    padding: 8px 15px;
-}
-
 /* ===== PAGINACIÓN ===== */
 .pagination {
     display: flex;
@@ -726,7 +617,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: var(--radius-md);
+    border-radius: var(--border-radius-md);
     background-color: var(--bg-light);
     color: var(--text-color);
     border: 1px solid var(--border-color);
@@ -751,81 +642,7 @@ body {
     cursor: not-allowed;
 }
 
-/* ===== MODAL DE PERFIL ===== */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(4px);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.modal.active {
-    display: flex;
-}
-
-.modal-content {
-    width: 100%;
-    max-width: 900px;
-    background-color: var(--bg-light);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    position: relative;
-    max-height: 90vh;
-    display: flex;
-    flex-direction: column;
-    animation: scale-in 0.3s ease-out;
-}
-
-.modal-content.modal-perfil-content {
-    width: 90%;
-    max-width: 1000px;
-}
-
-@keyframes scale-in {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.modal-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    z-index: 10;
-    box-shadow: var(--shadow-sm);
-    color: var(--text-light);
-    transition: var(--transition);
-}
-
-.modal-close:hover {
-    background-color: white;
-    color: var(--text-color);
-}
-
-/* ===== PERFIL HEADER ===== */
+/* ===== PERFIL DE PROVEEDOR EN MODAL ===== */
 .profile-header {
     position: relative;
 }
@@ -950,7 +767,6 @@ body {
     border-bottom-color: var(--primary-color);
 }
 
-/* ===== CONTENIDO DE LAS TABS ===== */
 .profile-content {
     padding: 30px;
     overflow-y: auto;
@@ -993,434 +809,20 @@ body {
     margin-bottom: 15px;
 }
 
-.services-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.service-tag {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    padding: 8px 16px;
-    border-radius: 100px;
-    font-size: 14px;
-}
-
-.clients-grid {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.client-logo {
-    width: 60px;
-    height: 60px;
-    background-color: var(--bg-color);
-    border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 600;
-    color: var(--text-color);
-}
-
-.certifications {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-
-.certification-item {
-    background-color: var(--bg-color);
-    padding: 10px 15px;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    color: var(--text-color);
-}
-
-.certification-item i {
-    color: var(--secondary-color);
-}
-
-/* ===== TAB DE PRODUCTOS ===== */
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-}
-
-.product-card {
-    background-color: var(--bg-light);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-sm);
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    transition: var(--transition);
-}
-
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
-}
-
-.product-image {
-    height: 140px;
-    background-color: var(--bg-color);
-    position: relative;
-}
-
-.product-card h3 {
-    padding: 15px 15px 5px;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-color);
-}
-
-.product-card p {
-    padding: 0 15px 10px;
-    font-size: 14px;
-    color: var(--text-light);
-}
-
-.product-price {
-    display: block;
-    padding: 10px 15px;
-    background-color: var(--bg-color);
-    color: var(--primary-color);
-    font-weight: 600;
-    border-top: 1px solid var(--border-color);
-}
-
-/* ===== TAB DE VALORACIONES ===== */
-.reviews-summary {
-    display: flex;
-    gap: 30px;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.review-average {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.average-rating {
-    font-size: 48px;
-    font-weight: 700;
-    color: var(--text-color);
-    line-height: 1;
-    margin-bottom: 10px;
-}
-
-.rating-bars {
-    flex-grow: 1;
-}
-
-.rating-bar-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 8px;
-}
-
-.rating-label {
-    width: 15px;
-    text-align: center;
-    color: var(--text-light);
-    font-size: 14px;
-}
-
-.rating-bar {
-    flex-grow: 1;
-    height: 10px;
-    background-color: var(--bg-color);
-    border-radius: 5px;
-    overflow: hidden;
-}
-
-.bar-fill {
-    height: 100%;
-    background-color: var(--secondary-color);
-}
-
-.rating-count {
-    width: 30px;
-    text-align: right;
-    color: var(--text-light);
-    font-size: 14px;
-}
-
-.reviews-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.review-item {
-    background-color: var(--bg-color);
-    border-radius: var(--radius-md);
-    padding: 20px;
-}
-
-.review-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-.reviewer-info {
-    display: flex;
-    gap: 15px;
-}
-
-.reviewer-logo {
-    width: 40px;
-    height: 40px;
-    background-color: var(--primary-color);
-    color: white;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.reviewer-details h4 {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-color);
-    margin-bottom: 3px;
-}
-
-.review-date {
-    font-size: 12px;
-    color: var(--text-light);
-}
-
-.review-content p {
-    color: var(--text-color);
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-/* ===== TAB DE CONTACTO ===== */
-.contact-info {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-}
-
-.contact-items {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.contact-item {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-}
-
-.contact-icon {
-    width: 40px;
-    height: 40px;
-    background-color: var(--primary-light);
-    color: white;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-}
-
-.contact-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.contact-label {
-    font-size: 12px;
-    color: var(--text-light);
-    margin-bottom: 3px;
-}
-
-.contact-value {
-    font-size: 16px;
-    color: var(--text-color);
-    font-weight: 500;
-}
-
-.contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.form-group label {
-    font-size: 14px;
-    color: var(--text-light);
-}
-
-.form-input, 
-.form-textarea {
-    padding: 10px 12px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    font-size: 14px;
-    color: var(--text-color);
-    transition: var(--transition);
-}
-
-.form-input:focus,
-.form-textarea:focus {
-    outline: none;
-    border-color: var(--primary-light);
-    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
-}
-
-.form-textarea {
-    min-height: 120px;
-    resize: vertical;
-}
-
-.form-check {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.form-check input {
-    accent-color: var(--primary-color);
-}
-
-.form-check label {
-    font-size: 14px;
-    color: var(--text-light);
-}
-
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 10px;
-}
-
-.btn-send-message {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.btn-send-message:hover {
-    background-color: var(--primary-dark);
-}
-
-/* ===== MODAL DE CONTACTO ===== */
-#modal-contact .modal-content {
-    max-width: 600px;
-}
-
-.contact-modal-header {
-    padding: 20px 30px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.contact-modal-header h2 {
-    color: var(--text-color);
-    font-size: 20px;
-    font-weight: 600;
-}
-
-.contact-modal-body {
-    padding: 30px;
-}
-
-.form-row {
-    display: flex;
-    gap: 15px;
-}
-
-.form-row .form-group {
-    flex: 1;
-}
-
-.contact-modal-footer {
-    padding: 20px 30px;
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-.btn-primary {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.btn-primary:hover {
-    background-color: var(--primary-dark);
-}
-
-.btn-secondary {
-    background-color: white;
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-    padding: 10px 20px;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.btn-secondary:hover {
-    background-color: var(--bg-color);
-}
-
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1400px) {
-    .productos-grid,
     .providers-grid {
         grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     }
 }
 
 @media (max-width: 1200px) {
-    .productos-grid,
     .providers-grid {
         grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
     }
 }
 
 @media (min-width: 769px) and (max-width: 992px) {
-    .contact-info {
-        grid-template-columns: 1fr;
-    }
-    
     .providers-section {
         width: calc(100% - 240px);
     }
@@ -1431,11 +833,6 @@ body {
 }
 
 @media (max-width: 768px) {
-    .main-content {
-        margin-left: 0;
-        max-width: 100%;
-    }
-    
     .marketplace-content {
         flex-direction: column;
         padding: 0 15px 30px;
@@ -1448,14 +845,6 @@ body {
     
     .providers-section {
         width: 100%;
-    }
-    
-    .provider-list-item {
-        flex-direction: column;
-    }
-    
-    .provider-list-logo {
-        margin-bottom: 10px;
     }
     
     .providers-header {
@@ -1487,35 +876,12 @@ body {
         width: 100%;
     }
     
-    .search-container {
-        width: 100%;
-    }
-    
     .categories-grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
     
     .form-row {
         flex-direction: column;
-    }
-    
-    .productos-grid,
-    .providers-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    }
-}
-
-@media (max-width: 576px) {
-    .productos-grid,
-    .providers-grid,
-    .company-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .productos-container,
-    .empresas-container,
-    .marketplace-container {
-        padding: 15px;
     }
     
     .profile-main {
@@ -1545,12 +911,77 @@ body {
         padding: 12px 15px;
     }
     
-    .profile-content,
-    .contact-modal-body {
+    .profile-content {
         padding: 20px 15px;
     }
+}
+
+
+/* Corrección para el ancho de la sección de proveedores en explorarProveedores.css */
+
+/* Asegurar que el contenedor principal ocupe todo el ancho disponible */
+.marketplace-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    overflow-x: hidden;
+}
+
+/* Corregir el ancho del contenido principal */
+.marketplace-content {
+    display: flex;
+    gap: 30px;
+    padding: 0 30px 40px;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+/* Asegurar que la sección de proveedores ocupe todo el espacio disponible */
+.providers-section {
+    flex: 1;
+    width: calc(100% - 280px) !important; /* 250px del sidebar + 30px de gap */
+}
+
+/* Corregir la cuadrícula de proveedores */
+.providers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+    gap: 20px;
+    width: 100% !important;
+}
+
+/* Asegurar que las tarjetas ocupen todo el ancho disponible */
+.provider-card {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+/* Ajustes para pantallas medianas */
+@media (max-width: 1200px) {
+    .providers-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important;
+    }
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+    .marketplace-content {
+        flex-direction: column;
+        padding: 0 15px 30px;
+    }
     
-    .products-grid {
-        grid-template-columns: 1fr;
+    .providers-section {
+        width: 100% !important;
+    }
+    
+    .providers-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .providers-grid {
+        grid-template-columns: 1fr !important;
     }
 }
