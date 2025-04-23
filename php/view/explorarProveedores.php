@@ -12,8 +12,9 @@ if (!isset($_SESSION['usuario'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explorar Proveedores - RemoteOrder</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="../../public/styles/panelPrincipal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../public/styles/base.css">
+    <link rel="stylesheet" href="../../public/styles/menuLateral.css">
     <link rel="stylesheet" href="../../public/styles/exploradorProveedores.css">
 </head>
 <body>
@@ -26,7 +27,6 @@ if (!isset($_SESSION['usuario'])) {
                 <h1>Descubre proveedores de confianza</h1>
                 <p>Conecta con los mejores proveedores para impulsar tu negocio</p>
                 <div class="search-box">
-                    <i class="fas fa-search search-icon"></i>
                     <input type="text" id="hero-search" placeholder="Busca proveedores por nombre, sector o producto...">
                     <button class="search-button">Buscar</button>
                 </div>
@@ -273,41 +273,44 @@ if (!isset($_SESSION['usuario'])) {
                        
 
                         foreach($empresas as $empresa){
-                            echo '
-                            <div class="provider-card" data-id="'.$empresa->getId().'">
-                                <div class="provider-favorite">
-                                    <button class="btn-favorite"><i class="far fa-heart"></i></button>
-                                </div>
-                                <div class="provider-header">
-                                    <div class="provider-logo"><img src="../../'.$empresa->getRutaLogo().'" alt="Logo de la empresa '.$empresa->getNombre().'" class="provider-logo"></div>
-                                    <div style="margin-right: 2.3rem;" class="provider-rating">
-                                        <div class="stars">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half-alt"></i>
+                            if($empresa->getId() != $_SESSION['empresa']['id']){
+                                echo '
+                                    <div class="provider-card" data-id="'.$empresa->getId().'">
+                                        <div class="provider-favorite">
+                                            <button class="btn-favorite "><i class="far fa-heart"></i></button>
                                         </div>
-                                        <span>4.5</span>
+                                        <div class="provider-header">
+                                            <div class="provider-logo"><img src="../../'.$empresa->getRutaLogo().'" alt="Logo de la empresa '.$empresa->getNombre().'" class="provider-logo"></div>
+                                            <div style="margin-right: 2.3rem;" class="provider-rating">
+                                                <div class="stars">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star-half-alt"></i>
+                                                </div>
+                                                <span>4.5</span>
+
+                                            </div>
+                                        </div>
+                                        <div class="provider-body">
+                                            <h3>'.$empresa->getNombre().'</h3>
+                                            <div class="provider-location">
+                                                <i class="fas fa-map-marker-alt"> </i> '.$empresa->getCiudad().', '.$empresa->getPais().'
+                                            </div>
+                                            <div class="provider-tags">
+                                                <span class="tag tag-'.strtolower($empresa->getSector()).'">' . $empresa->getSector() . '</span>
+                                            </div>
+                                            <p class="provider-description">'. (strlen($empresa->getDescripcion()) > 200 ? substr($empresa->getDescripcion(), 0, 200) . '...' : $empresa->getDescripcion()) . '</p>
+                                        </div>
+                                        <div class="provider-footer">
+                                            <button class="btn-view-profile">Ver perfil</button>
+                                            <button class="btn-contact">Contactar</button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="provider-body">
-                                    <h3>'.$empresa->getNombre().'</h3>
-                                    <div class="provider-location">
-                                        <i class="fas fa-map-marker-alt"> </i> '.$empresa->getCiudad().', '.$empresa->getPais().'
-                                    </div>
-                                    <div class="provider-tags">
-                                        <span class="tag tag-tecnologia">' . $empresa->getSector() . '</span>
-                                    </div>
-                                    <p class="provider-description">' . substr($empresa->getDescripcion(), 0, 110) . (strlen($empresa->getDescripcion()) > 200 ? '...' : '') . '</p>
-                                </div>
-                                <div class="provider-footer">
-                                    <button class="btn-view-profile">Ver perfil</button>
-                                    <button class="btn-contact">Contactar</button>
-                                </div>
-                            </div>
-                        
-                        ';
+                                
+                                ';
+                            }
                         }
                     
                     ?>
@@ -579,9 +582,7 @@ if (!isset($_SESSION['usuario'])) {
         </div>
     </div>
     
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+
     <script src="../../public/js/menuLateral.js"></script>
     <script src="../../public/js/exploradorProveedores.js"></script>
 </body>

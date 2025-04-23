@@ -9,8 +9,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RemoteOrder - Explorador de Empresas</title>
+    <link rel="stylesheet" href="../../public/styles/base.css">
+    <link rel="stylesheet" href="../../public/styles/menuLateral.css">
     <link rel="stylesheet" href="../../public/styles/clientes.css">
-    <link rel="stylesheet" href="../../public/styles/panelPrincipal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>

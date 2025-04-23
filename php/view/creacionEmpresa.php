@@ -14,6 +14,7 @@ if (!isset($_SESSION['usuario']) || !isset($_SESSION['usuario']['id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Nueva Empresa</title>
+    <link rel="stylesheet" href="../../public/styles/base.css">
     <link rel="stylesheet" href="../../public/styles/crearEmpresa.css">
 </head>
 <body>

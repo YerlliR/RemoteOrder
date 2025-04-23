@@ -1,109 +1,25 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+
+/* Estilos específicos para la página de selección de empresa */
 
 body {
-    background: linear-gradient(135deg, #f0f4ff 0%, #ffffff 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    position: relative;
-    overflow: hidden;
     padding: 20px;
-}
-
-body::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at 50% 50%, rgba(99, 179, 237, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
-    z-index: -1;
-}
-
-.floating-shape {
-    position: absolute;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(96, 165, 250, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
-    filter: blur(20px);
-    z-index: -1;
-}
-
-.shape1 {
-    top: 10%;
-    left: 5%;
-    width: 400px;
-    height: 400px;
-}
-
-.shape2 {
-    bottom: 5%;
-    right: 5%;
-    width: 350px;
-    height: 350px;
 }
 
 .container {
     width: 100%;
     max-width: 1200px;
     padding: 40px;
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    box-shadow: 0 12px 40px rgba(91, 164, 255, 0.15),
-                0 3px 8px rgba(0, 0, 0, 0.06);
-    backdrop-filter: blur(10px);
-    position: relative;
-    z-index: 2;
-    overflow: hidden;
-    animation: fadeIn 0.8s ease-out;
-}
-
-.container::before {
-    content: '';
-    position: absolute;
-    top: -100px;
-    right: -100px;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(99, 179, 237, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
-    z-index: -1;
-}
-
-.container::after {
-    content: '';
-    position: absolute;
-    bottom: -80px;
-    left: -80px;
-    width: 180px;
-    height: 180px;
-    background: radial-gradient(circle, rgba(99, 179, 237, 0.06) 0%, rgba(255, 255, 255, 0) 70%);
-    z-index: -1;
+    margin: 30px auto;
 }
 
 h1 {
     text-align: center;
     margin-bottom: 35px;
     font-size: 32px;
-    color: #3b82f6;
-    letter-spacing: 0.8px;
-    font-weight: 700;
-    position: relative;
-}
-
-h1::after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 50%;
-    width: 40px;
-    height: 3px;
-    background: linear-gradient(90deg, #3b82f6, #60a5fa);
-    transform: translateX(-50%);
-    border-radius: 50px;
 }
 
 .company-grid {
@@ -126,7 +42,6 @@ h1::after {
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    animation: fadeIn 0.8s ease-out;
 }
 
 .company-card:hover {
@@ -141,20 +56,20 @@ h1::after {
     left: 0;
     width: 100%;
     height: 4px;
-    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
 }
 
 .logo-container {
     width: 90px;
     height: 90px;
     border-radius: 50%;
-    background-color: #f8fafc;
+    background-color: var(--bg-color);
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
     overflow: hidden;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
     box-shadow: 0 4px 10px rgba(91, 164, 255, 0.1);
 }
 
@@ -167,14 +82,14 @@ h1::after {
 .company-name {
     font-size: 18px;
     font-weight: 600;
-    color: #334155;
+    color: var(--text-color);
     margin-bottom: 8px;
     text-align: center;
 }
 
 .company-details {
     font-size: 14px;
-    color: #64748b;
+    color: var(--text-light);
     text-align: center;
     margin-bottom: 15px;
 }
@@ -199,7 +114,7 @@ h1::after {
 /* Tarjeta para añadir nueva empresa */
 .add-company-card {
     background-color: rgba(255, 255, 255, 0.8);
-    border: 2px dashed #cbd5e1;
+    border: 2px dashed var(--border-color);
     min-height: 250px;
     display: flex;
     flex-direction: column;
@@ -209,7 +124,7 @@ h1::after {
 
 .add-company-card:hover {
     background-color: white;
-    border-color: #60a5fa;
+    border-color: var(--primary-light);
 }
 
 .add-company-card::before {
@@ -220,7 +135,7 @@ h1::after {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    background: var(--primary-gradient);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -232,31 +147,8 @@ h1::after {
 
 .add-text {
     font-size: 16px;
-    color: #3b82f6;
+    color: var(--primary-color);
     font-weight: 600;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.4);
-    }
-    70% {
-        box-shadow: 0 0 0 12px rgba(96, 165, 250, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(96, 165, 250, 0);
-    }
 }
 
 @media (max-width: 768px) {
