@@ -1,6 +1,20 @@
 
 /* Estilos específicos para login y registro */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f5f9ff; /* O el color de fondo que prefieras */
+    position: relative;
+    overflow-x: hidden;
+}
 
+/* Opcional: ajusta la posición de las formas flotantes para que se vean bien con el centrado */
+.floating-shape {
+    position: fixed; /* Cambiado de absolute a fixed para mantener posición relativa a la ventana */
+}
 .container {
     width: 100%;
     max-width: 460px;

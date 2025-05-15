@@ -772,6 +772,11 @@
     overflow-y: auto;
 }
 
+#perfil-nombre {
+    color: white;
+
+}
+
 .tab-content {
     display: none;
 }

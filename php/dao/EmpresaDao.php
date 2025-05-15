@@ -77,11 +77,17 @@ function findById($empresaId) {
         $stmt->execute();
         $empresa = $stmt->fetch(PDO::FETCH_ASSOC);
         $db->closeConnection();
+        
+        // Verificar si se encontró la empresa
+        if (!$empresa) {
+            return false;
+        }
+        
+        return $empresa;
     } catch (Exception $e) {
         echo "Error al buscar la empresa: " . $e->getMessage();
+        return false;
     }
-
-    return $empresa;
 }
 
 function findAllEmpresas() {
@@ -115,5 +121,24 @@ function findAllEmpresas() {
 
     return $empresas;
 }
+
+function contBySector($sector) {
+    try {
+        $db = new conexionDb();
+        $conn = $db->getConnection();
+        $stmt = $conn->prepare("SELECT COUNT(*) AS total FROM empresas WHERE sector = :sector");
+        $stmt->bindParam(':sector', $sector);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $db->closeConnection();
+        return $result['total'];
+    } catch (Exception $e) {
+        echo "Error al buscar las empresas: " . $e->getMessage();
+    }
+
+    return 0;
+}
+
+
 
 ?>

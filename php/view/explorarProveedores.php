@@ -5,6 +5,10 @@ if (!isset($_SESSION['usuario'])) {
     header('Location: ../../index.php');
     exit;
 }
+
+
+include_once "../dao/EmpresaDao.php"; 
+include_once "../model/Empresa.php";
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -42,99 +46,98 @@ if (!isset($_SESSION['usuario'])) {
                         <i class="fas fa-microchip"></i>
                     </div>
                     <h3>Tecnología</h3>
-                    <span class="provider-count">24 proveedores</span>
+                    <span class="provider-count"><?php echo contBySector("tecnologia");?> proveedores</span>
                 </div>
                 <div class="category-card" data-category="finanzas">
                     <div class="category-icon">
                         <i class="fas fa-piggy-bank"></i>
                     </div>
                     <h3>Finanzas</h3>
-                    <span class="provider-count">18 proveedores</span>
+                    <span class="provider-count"><?php echo contBySector("finanzas");?> proveedores</span>
                 </div>
                 <div class="category-card" data-category="marketing">
                     <div class="category-icon">
                         <i class="fas fa-bullhorn"></i>
                     </div>
                     <h3>Marketing</h3>
-                    <span class="provider-count">15 proveedores</span>
+                    <span class="provider-count"><?php echo contBySector("marketing");?> proveedores</span>
                 </div>
                 <div class="category-card" data-category="salud">
                     <div class="category-icon">
                         <i class="fas fa-medkit"></i>
                     </div>
                     <h3>Salud</h3>
-                    <span class="provider-count">21 proveedores</span>
+                    <span class="provider-count"><?php echo contBySector("salud");?> proveedores</span>
                 </div>
                 <div class="category-card" data-category="educacion">
                     <div class="category-icon">
                         <i class="fas fa-graduation-cap"></i>
                     </div>
                     <h3>Educación</h3>
-                    <span class="provider-count">19 proveedores</span>
+                    <span class="provider-count"><?php echo contBySector("educacion");?> proveedores</span>
                 </div>
                 <div class="category-card" data-category="turismo">
                     <div class="category-icon">
                         <i class="fas fa-passport"></i>
                     </div>
                     <h3>Turismo</h3>
-                    <span class="provider-count">26 proveedores</span>
+                    <span class="provider-count"><?php echo contBySector("turismo");?> proveedores</span>
                 </div>
                 <div class="category-card" data-category="inmobiliario">
                     <div class="category-icon">
                         <i class="fas fa-building"></i>
                     </div>
                     <h3>Inmobiliario</h3>
-                    <span class="provider-count">18 proveedores</span>
+                    <span class="provider-count"><?php echo contBySector("inmobiliario");?> proveedores</span>
                 </div>
                 <div class="category-card" data-category="industrial">
                     <div class="category-icon">
                         <i class="fas fa-industry"></i>
                     </div>
                     <h3>Industrial</h3>
-                    <span class="provider-count">15 proveedores</span>
+                    <span class="provider-count"><?php echo contBySector("industrial");?> proveedores</span>
                 </div>
                 <div class="category-card" data-category="alimenticio">
                     <div class="category-icon">
                         <i class="fas fa-concierge-bell"></i>
                     </div>
                     <h3>Alimenticio</h3>
-                    <span class="provider-count">26 proveedores</span>
+                    <span class="provider-count"><?php echo contBySector("alimenticio");?> proveedores</span>
                 </div>
                 <div class="category-card" data-category="comercio">
                     <div class="category-icon">
                         <i class="fas fa-shopping-bag"></i>
                     </div>
                     <h3>Comercio</h3>
-                    <span class="provider-count">21 proveedores</span>
+                    <span class="provider-count"><?php echo contBySector("comercio");?> proveedores</span>
                 </div>
                 <div class="category-card" data-category="agricola">
                     <div class="category-icon">
                         <i class="fas fa-seedling"></i>
                     </div>
                     <h3>Agrícola</h3>
-                    <span class="provider-count">19 proveedores</span>
+                    <span class="provider-count"><?php echo contBySector("agricola");?> proveedores</span>
                 </div>
-
                 <div class="category-card" data-category="energia">
                     <div class="category-icon">
                         <i class="fas fa-lightbulb"></i>
                     </div>
                     <h3>Energía</h3>
-                    <span class="provider-count">18 proveedores</span>
+                    <span class="provider-count"><?php echo contBySector("energia");?> proveedores</span>
                 </div>
                 <div class="category-card" data-category="transporte">
                     <div class="category-icon">
                         <i class="fas fa-truck"></i>
                     </div>
                     <h3>Transporte</h3>
-                    <span class="provider-count">15 proveedores</span>
+                    <span class="provider-count"><?php echo contBySector("transporte");?> proveedores</span>
                 </div>
                 <div class="category-card" data-category="otros">
                     <div class="category-icon">
                         <i class="fas fa-question-circle"></i>
                     </div>
                     <h3>Otros</h3>
-                    <span class="provider-count">26 proveedores</span>
+                    <span class="provider-count"><?php echo contBySector("otros");?> proveedores</span>
                 </div>
             </div>
         </div>
@@ -266,11 +269,8 @@ if (!isset($_SESSION['usuario'])) {
                 <!-- Vista de cuadrícula (por defecto) -->
                 <div class="providers-grid active-view" id="grid-view">
                     <?php
-                        include_once "../dao/EmpresaDao.php"; 
-                        include_once "../model/Empresa.php";
-                        $empresas = findAllEmpresas();
 
-                       
+                        $empresas = findAllEmpresas();
 
                         foreach($empresas as $empresa){
                             if($empresa->getId() != $_SESSION['empresa']['id']){
@@ -304,7 +304,7 @@ if (!isset($_SESSION['usuario'])) {
                                             <p class="provider-description">'. (strlen($empresa->getDescripcion()) > 200 ? substr($empresa->getDescripcion(), 0, 200) . '...' : $empresa->getDescripcion()) . '</p>
                                         </div>
                                         <div class="provider-footer">
-                                            <button class="btn-view-profile">Ver perfil</button>
+                                            <button class="btn-view-profile" data-empresa-id="'.$empresa->getId().'">Ver perfil</button>
                                             <button class="btn-contact">Contactar</button>
                                         </div>
                                     </div>
@@ -330,260 +330,75 @@ if (!isset($_SESSION['usuario'])) {
             </div>
         </div>
     </div>
-    
-    <!-- Modal de Perfil del Proveedor -->
-    <div class="modal" id="modal-perfil">
+    <!-- Modal de Contacto (opcional) -->
+    <div class="modal" id="modal-contact">
         <div class="modal-content">
             <button class="modal-close"><i class="fas fa-times"></i></button>
             
-            <div class="profile-header">
-                <div class="profile-cover"></div>
-                <div class="profile-main">
-                    <div class="profile-logo">TS</div>
-                    <div class="profile-info">
-                        <h2 id="perfil-nombre">TechSupplies S.L.</h2>
-                        <div class="profile-meta">
-                            <span class="profile-location"><i class="fas fa-map-marker-alt"></i> Madrid, España</span>
-                            <span class="profile-category"><i class="fas fa-tag"></i> Tecnología</span>
-                            <span class="profile-since"><i class="fas fa-calendar-alt"></i> Desde 2015</span>
-                        </div>
-                        <div class="profile-rating">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                                <span>4.5</span>
-                            </div>
-                            <span class="rating-count">(28 valoraciones)</span>
-                        </div>
+            <div class="modal-header">
+                <h2>Contactar con <span id="contact-provider-name">Proveedor</span></h2>
+            </div>
+            
+            <div class="modal-body">
+                <div class="contact-form">
+                    <div class="form-group">
+                        <label for="modal-contact-name">Nombre</label>
+                        <input type="text" id="modal-contact-name" placeholder="Tu nombre completo">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="modal-contact-email">Email</label>
+                        <input type="email" id="modal-contact-email" placeholder="tu@correo.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="modal-contact-subject">Asunto</label>
+                        <input type="text" id="modal-contact-subject" placeholder="Asunto del mensaje">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="modal-contact-message">Mensaje</label>
+                        <textarea id="modal-contact-message" rows="5" placeholder="Escribe tu mensaje..."></textarea>
+                    </div>
+                    
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="modal-contact-terms">
+                        <label for="modal-contact-terms">Acepto los términos y condiciones</label>
                     </div>
                 </div>
             </div>
             
-            <div class="profile-tabs">
-                <button class="tab-btn active" data-tab="info">Información</button>
-                <button class="tab-btn" data-tab="products">Productos</button>
-                <button class="tab-btn" data-tab="reviews">Valoraciones</button>
-                <button class="tab-btn" data-tab="contact">Contacto</button>
-            </div>
-            
-            <div class="profile-content">
-                <!-- Tab: Información -->
-                <div class="tab-content active" id="tab-info">
-                    <div class="profile-section">
-                        <h3>Acerca de</h3>
-                        <p>TechSupplies S.L. es una empresa líder en la distribución de componentes electrónicos y tecnológicos. Contamos con más de 8 años de experiencia en el sector y una amplia red de socios internacionales que nos permiten ofrecer los mejores productos a precios competitivos.</p>
-                        <p>Nos especializamos en semiconductores, placas base, componentes pasivos, y todo tipo de materiales para la fabricación de dispositivos electrónicos.</p>
-                    </div>
-                    
-                    <div class="profile-section">
-                        <h3>Servicios</h3>
-                        <div class="services-tags">
-                            <div class="service-tag">Semiconductores</div>
-                            <div class="service-tag">Placas base</div>
-                            <div class="service-tag">Componentes pasivos</div>
-                            <div class="service-tag">Herramientas de montaje</div>
-                            <div class="service-tag">Kits de desarrollo</div>
-                            <div class="service-tag">Asesoría técnica</div>
-                        </div>
-                    </div>
-                    
-                    <div class="profile-section">
-                        <h3>Clientes destacados</h3>
-                        <div class="clients-grid">
-                            <div class="client-logo">EC</div>
-                            <div class="client-logo">IN</div>
-                            <div class="client-logo">DT</div>
-                            <div class="client-logo">TL</div>
-                        </div>
-                    </div>
-                    
-                    <div class="profile-section">
-                        <h3>Certificaciones</h3>
-                        <div class="certifications">
-                            <div class="certification-item">
-                                <i class="fas fa-certificate"></i>
-                                <span>ISO 9001:2015</span>
-                            </div>
-                            <div class="certification-item">
-                                <i class="fas fa-certificate"></i>
-                                <span>ISO 14001:2015</span>
-                            </div>
-                            <div class="certification-item">
-                                <i class="fas fa-certificate"></i>
-                                <span>Distribuidor Autorizado</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Tab: Productos -->
-                <div class="tab-content" id="tab-products">
-                    <div class="products-grid">
-                        <div class="product-card">
-                            <div class="product-image"></div>
-                            <h3>Kit de desarrollo Arduino</h3>
-                            <p>Kit completo con placa Arduino, sensores y componentes</p>
-                            <span class="product-price">89.99€</span>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-image"></div>
-                            <h3>Componentes pasivos</h3>
-                            <p>Paquete de resistencias, condensadores y LEDs variados</p>
-                            <span class="product-price">24.50€</span>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-image"></div>
-                            <h3>Placa base industrial</h3>
-                            <p>Placa base reforzada para entornos industriales</p>
-                            <span class="product-price">149.95€</span>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-image"></div>
-                            <h3>Set de herramientas</h3>
-                            <p>Kit de herramientas de precisión para electrónica</p>
-                            <span class="product-price">75.00€</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Tab: Valoraciones -->
-                <div class="tab-content" id="tab-reviews">
-                    <div class="reviews-summary">
-                        <div class="review-average">
-                            <span class="average-rating">4.5</span>
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                        </div>
-                        <div class="rating-bars">
-                            <div class="rating-bar-item">
-                                <span class="rating-label">5</span>
-                                <div class="rating-bar">
-                                    <div class="bar-fill" style="width: 70%"></div>
-                                </div>
-                                <span class="rating-count">19</span>
-                            </div>
-                            <div class="rating-bar-item">
-                                <span class="rating-label">4</span>
-                                <div class="rating-bar">
-                                    <div class="bar-fill" style="width: 20%"></div>
-                                </div>
-                                <span class="rating-count">6</span>
-                            </div>
-                            <div class="rating-bar-item">
-                                <span class="rating-label">3</span>
-                                <div class="rating-bar">
-                                    <div class="bar-fill" style="width: 7%"></div>
-                                </div>
-                                <span class="rating-count">2</span>
-                            </div>
-                            <div class="rating-bar-item">
-                                <span class="rating-label">2</span>
-                                <div class="rating-bar">
-                                    <div class="bar-fill" style="width: 3%"></div>
-                                </div>
-                                <span class="rating-count">1</span>
-                            </div>
-                            <div class="rating-bar-item">
-                                <span class="rating-label">1</span>
-                                <div class="rating-bar">
-                                    <div class="bar-fill" style="width: 0%"></div>
-                                </div>
-                                <span class="rating-count">0</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="reviews-list">
-                        <div class="review-item">
-                            <div class="review-header">
-                                <div class="reviewer-info">
-                                    <div class="reviewer-logo">ED</div>
-                                    <div class="reviewer-details">
-                                        <h4>Empresa Digital S.A.</h4>
-                                        <span class="review-date">15 abril, 2025</span>
-                                    </div>
-                                </div>
-                                <div class="review-rating">
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                    <span>5.0</span>
-                                </div>
-                            </div>
-                            <div class="review-content">
-                                <p>Excelente proveedor, siempre tienen stock de los componentes que necesitamos y los envíos llegan antes de lo esperado. La calidad de sus productos es inmejorable y su servicio de atención al cliente es excepcional.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="review-item">
-                            <div class="review-header">
-                                <div class="reviewer-info">
-                                    <div class="reviewer-logo">EM</div>
-                                    <div class="reviewer-details">
-                                        <h4>Electrónica Moderna</h4>
-                                        <span class="review-date">2 marzo, 2025</span>
-                                    </div>
-                                </div>
-                                <div class="review-rating">
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                    </div>
-                                    <span>4.0</span>
-                                </div>
-                            </div>
-                            <div class="review-content">
-                                <p>Buenos productos y servicio rápido. El único inconveniente es que a veces los precios son algo elevados comparados con otros proveedores, pero la calidad compensa. Recomendamos sus kits de desarrollo.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="review-item">
-                            <div class="review-header">
-                                <div class="reviewer-info">
-                                    <div class="reviewer-logo">ST</div>
-                                    <div class="reviewer-details">
-                                        <h4>Smart Technologies</h4>
-                                        <span class="review-date">18 febrero, 2025</span>
-                                    </div>
-                                </div>
-                                <div class="review-rating">
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                    <span>4.5</span>
-                                </div>
-                            </div>
-                            <div class="review-content">
-                                <p>Hemos trabajado con TechSupplies en varios proyectos y siempre han respondido con profesionalidad. Su catálogo de semiconductores es muy completo y su asesoramiento técnico nos ha sido de gran ayuda.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btn-cancel-contact">Cancelar</button>
+                <button class="btn-primary" id="btn-send-modal-message">Enviar mensaje</button>
             </div>
         </div>
     </div>
-    
 
     <script src="../../public/js/menuLateral.js"></script>
     <script src="../../public/js/exploradorProveedores.js"></script>
+
+
+    <!-- Después de los scripts existentes, al final del archivo -->
+<script>
+    // Almacenar datos de empresas para uso en JavaScript
+    const empresasDatos = <?php 
+        $empresasData = [];
+        foreach(findAllEmpresas() as $e) {
+            $empresasData[$e->getId()] = [
+                'id' => $e->getId(),
+                'nombre' => $e->getNombre(),
+                'sector' => $e->getSector(),
+                'descripcion' => $e->getDescripcion(),
+                'ciudad' => $e->getCiudad(),
+                'pais' => $e->getPais(),
+                'email' => $e->getEmail(),
+                'telefono' => $e->getTelefono(),
+                'sitio_web' => $e->getSitioWeb()
+            ];
+        }
+        echo json_encode($empresasData);
+    ?>;
+</script>
 </body>
 </html>

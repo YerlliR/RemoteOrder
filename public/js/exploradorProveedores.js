@@ -12,13 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const listView = document.getElementById('list-view');
     const providerCards = document.querySelectorAll('.provider-card, .provider-list-item');
     const favoriteButtons = document.querySelectorAll('.btn-favorite');
-    const viewProfileButtons = document.querySelectorAll('.btn-view-profile');
     const contactButtons = document.querySelectorAll('.btn-contact');
-    const modalPerfil = document.getElementById('modal-perfil');
     const modalContact = document.getElementById('modal-contact');
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
-    const modalCloseButtons = document.querySelectorAll('.modal-close');
     const cancelContactBtn = document.getElementById('btn-cancel-contact');
     const sendModalMessageBtn = document.getElementById('btn-send-modal-message');
     const pageButtons = document.querySelectorAll('.page-btn');
@@ -265,10 +260,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // Mostrar vista correspondiente
             if (viewType === 'grid') {
                 gridView.classList.add('active-view');
-                listView.classList.remove('active-view');
+                if (listView) listView.classList.remove('active-view');
             } else {
                 gridView.classList.remove('active-view');
-                listView.classList.add('active-view');
+                if (listView) listView.classList.add('active-view');
             }
         });
     });
@@ -305,20 +300,131 @@ document.addEventListener('DOMContentLoaded', function() {
         alert(message);
     }
     
-    // Abrir modal de perfil
-    viewProfileButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // Obtener datos del proveedor (en una implementación real, podrías hacer una petición AJAX)
-            const providerCard = this.closest('.provider-card, .provider-list-item');
-            const providerName = providerCard.querySelector('h3').textContent;
+    // Gestionar clics en botón "Ver perfil"
+    document.addEventListener('click', function(e) {
+        // Verificar si el clic fue en un botón "Ver perfil"
+        if (e.target.classList.contains('btn-view-profile')) {
+            e.preventDefault(); // Prevenir comportamiento por defecto
             
-            // Actualizar nombre en el modal
-            document.getElementById('perfil-nombre').textContent = providerName;
+            // Obtener ID de empresa desde el atributo data
+            const empresaId = e.target.getAttribute('data-empresa-id');
             
-            // Mostrar modal
-            modalPerfil.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Evitar scroll en el fondo
-        });
+            // Verificar si tenemos datos para esta empresa
+            if (empresasDatos[empresaId]) {
+                // Obtener datos de la empresa
+                const empresa = empresasDatos[empresaId];
+                
+                // Construir el modal dinámicamente
+                const modalHtml = `
+                <div class="modal active" id="modal-perfil">
+                    <div class="modal-content">
+                        <button class="modal-close"><i class="fas fa-times"></i></button>
+                        
+                        <div class="profile-header">
+                            <div class="profile-cover"></div>
+                            <div class="profile-main">
+                                <div class="profile-logo">TS</div>
+                                <div class="profile-info">
+                                    <h2 id="perfil-nombre">${empresa.nombre}</h2>
+                                    <br>
+                                    <div class="profile-meta">
+                                        <span class="profile-location"><i class="fas fa-map-marker-alt"></i> ${empresa.ciudad}, ${empresa.pais}</span>
+                                        <span class="profile-category"><i class="fas fa-tag"></i> ${empresa.sector}</span>
+                                    </div>
+                                    <div class="profile-rating">
+                                        <div class="stars">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                            <span>4.5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-tabs">
+                            <button class="tab-btn active" data-tab="info">Información</button>
+                            <button class="tab-btn" data-tab="products">Productos</button>
+                            <button class="tab-btn" data-tab="contact">Contacto</button>
+                        </div>
+                        
+                        <div class="profile-content">
+                            <!-- Tab: Información -->
+                            <div class="tab-content active" id="tab-info">
+                                <div class="profile-section">
+                                    <h3>Acerca de</h3>
+                                    <p>${empresa.descripcion}</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Tab: Productos -->
+                            <div class="tab-content" id="tab-products">
+                                <div class="products-grid">
+                                <?php
+                                
+                                $productos = findByEmpresaId($empresa->getId());
+                            
+                                foreach ($productos as $producto) {
+                                ?>
+                                    <div class="product-card">
+                                        <div class="product-image" style="background-image: url('../../uploads/productos/<?php echo $producto->getRutaImagen(); ?>');"></div>
+                                        <h3><?php echo $producto->getNombreProducto(); ?></h3>
+                                        <p><?php echo $producto->getDescripcion(); ?></p>
+                                        <span class="product-price"><?php echo $producto->getPrecio(); ?>€</span>
+                                    </div>
+                                <?php
+                                }
+                                ?>
+                                    
+                                </div>
+                            </div>
+                            
+                            <!-- Tab: Contacto -->
+                            <div class="tab-content" id="tab-contact">
+                                <div class="profile-section">
+                                    <h3>Información de contacto</h3>
+                                    <div class="contact-info">
+                                        <div class="contact-item">
+                                            <i class="fas fa-envelope"></i>
+                                            <span>${empresa.email}</span>
+                                        </div>
+                                        <div class="contact-item">
+                                            <i class="fas fa-phone"></i>
+                                            <span>${empresa.telefono}</span>
+                                        </div>
+                                        <div class="contact-item">
+                                            <i class="fas fa-globe"></i>
+                                            <span>${empresa.sitio_web}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                
+                // Eliminar modal anterior si existe
+                const modalAnterior = document.getElementById('modal-perfil');
+                if (modalAnterior) {
+                    modalAnterior.remove();
+                }
+                
+                // Añadir el modal al body
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                
+                // Evitar scroll en el fondo
+                document.body.style.overflow = 'hidden';
+                
+                // Activar listeners para el nuevo modal
+                activarListenersModal();
+            } else {
+                // Mostrar mensaje de error si no hay datos
+                alert('No se encontró información para esta empresa.');
+            }
+        }
     });
     
     // Abrir modal de contacto
@@ -329,34 +435,63 @@ document.addEventListener('DOMContentLoaded', function() {
             const providerName = providerCard.querySelector('h3').textContent;
             
             // Actualizar nombre en el modal
-            document.getElementById('contact-provider-name').textContent = providerName;
+            const contactProviderName = document.getElementById('contact-provider-name');
+            if (contactProviderName) {
+                contactProviderName.textContent = providerName;
+            }
             
             // Mostrar modal
-            modalContact.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            if (modalContact) {
+                modalContact.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
         });
     });
     
-    // Gestionar tabs del perfil
-    tabButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const tabId = this.dataset.tab;
-            
-            // Actualizar botones activos
-            tabButtons.forEach(button => {
-                button.classList.remove('active');
+    // Función para activar listeners en los elementos del modal
+    function activarListenersModal() {
+        const modalPerfil = document.getElementById('modal-perfil');
+        if (!modalPerfil) return;
+        
+        // Cerrar modal
+        const closeBtn = modalPerfil.querySelector('.modal-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function() {
+                closeModal(modalPerfil);
             });
-            this.classList.add('active');
-            
-            // Mostrar contenido correspondiente
-            tabContents.forEach(content => {
-                content.classList.remove('active');
-            });
-            document.getElementById(`tab-${tabId}`).classList.add('active');
+        }
+        
+        // Cerrar modal al hacer clic fuera del contenido
+        modalPerfil.addEventListener('click', function(e) {
+            if (e.target === modalPerfil) {
+                closeModal(modalPerfil);
+            }
         });
-    });
+        
+        // Gestionar tabs del perfil
+        const tabButtons = modalPerfil.querySelectorAll('.tab-btn');
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabId = this.dataset.tab;
+                
+                // Actualizar botones activos
+                tabButtons.forEach(button => {
+                    button.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Mostrar contenido correspondiente
+                const tabContents = modalPerfil.querySelectorAll('.tab-content');
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                modalPerfil.querySelector(`#tab-${tabId}`).classList.add('active');
+            });
+        });
+    }
     
     // Cerrar modales
+    const modalCloseButtons = document.querySelectorAll('.modal-close');
     modalCloseButtons.forEach(btn => {
         btn.addEventListener('click', function() {
             const modal = this.closest('.modal');
@@ -378,18 +513,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     function closeModal(modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = 'auto'; // Restaurar scroll
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restaurar scroll
+        }
     }
     
     // Enviar formulario de contacto (modal)
     if (sendModalMessageBtn) {
         sendModalMessageBtn.addEventListener('click', function() {
-            const subject = document.getElementById('modal-contact-subject').value.trim();
-            const message = document.getElementById('modal-contact-message').value.trim();
-            const name = document.getElementById('modal-contact-name').value.trim();
-            const email = document.getElementById('modal-contact-email').value.trim();
-            const termsAccepted = document.getElementById('modal-contact-terms').checked;
+            const subject = document.getElementById('modal-contact-subject')?.value.trim();
+            const message = document.getElementById('modal-contact-message')?.value.trim();
+            const name = document.getElementById('modal-contact-name')?.value.trim();
+            const email = document.getElementById('modal-contact-email')?.value.trim();
+            const termsAccepted = document.getElementById('modal-contact-terms')?.checked;
             
             // Validación básica
             if (!subject || !message || !name || !email) {
@@ -412,11 +549,11 @@ document.addEventListener('DOMContentLoaded', function() {
             showToast('Mensaje enviado correctamente');
             
             // Limpiar formulario y cerrar modal
-            document.getElementById('modal-contact-subject').value = '';
-            document.getElementById('modal-contact-message').value = '';
-            document.getElementById('modal-contact-name').value = '';
-            document.getElementById('modal-contact-email').value = '';
-            document.getElementById('modal-contact-terms').checked = false;
+            if (document.getElementById('modal-contact-subject')) document.getElementById('modal-contact-subject').value = '';
+            if (document.getElementById('modal-contact-message')) document.getElementById('modal-contact-message').value = '';
+            if (document.getElementById('modal-contact-name')) document.getElementById('modal-contact-name').value = '';
+            if (document.getElementById('modal-contact-email')) document.getElementById('modal-contact-email').value = '';
+            if (document.getElementById('modal-contact-terms')) document.getElementById('modal-contact-terms').checked = false;
             
             closeModal(modalContact);
         });
@@ -447,9 +584,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
-
-
-
 
     function adjustCardLayout() {
         const marketplaceContent = document.querySelector('.marketplace-content');

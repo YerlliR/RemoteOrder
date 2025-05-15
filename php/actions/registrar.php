@@ -32,7 +32,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                     registrarUsuario($nombre, $apellidos, $email, $password);
                     
                     // Redirigir al usuario a la página de inicio de sesión
-                    header("Location: ./login.php?registro=exitoso");
+                    header("Location: ../view/login.php");
                     exit();
                 } catch (Exception $e) {
                     echo "Error al registrar: " . $e->getMessage();
