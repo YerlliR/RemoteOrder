@@ -14,23 +14,40 @@
         try {
             $db = new conexionDb();
             $conn = $db->getConnection();
-            $stmt = $conn->prepare("INSERT INTO solicitudes (id_empresa_solicitante, id_empresa_proveedor, asunto, mensaje, estado, fecha_creacion) 
-                                    VALUES (:id_empresa_solicitante, :id_empresa_proveedor, :asunto, :mensaje, :estado, :fecha_creacion)");
             
-            $resultado = $stmt->execute([
+            // Para depuración, registrar los valores que se intentan insertar
+            error_log("Insertando: id_solicitante=" . $solicitud->getIdEmpresaSolicitante() . 
+                    ", id_proveedor=" . $solicitud->getIdEmpresaProveedor() . 
+                    ", asunto=" . $solicitud->getAsunto());
+            
+            $stmt = $conn->prepare("INSERT INTO solicitudes (id_empresa_solicitante, id_empresa_proveedor, asunto, mensaje, estado, fecha_creacion) 
+                                VALUES (:id_empresa_solicitante, :id_empresa_proveedor, :asunto, :mensaje, :estado, :fecha_creacion)");
+            
+            $params = [
                 ':id_empresa_solicitante' => $solicitud->getIdEmpresaSolicitante(),
                 ':id_empresa_proveedor' => $solicitud->getIdEmpresaProveedor(),
                 ':asunto' => $solicitud->getAsunto(),
                 ':mensaje' => $solicitud->getMensaje(),
                 ':estado' => $solicitud->getEstado(),
                 ':fecha_creacion' => $solicitud->getFechaCreacion()
-            ]);
+            ];
+            
+            // Para depuración, registrar los parámetros
+            error_log("Parámetros: " . print_r($params, true));
+            
+            $resultado = $stmt->execute($params);
+            
+            // Si hay algún error en la consulta SQL, registrarlo
+            if (!$resultado) {
+                $errorInfo = $stmt->errorInfo();
+                error_log("Error SQL: " . $errorInfo[2]);
+            }
             
             $db->closeConnection();
             
             return $resultado;
         } catch (Exception $e) {
-            error_log("Error al guardar solicitud: " . $e->getMessage());
+            error_log("Error en guardarSolicitud: " . $e->getMessage());
             return false;
         }
     }

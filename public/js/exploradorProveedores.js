@@ -428,23 +428,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Abrir modal de contacto
+// Agregar esto a la sección donde manejas los clics en contactButtons
     contactButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // Obtener datos del proveedor
-            const providerCard = this.closest('.provider-card, .provider-list-item');
-            const providerName = providerCard.querySelector('h3').textContent;
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             
-            // Actualizar nombre en el modal
-            const contactProviderName = document.getElementById('contact-provider-name');
-            if (contactProviderName) {
-                contactProviderName.textContent = providerName;
-            }
+            // Obtener el ID de la empresa desde el atributo data
+            selectedProviderID = this.getAttribute('data-empresa-id');
+            selectedProviderName = this.closest('.provider-card').querySelector('h3').textContent;
             
-            // Mostrar modal
-            if (modalContact) {
-                modalContact.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
+            // Actualizar el nombre en el modal
+            document.getElementById('contact-provider-name').textContent = selectedProviderName;
+            
+            // Mostrar el modal
+            modalContact.classList.add('active');
         });
     });
     
@@ -655,9 +653,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Referencias a elementos del modal de contacto
 
-    const viewProfileButtons = document.querySelectorAll('.btn-view-profile');
     const contactProviderName = document.getElementById('contact-provider-name');
-    const btnSendModalMessage = document.getElementById('btn-send-modal-message');
     const btnCancelContact = document.getElementById('btn-cancel-contact');
     
     // Variables para almacenar el proveedor seleccionado
@@ -740,16 +736,73 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Enviar solicitud al hacer clic en el botón "Enviar mensaje"
+    // Asegurarnos que el botón de enviar mensaje funciona correctamente
+    // Variable global para almacenar el ID del proveedor seleccionado
+
+// Función para abrir el modal de contacto
+function openContactModal(providerID, providerName) {
+    selectedProviderID = providerID;
+    
+    // Registrar para depuración
+    console.log("ID de proveedor seleccionado:", selectedProviderID);
+    
+    // Actualizar el nombre en el modal
+    const contactProviderName = document.getElementById('contact-provider-name');
+    if (contactProviderName) {
+        contactProviderName.textContent = providerName;
+    }
+    
+    // Mostrar el modal
+    const modalContact = document.getElementById('modal-contact');
+    if (modalContact) {
+        modalContact.classList.add('active');
+    }
+}
+
+// Asignar evento a todos los botones de contacto
+document.addEventListener('DOMContentLoaded', function() {
+    const contactButtons = document.querySelectorAll('.btn-contact');
+    
+    contactButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Obtener el ID y nombre del proveedor
+            const providerCard = this.closest('.provider-card');
+            if (providerCard) {
+                const providerID = providerCard.getAttribute('data-id');
+                const providerName = providerCard.querySelector('h3').textContent;
+                
+                console.log("Botón contactar clickeado. ID:", providerID, "Nombre:", providerName);
+                
+                // Abrir el modal
+                openContactModal(providerID, providerName);
+            } else {
+                console.error("No se pudo encontrar la tarjeta del proveedor");
+            }
+        });
+    });
+    
+    // Botón para enviar el formulario
+    const btnSendModalMessage = document.getElementById('btn-send-modal-message');
     if (btnSendModalMessage) {
         btnSendModalMessage.addEventListener('click', function() {
             // Validar campos
             const subject = document.getElementById('modal-contact-subject').value.trim();
             const message = document.getElementById('modal-contact-message').value.trim();
-            const name = document.getElementById('modal-contact-name').value.trim();
+            
+            console.log("Enviando solicitud. ID:", selectedProviderID, "Asunto:", subject);
             
             // Verificar que se haya seleccionado un proveedor
             if (!selectedProviderID) {
                 showToast('Error: No se ha seleccionado un proveedor');
+                return;
+            }
+            
+            // Validación simple
+            if (!subject || !message) {
+                showToast('Por favor, complete todos los campos obligatorios');
                 return;
             }
             
@@ -760,11 +813,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 mensaje: message
             };
             
+            // Mostrar los datos que se van a enviar (para depuración)
+            console.log("Datos a enviar:", JSON.stringify(solicitudData));
+            
             // Mostrar indicador de carga
             btnSendModalMessage.disabled = true;
             btnSendModalMessage.textContent = 'Enviando...';
             
-            // Enviar solicitud al servidor mediante fetch
+            // Enviar solicitud al servidor
             fetch('../../php/actions/procesarSolicitud.php', {
                 method: 'POST',
                 headers: {
@@ -772,8 +828,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify(solicitudData)
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log("Respuesta recibida:", response);
+                return response.json();
+            })
             .then(data => {
+                // Registrar la respuesta para depuración
+                console.log("Datos recibidos:", data);
+                
                 // Restablecer botón
                 btnSendModalMessage.disabled = false;
                 btnSendModalMessage.textContent = 'Enviar mensaje';
@@ -785,20 +847,37 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Cerrar modal y limpiar campos
                     closeContactModal();
                 } else {
-                    console.error('Error:', data.mensaje || 'No se pudo enviar la solicitud');
-                    // Mostrar mensaje de error
+                    // Mostrar error detallado
                     showToast('Error: ' + (data.mensaje || 'No se pudo enviar la solicitud'));
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Error en fetch:', error);
                 btnSendModalMessage.disabled = false;
                 btnSendModalMessage.textContent = 'Enviar mensaje';
                 showToast('Error de conexión. Inténtalo de nuevo.');
             });
         });
     }
+});
+
+// Función para cerrar el modal
+function closeContactModal() {
+    const modalContact = document.getElementById('modal-contact');
+    if (modalContact) {
+        modalContact.classList.remove('active');
+    }
     
+    // Limpiar campos
+    const subjectInput = document.getElementById('modal-contact-subject');
+    const messageInput = document.getElementById('modal-contact-message');
+    
+    if (subjectInput) subjectInput.value = '';
+    if (messageInput) messageInput.value = '';
+    
+    // Resetear el ID del proveedor
+    selectedProviderID = null;
+}
     // Función mejorada para mostrar notificaciones (toast)
     function showToast(message) {
         // Verificar si ya existe un toast
