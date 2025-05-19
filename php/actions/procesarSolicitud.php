@@ -9,19 +9,6 @@ require_once '../dao/SolicitudDao.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-error_log("Tipo de ID Empresa Solicitante: " . gettype($idEmpresaSolicitante));
-error_log("Valor de ID Empresa Solicitante: " . print_r($idEmpresaSolicitante, true));
-
-// Si es un array u objeto, convertirlo a string o int según sea necesario
-if (is_array($idEmpresaSolicitante)) {
-    $idEmpresaSolicitante = $idEmpresaSolicitante[0]; // Tomar el primer elemento
-    error_log("ID convertido a: " . $idEmpresaSolicitante);
-}
-
-// Asegurarse de que sea un entero
-$idEmpresaSolicitante = (int)$idEmpresaSolicitante;
-
-
 // Verificar que el usuario está autenticado
 if (!isset($_SESSION['usuario']) || !isset($_SESSION['empresa']['id'])) {
     header('Content-Type: application/json');
@@ -37,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 try {
-    // Obtener los datos del formulario
+    // Obtener los datos del formulario (formato JSON)
     $data = json_decode(file_get_contents('php://input'), true);
     
     // Registrar los datos recibidos para depuración
@@ -46,11 +33,21 @@ try {
     // Verificar que se recibieron todos los datos necesarios
     if (!isset($data['id_empresa_proveedor']) || !isset($data['asunto']) || !isset($data['mensaje'])) {
         header('Content-Type: application/json');
-        echo json_encode(['success' => false, 'mensaje' => 'Datos incompletos: ' . json_encode($data)]);
+        echo json_encode(['success' => false, 'mensaje' => 'Datos incompletos']);
         exit;
     }
     
+    // Obtener ID de empresa desde la sesión
     $idEmpresaSolicitante = $_SESSION['empresa']['id'];
+    
+    // Si el ID de empresa es un array (a veces sucede en la sesión)
+    if (is_array($idEmpresaSolicitante)) {
+        $idEmpresaSolicitante = $idEmpresaSolicitante[0]; // Tomar el primer elemento
+    }
+    
+    // Asegurarse de que sea un entero
+    $idEmpresaSolicitante = (int)$idEmpresaSolicitante;
+    
     $idEmpresaProveedor = $data['id_empresa_proveedor'];
     $asunto = $data['asunto'];
     $mensaje = $data['mensaje'];

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Elementos DOM
+    // Referencias a elementos DOM frecuentemente utilizados
     const heroSearch = document.getElementById('hero-search');
     const searchButton = document.querySelector('.search-button');
     const categoryCards = document.querySelectorAll('.category-card');
@@ -10,18 +10,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const viewToggleBtns = document.querySelectorAll('.toggle-btn');
     const gridView = document.getElementById('grid-view');
     const listView = document.getElementById('list-view');
-    const providerCards = document.querySelectorAll('.provider-card, .provider-list-item');
+    const providerCards = document.querySelectorAll('.provider-card');
     const favoriteButtons = document.querySelectorAll('.btn-favorite');
-    const contactButtons = document.querySelectorAll('.btn-contact');
     const modalContact = document.getElementById('modal-contact');
-    const cancelContactBtn = document.getElementById('btn-cancel-contact');
-    const sendModalMessageBtn = document.getElementById('btn-send-modal-message');
     const pageButtons = document.querySelectorAll('.page-btn');
 
+    // Variable para almacenar el filtro de categoría activo
     let categoryFilter = '';
-    let resultsCount = 25; // Valor inicial
     
-    // Función para buscar proveedores
+    // Variable global para almacenar el ID del proveedor seleccionado
+    let selectedProviderID = null;
+
+    // ===== BÚSQUEDA =====
     function searchProviders() {
         const searchTerm = heroSearch.value.toLowerCase().trim();
         if (!searchTerm) return;
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Filtrar proveedores según el término de búsqueda
         providerCards.forEach(card => {
             const providerName = card.querySelector('h3').textContent.toLowerCase();
-            const providerDescription = card.querySelector('.provider-description, .provider-description').textContent.toLowerCase();
+            const providerDescription = card.querySelector('.provider-description').textContent.toLowerCase();
             const providerTag = card.querySelector('.tag').textContent.toLowerCase();
             
             if (providerName.includes(searchTerm) || 
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
         searchButton.addEventListener('click', searchProviders);
     }
     
-    // Filtrar por categoría
+    // ===== FILTROS POR CATEGORÍA =====
     function filterByCategory(category) {
         let matches = 0;
         categoryFilter = category;
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Resetear filtros
+    // ===== RESETEAR FILTROS =====
     if (resetFiltersBtn) {
         resetFiltersBtn.addEventListener('click', function() {
             // Desmarcar todos los checkboxes y radios
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Aplicar filtros cuando cambian los checkboxes o radios
+    // ===== APLICAR FILTROS =====
     function applyFilters() {
         // Obtener valores de filtros
         const selectedLocations = Array.from(document.querySelectorAll('input[name="location"]:checked'))
@@ -179,9 +179,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (rating < parseFloat(selectedRating)) shouldShow = false;
             }
             
-            // Aquí podrían incluirse los filtros de experiencia y servicios
-            // en una implementación real con datos completos
-            
             // Aplicar visibilidad
             if (shouldShow) {
                 card.style.display = '';
@@ -204,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
         radio.addEventListener('change', applyFilters);
     });
     
-    // Ordenar proveedores
+    // ===== ORDENAR PROVEEDORES =====
     if (sortSelect) {
         sortSelect.addEventListener('change', function() {
             const sortValue = this.value;
@@ -237,16 +234,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Actualizar contador de resultados
+    // ===== ACTUALIZAR CONTADOR DE RESULTADOS =====
     function updateResultsCounter(count) {
         const countElement = document.getElementById('results-count');
         if (countElement) {
             countElement.textContent = count;
         }
-        resultsCount = count;
     }
     
-    // Cambiar vista de cuadrícula a lista
+    // ===== CAMBIAR VISTA (CUADRÍCULA/LISTA) =====
     viewToggleBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             const viewType = this.dataset.view;
@@ -268,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Gestionar favoritos
+    // ===== GESTIONAR FAVORITOS =====
     favoriteButtons.forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.stopPropagation(); // Evitar que se active el clic en la tarjeta
@@ -280,38 +276,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 icon.classList.remove('far');
                 icon.classList.add('fas');
                 
-                // Mostrar notificación o feedback (opcional)
                 showToast('Proveedor añadido a favoritos');
             } else {
                 // Quitar de favoritos
                 icon.classList.remove('fas');
                 icon.classList.add('far');
                 
-                // Mostrar notificación o feedback (opcional)
                 showToast('Proveedor eliminado de favoritos');
             }
         });
     });
     
-    // Función para mostrar notificaciones (toast)
-    function showToast(message) {
-        // Implementación simple de notificación
-        // En una aplicación real, podrías usar una librería de notificaciones o crear uno más elaborado
-        alert(message);
-    }
-    
-    // Gestionar clics en botón "Ver perfil"
+    // ===== GESTIÓN DE PERFIL DE PROVEEDOR =====
+    // Manejar clicks en botones "Ver perfil"
     document.addEventListener('click', function(e) {
-        // Verificar si el clic fue en un botón "Ver perfil"
-        if (e.target.classList.contains('btn-view-profile')) {
-            e.preventDefault(); // Prevenir comportamiento por defecto
+        if (e.target.classList.contains('btn-view-profile') || e.target.closest('.btn-view-profile')) {
+            e.preventDefault();
+            
+            // Obtener el botón (puede ser el propio elemento o su padre)
+            const button = e.target.classList.contains('btn-view-profile') ? e.target : e.target.closest('.btn-view-profile');
             
             // Obtener ID de empresa desde el atributo data
-            const empresaId = e.target.getAttribute('data-empresa-id');
+            const empresaId = button.getAttribute('data-empresa-id');
             
             // Verificar si tenemos datos para esta empresa
-            if (empresasDatos[empresaId]) {
-                // Obtener datos de la empresa
+            if (empresasDatos && empresasDatos[empresaId]) {
                 const empresa = empresasDatos[empresaId];
                 
                 // Construir el modal dinámicamente
@@ -363,22 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <!-- Tab: Productos -->
                             <div class="tab-content" id="tab-products">
                                 <div class="products-grid">
-                                <?php
-                                
-                                $productos = findByEmpresaId($empresa->getId());
-                            
-                                foreach ($productos as $producto) {
-                                ?>
-                                    <div class="product-card">
-                                        <div class="product-image" style="background-image: url('../../uploads/productos/<?php echo $producto->getRutaImagen(); ?>');"></div>
-                                        <h3><?php echo $producto->getNombreProducto(); ?></h3>
-                                        <p><?php echo $producto->getDescripcion(); ?></p>
-                                        <span class="product-price"><?php echo $producto->getPrecio(); ?>€</span>
-                                    </div>
-                                <?php
-                                }
-                                ?>
-                                    
+                                    <p>No hay productos disponibles actualmente.</p>
                                 </div>
                             </div>
                             
@@ -397,11 +371,16 @@ document.addEventListener('DOMContentLoaded', function() {
                                         </div>
                                         <div class="contact-item">
                                             <i class="fas fa-globe"></i>
-                                            <span>${empresa.sitio_web}</span>
+                                            <span>${empresa.sitio_web || 'No disponible'}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary modal-close">Cerrar</button>
+                            <button class="btn btn-primary btn-solicitar-desde-perfil" data-empresa-id="${empresaId}">Solicitar servicio</button>
                         </div>
                     </div>
                 </div>`;
@@ -422,345 +401,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 activarListenersModal();
             } else {
                 // Mostrar mensaje de error si no hay datos
-                alert('No se encontró información para esta empresa.');
+                showToast('No se encontró información para esta empresa.');
             }
         }
     });
     
-    // Abrir modal de contacto
-// Agregar esto a la sección donde manejas los clics en contactButtons
-    contactButtons.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Obtener el ID de la empresa desde el atributo data
-            selectedProviderID = this.getAttribute('data-empresa-id');
-            selectedProviderName = this.closest('.provider-card').querySelector('h3').textContent;
-            
-            // Actualizar el nombre en el modal
-            document.getElementById('contact-provider-name').textContent = selectedProviderName;
-            
-            // Mostrar el modal
-            modalContact.classList.add('active');
-        });
-    });
-    
-    // Función para activar listeners en los elementos del modal
-    function activarListenersModal() {
-        const modalPerfil = document.getElementById('modal-perfil');
-        if (!modalPerfil) return;
-        
-        // Cerrar modal
-        const closeBtn = modalPerfil.querySelector('.modal-close');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', function() {
-                closeModal(modalPerfil);
-            });
-        }
-        
-        // Cerrar modal al hacer clic fuera del contenido
-        modalPerfil.addEventListener('click', function(e) {
-            if (e.target === modalPerfil) {
-                closeModal(modalPerfil);
-            }
-        });
-        
-        // Gestionar tabs del perfil
-        const tabButtons = modalPerfil.querySelectorAll('.tab-btn');
-        tabButtons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const tabId = this.dataset.tab;
-                
-                // Actualizar botones activos
-                tabButtons.forEach(button => {
-                    button.classList.remove('active');
-                });
-                this.classList.add('active');
-                
-                // Mostrar contenido correspondiente
-                const tabContents = modalPerfil.querySelectorAll('.tab-content');
-                tabContents.forEach(content => {
-                    content.classList.remove('active');
-                });
-                modalPerfil.querySelector(`#tab-${tabId}`).classList.add('active');
-            });
-        });
-    }
-    
-    // Cerrar modales
-    const modalCloseButtons = document.querySelectorAll('.modal-close');
-    modalCloseButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const modal = this.closest('.modal');
-            closeModal(modal);
-        });
-    });
-    
-    if (cancelContactBtn) {
-        cancelContactBtn.addEventListener('click', function() {
-            closeModal(modalContact);
-        });
-    }
-    
-    // Cerrar modal al hacer clic fuera del contenido
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('modal')) {
-            closeModal(e.target);
-        }
-    });
-    
-    function closeModal(modal) {
-        if (modal) {
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto'; // Restaurar scroll
-        }
-    }
-    
-    // Enviar formulario de contacto (modal)
-    if (sendModalMessageBtn) {
-        sendModalMessageBtn.addEventListener('click', function() {
-            const subject = document.getElementById('modal-contact-subject')?.value.trim();
-            const message = document.getElementById('modal-contact-message')?.value.trim();
-            const name = document.getElementById('modal-contact-name')?.value.trim();
-            
-            // Validación básica
-            if (!subject || !message || !name) {
-                showToast('Por favor, completa todos los campos obligatorios');
-                return;
-            }
-            
-            // En una implementación real, aquí enviarías los datos al servidor
-            // Simulación de envío exitoso
-            showToast('Mensaje enviado correctamente');
-            
-            // Limpiar formulario y cerrar modal
-            if (document.getElementById('modal-contact-subject')) document.getElementById('modal-contact-subject').value = '';
-            if (document.getElementById('modal-contact-message')) document.getElementById('modal-contact-message').value = '';
-            if (document.getElementById('modal-contact-name')) document.getElementById('modal-contact-name').value = '';
-            
-            closeModal(modalContact);
-        });
-    }
-    
-    // Validación simple de email
-    
-    
-    // Gestionar paginación
-    pageButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            if (this.classList.contains('disabled') || this.classList.contains('active')) {
-                return;
-            }
-            
-            // Actualizar botones activos
-            document.querySelector('.page-btn.active')?.classList.remove('active');
-            this.classList.add('active');
-            
-            // En una implementación real, aquí cargarías los datos de la página correspondiente
-            // Por ahora simplemente fingimos que hemos cambiado de página
-            window.scrollTo({
-                top: document.querySelector('.providers-section').offsetTop,
-                behavior: 'smooth'
-            });
-        });
-    });
-
-    function adjustCardLayout() {
-        const marketplaceContent = document.querySelector('.marketplace-content');
-        const providersGrid = document.querySelector('.providers-grid');
-        
-        if (marketplaceContent && providersGrid) {
-            // Ajustar el ancho del contenedor según el espacio disponible
-            if (window.innerWidth <= 768) {
-                marketplaceContent.style.maxWidth = '100%';
-            } else {
-                // En pantallas más grandes, considerar el espacio del sidebar
-                marketplaceContent.style.maxWidth = '1200px';
-            }
-        }
-        
-        // Recalcular el tamaño óptimo para las tarjetas según el ancho disponible
-        if (providersGrid) {
-            const containerWidth = providersGrid.clientWidth;
-            let optimalColumns;
-            
-            if (containerWidth > 1200) {
-                optimalColumns = Math.floor(containerWidth / 280); // Más tarjetas para pantallas grandes
-            } else if (containerWidth > 768) {
-                optimalColumns = Math.floor(containerWidth / 260);
-            } else if (containerWidth > 576) {
-                optimalColumns = Math.floor(containerWidth / 230);
-            } else {
-                optimalColumns = 1; // Una tarjeta por fila en móviles pequeños
-            }
-            
-            // Aplicar el ajuste solo si es necesario
-            if (optimalColumns > 0) {
-                const minWidth = Math.floor((containerWidth / optimalColumns) - 25) + 'px';
-                providersGrid.style.gridTemplateColumns = `repeat(auto-fill, minmax(${minWidth}, 1fr))`;
-            }
-        }
-    }
-    
-    // Ejecutar al cargar y al cambiar el tamaño de ventana
-    adjustCardLayout();
-    window.addEventListener('resize', adjustCardLayout);
-    
-    // Mejorar la interacción entre el toggle del sidebar y el contenido
-    const toggleSidebar = document.getElementById('toggleSidebar');
-    const sidebar = document.getElementById('sidebar');
-    
-    if (toggleSidebar && sidebar) {
-        toggleSidebar.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
-            
-            // Volver a ajustar el layout después de la transición del sidebar
-            setTimeout(adjustCardLayout, 300);
-        });
-    }
-    
-    // Detectar clicks fuera del sidebar para cerrarlo en móviles
-    document.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768 && 
-            sidebar && 
-            sidebar.classList.contains('active') && 
-            !sidebar.contains(e.target) && 
-            e.target !== toggleSidebar) {
-            sidebar.classList.remove('active');
-            setTimeout(adjustCardLayout, 300);
-        }
-    });
-
-    // Corregir el comportamiento de los enlaces en el sidebar
-    const menuLinks = document.querySelectorAll('.sidebar a');
-    menuLinks.forEach(link => {
-        // Asegurar que los enlaces funcionan correctamente
-        link.addEventListener('click', function(e) {
-            const href = link.getAttribute('href');
-            if (href && href !== '#') {
-                // No prevenir la navegación para enlaces válidos
-            } else {
-                e.preventDefault();
-            }
-            
-            // Si estamos en móvil, cerrar el sidebar al hacer clic en un enlace
-            if (window.innerWidth <= 768 && sidebar) {
-                sidebar.classList.remove('active');
-            }
-        });
-    });
-
-    // Referencias a elementos del modal de contacto
-
-    const contactProviderName = document.getElementById('contact-provider-name');
-    const btnCancelContact = document.getElementById('btn-cancel-contact');
-    
-    // Variables para almacenar el proveedor seleccionado
-    let selectedProviderID = null;
-    let selectedProviderName = '';
-    
-    // Abrir modal de contacto al hacer clic en "Contactar"
-    contactButtons.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Obtener datos del proveedor desde la tarjeta
-            const providerCard = this.closest('.provider-card');
-            if (providerCard) {
-                selectedProviderID = providerCard.getAttribute('data-id');
-                selectedProviderName = providerCard.querySelector('h3').textContent;
-                
-                // Actualizar nombre en el modal
-                if (contactProviderName) {
-                    contactProviderName.textContent = selectedProviderName;
-                }
-                
-                // Mostrar modal
-                if (modalContact) {
-                    modalContact.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                }
-            }
-        });
-    });
-    
-    // Abrir modal desde el botón "Contactar" en el perfil
-    document.addEventListener('click', function(e) {
-        if (e.target.matches('.btn-solicitar-desde-perfil')) {
-            e.preventDefault();
-            
-            // Cerrar modal de perfil si está abierto
-            const modalPerfil = document.getElementById('modal-perfil');
-            if (modalPerfil && modalPerfil.classList.contains('active')) {
-                modalPerfil.classList.remove('active');
-            }
-            
-            // Abrir modal de contacto
-            if (modalContact) {
-                // El ID y nombre del proveedor ya deben estar establecidos
-                modalContact.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-        }
-    });
-    
-    // Cerrar modal de contacto
-    if (btnCancelContact) {
-        btnCancelContact.addEventListener('click', function() {
-            closeContactModal();
-        });
-    }
-    
-    // También cerrar al hacer clic en el botón X o fuera del modal
-    document.addEventListener('click', function(e) {
-        if (e.target.matches('.modal-close') || 
-            (modalContact && e.target === modalContact)) {
-            closeContactModal();
-        }
-    });
-    
-    // Función para cerrar el modal de contacto
-    function closeContactModal() {
-        if (modalContact) {
-            modalContact.classList.remove('active');
-            document.body.style.overflow = 'auto';
-            
-            // Limpiar campos del formulario
-            document.getElementById('modal-contact-name').value = '';
-            document.getElementById('modal-contact-subject').value = '';
-            document.getElementById('modal-contact-message').value = '';
-            document.getElementById('modal-contact-terms').checked = false;
-        }
-    }
-    
-    // Enviar solicitud al hacer clic en el botón "Enviar mensaje"
-    // Asegurarnos que el botón de enviar mensaje funciona correctamente
-    // Variable global para almacenar el ID del proveedor seleccionado
-
-// Función para abrir el modal de contacto
-function openContactModal(providerID, providerName) {
-    selectedProviderID = providerID;
-    
-    // Registrar para depuración
-    console.log("ID de proveedor seleccionado:", selectedProviderID);
-    
-    // Actualizar el nombre en el modal
-    const contactProviderName = document.getElementById('contact-provider-name');
-    if (contactProviderName) {
-        contactProviderName.textContent = providerName;
-    }
-    
-    // Mostrar el modal
-    const modalContact = document.getElementById('modal-contact');
-    if (modalContact) {
-        modalContact.classList.add('active');
-    }
-}
-
-// Asignar evento a todos los botones de contacto
-document.addEventListener('DOMContentLoaded', function() {
+    // ===== GESTIONAR CONTACTO CON PROVEEDORES =====
+    // Asignar eventos a botones de contacto
     const contactButtons = document.querySelectorAll('.btn-contact');
     
     contactButtons.forEach(btn => {
@@ -768,31 +415,66 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             e.stopPropagation();
             
-            // Obtener el ID y nombre del proveedor
+            // Obtener el ID del proveedor
+            selectedProviderID = this.getAttribute('data-empresa-id');
+            
+            // Obtener el nombre del proveedor desde la tarjeta
             const providerCard = this.closest('.provider-card');
-            if (providerCard) {
-                const providerID = providerCard.getAttribute('data-id');
-                const providerName = providerCard.querySelector('h3').textContent;
-                
-                console.log("Botón contactar clickeado. ID:", providerID, "Nombre:", providerName);
-                
-                // Abrir el modal
-                openContactModal(providerID, providerName);
-            } else {
-                console.error("No se pudo encontrar la tarjeta del proveedor");
+            const providerName = providerCard ? providerCard.querySelector('h3').textContent : 'Proveedor';
+            
+            // Actualizar el nombre en el modal
+            const contactProviderName = document.getElementById('contact-provider-name');
+            if (contactProviderName) {
+                contactProviderName.textContent = providerName;
+            }
+            
+            // Mostrar el modal
+            if (modalContact) {
+                modalContact.classList.add('active');
+                document.body.style.overflow = 'hidden';
             }
         });
     });
     
-    // Botón para enviar el formulario
+    // ===== GESTIONAR SOLICITUDES DESDE PERFIL =====
+    // Escuchar clicks en botón "Solicitar servicio" del perfil
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('btn-solicitar-desde-perfil')) {
+            e.preventDefault();
+            
+            // Obtener ID del proveedor
+            selectedProviderID = e.target.getAttribute('data-empresa-id');
+            
+            // Obtener nombre del proveedor
+            const perfilNombre = document.getElementById('perfil-nombre');
+            const providerName = perfilNombre ? perfilNombre.textContent : 'Proveedor';
+            
+            // Cerrar modal de perfil
+            const modalPerfil = document.getElementById('modal-perfil');
+            if (modalPerfil) {
+                modalPerfil.classList.remove('active');
+            }
+            
+            // Actualizar el nombre en el modal de contacto
+            const contactProviderName = document.getElementById('contact-provider-name');
+            if (contactProviderName) {
+                contactProviderName.textContent = providerName;
+            }
+            
+            // Abrir modal de contacto
+            if (modalContact) {
+                modalContact.classList.add('active');
+            }
+        }
+    });
+    
+    // ===== ENVIAR FORMULARIO DE CONTACTO =====
     const btnSendModalMessage = document.getElementById('btn-send-modal-message');
     if (btnSendModalMessage) {
         btnSendModalMessage.addEventListener('click', function() {
             // Validar campos
             const subject = document.getElementById('modal-contact-subject').value.trim();
             const message = document.getElementById('modal-contact-message').value.trim();
-            
-            console.log("Enviando solicitud. ID:", selectedProviderID, "Asunto:", subject);
             
             // Verificar que se haya seleccionado un proveedor
             if (!selectedProviderID) {
@@ -806,19 +488,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
+            // Deshabilitar botón para evitar envíos múltiples
+            btnSendModalMessage.disabled = true;
+            btnSendModalMessage.textContent = 'Enviando...';
+            
             // Datos para enviar al servidor
             const solicitudData = {
                 id_empresa_proveedor: selectedProviderID,
                 asunto: subject,
                 mensaje: message
             };
-            
-            // Mostrar los datos que se van a enviar (para depuración)
-            console.log("Datos a enviar:", JSON.stringify(solicitudData));
-            
-            // Mostrar indicador de carga
-            btnSendModalMessage.disabled = true;
-            btnSendModalMessage.textContent = 'Enviando...';
             
             // Enviar solicitud al servidor
             fetch('../../php/actions/procesarSolicitud.php', {
@@ -828,14 +507,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify(solicitudData)
             })
-            .then(response => {
-                console.log("Respuesta recibida:", response);
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                // Registrar la respuesta para depuración
-                console.log("Datos recibidos:", data);
-                
                 // Restablecer botón
                 btnSendModalMessage.disabled = false;
                 btnSendModalMessage.textContent = 'Enviar mensaje';
@@ -859,26 +532,113 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-});
-
-// Función para cerrar el modal
-function closeContactModal() {
-    const modalContact = document.getElementById('modal-contact');
-    if (modalContact) {
-        modalContact.classList.remove('active');
+    
+    // ===== CERRAR MODALES =====
+    // Botones para cerrar modal de contacto
+    const btnCancelContact = document.getElementById('btn-cancel-contact');
+    const modalCloseButtons = document.querySelectorAll('.modal-close');
+    
+    if (btnCancelContact) {
+        btnCancelContact.addEventListener('click', closeContactModal);
     }
     
-    // Limpiar campos
-    const subjectInput = document.getElementById('modal-contact-subject');
-    const messageInput = document.getElementById('modal-contact-message');
+    // Botones de cierre general
+    modalCloseButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    });
     
-    if (subjectInput) subjectInput.value = '';
-    if (messageInput) messageInput.value = '';
+    // Cerrar modal al hacer clic fuera del contenido
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal')) {
+            e.target.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
     
-    // Resetear el ID del proveedor
-    selectedProviderID = null;
-}
-    // Función mejorada para mostrar notificaciones (toast)
+    // ===== PAGINACIÓN =====
+    pageButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (this.classList.contains('disabled') || this.classList.contains('active')) {
+                return;
+            }
+            
+            // Actualizar botones activos
+            document.querySelector('.page-btn.active')?.classList.remove('active');
+            this.classList.add('active');
+            
+            // En una implementación real, aquí cargarías los datos de la página correspondiente
+            window.scrollTo({
+                top: document.querySelector('.providers-section').offsetTop,
+                behavior: 'smooth'
+            });
+        });
+    });
+    
+    // ===== FUNCIONES AUXILIARES =====
+    
+    // Función para activar listeners en los elementos del modal de perfil
+    function activarListenersModal() {
+        const modalPerfil = document.getElementById('modal-perfil');
+        if (!modalPerfil) return;
+        
+        // Gestionar tabs del perfil
+        const tabButtons = modalPerfil.querySelectorAll('.tab-btn');
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabId = this.dataset.tab;
+                
+                // Actualizar botones activos
+                tabButtons.forEach(button => {
+                    button.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Mostrar contenido correspondiente
+                const tabContents = modalPerfil.querySelectorAll('.tab-content');
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                modalPerfil.querySelector(`#tab-${tabId}`).classList.add('active');
+            });
+        });
+        
+        // Botón de cierre
+        const closeBtn = modalPerfil.querySelector('.modal-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function() {
+                modalPerfil.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+        }
+    }
+    
+    // Función para cerrar el modal de contacto
+    function closeContactModal() {
+        if (modalContact) {
+            modalContact.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Limpiar campos
+        const subjectInput = document.getElementById('modal-contact-subject');
+        const messageInput = document.getElementById('modal-contact-message');
+        const nameInput = document.getElementById('modal-contact-name');
+        
+        if (subjectInput) subjectInput.value = '';
+        if (messageInput) messageInput.value = '';
+        if (nameInput) nameInput.value = '';
+        
+        // Resetear el ID del proveedor
+        selectedProviderID = null;
+    }
+    
+    // Función para mostrar notificaciones (toast)
     function showToast(message) {
         // Verificar si ya existe un toast
         let toastContainer = document.querySelector('.toast-container');
@@ -933,7 +693,49 @@ function closeContactModal() {
         }, 3000);
     }
     
-    // Función simple para validar email
+    // ===== AJUSTE DE LAYOUTS =====
+    
+    // Ajustar layout de la cuadrícula para diferentes tamaños de pantalla
+    function adjustCardLayout() {
+        const marketplaceContent = document.querySelector('.marketplace-content');
+        const providersGrid = document.querySelector('.providers-grid');
+        
+        if (marketplaceContent && providersGrid) {
+            // Ajustar el ancho del contenedor según el espacio disponible
+            if (window.innerWidth <= 768) {
+                marketplaceContent.style.maxWidth = '100%';
+            } else {
+                // En pantallas más grandes, considerar el espacio del sidebar
+                marketplaceContent.style.maxWidth = '1200px';
+            }
+        }
+        
+        // Recalcular el tamaño óptimo para las tarjetas según el ancho disponible
+        if (providersGrid) {
+            const containerWidth = providersGrid.clientWidth;
+            let optimalColumns;
+            
+            if (containerWidth > 1200) {
+                optimalColumns = Math.floor(containerWidth / 280); // Más tarjetas para pantallas grandes
+            } else if (containerWidth > 768) {
+                optimalColumns = Math.floor(containerWidth / 260);
+            } else if (containerWidth > 576) {
+                optimalColumns = Math.floor(containerWidth / 230);
+            } else {
+                optimalColumns = 1; // Una tarjeta por fila en móviles pequeños
+            }
+            
+            // Aplicar el ajuste solo si es necesario
+            if (optimalColumns > 0) {
+                const minWidth = Math.floor((containerWidth / optimalColumns) - 25) + 'px';
+                providersGrid.style.gridTemplateColumns = `repeat(auto-fill, minmax(${minWidth}, 1fr))`;
+            }
+        }
+    }
+    
+    // Ejecutar al cargar y al cambiar el tamaño de ventana
+    adjustCardLayout();
+    window.addEventListener('resize', adjustCardLayout);
     
     // Añadir keyframes para animaciones
     const style = document.createElement('style');
