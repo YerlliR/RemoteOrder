@@ -79,7 +79,7 @@ function obtenerProveedoresDeCliente($idCliente) {
         $sql = "SELECT e.*, r.fecha_inicio, r.id as relacion_id 
                 FROM empresas e 
                 INNER JOIN relaciones_empresa r ON e.id = r.id_empresa_proveedor 
-                WHERE r.id_empresa_cliente = :id_cliente 
+                WHERE r.id_empresa_proveedor = :id_cliente 
                 AND r.estado = 'activa'";
         
         $stmt = $conn->prepare($sql);
