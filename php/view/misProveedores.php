@@ -5,6 +5,10 @@ if (!isset($_SESSION['usuario'])) {
     header('Location: ../../index.php');
     exit;
 }
+
+// Incluir los archivos necesarios
+require_once "../dao/RelacionesEmpresaDao.php";
+require_once "../model/Empresa.php";
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -66,326 +70,168 @@ if (!isset($_SESSION['usuario'])) {
                 <div class="header-cell">Proveedor</div>
                 <div class="header-cell">Sector</div>
                 <div class="header-cell">Contacto</div>
-                <div class="header-cell">Último pedido</div>
+                <div class="header-cell">Ubicación</div>
                 <div class="header-cell">Valoración</div>
                 <div class="header-cell">Acciones</div>
             </div>
 
-            <!-- Proveedor 1 -->
-            <div class="proveedor-row">
-                <div class="proveedor-cell proveedor-info">
-                    <div class="proveedor-avatar">
-                        <img src="../../uploads/logosEmpresas/placeholder.png" alt="Logo Proveedor">
-                    </div>
-                    <div class="proveedor-details">
-                        <h3 class="proveedor-name">Suministros Globales S.L.</h3>
-                        <p class="proveedor-location"><i class="fas fa-map-marker-alt"></i> Madrid, España</p>
-                    </div>
-                </div>
-                <div class="proveedor-cell proveedor-sector">
-                    <span class="tag tag-tecnologia">Tecnología</span>
-                </div>
-                <div class="proveedor-cell proveedor-contacto">
-                    <p><i class="fas fa-envelope"></i> info@suministrosglobales.com</p>
-                    <p><i class="fas fa-phone"></i> +34 912 456 789</p>
-                </div>
-                <div class="proveedor-cell proveedor-pedido">
-                    <p class="pedido-fecha">15 Abril, 2025</p>
-                    <p class="pedido-estado">
-                        <span class="status status-completed">Completado</span>
-                    </p>
-                </div>
-                <div class="proveedor-cell proveedor-rating">
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                        <span>4.5</span>
-                    </div>
-                </div>
-                <div class="proveedor-cell proveedor-acciones">
-                    <button class="btn-action btn-view" title="Ver perfil">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn-action btn-order" title="Realizar pedido">
-                        <i class="fas fa-shopping-cart"></i>
-                    </button>
-                    <button class="btn-action btn-chat" title="Enviar mensaje">
-                        <i class="fas fa-comment-alt"></i>
-                    </button>
-                    <button class="btn-action btn-remove" title="Eliminar proveedor">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Proveedor 2 -->
-            <div class="proveedor-row">
-                <div class="proveedor-cell proveedor-info">
-                    <div class="proveedor-avatar">
-                        <img src="../../uploads/logosEmpresas/placeholder.png" alt="Logo Proveedor">
-                    </div>
-                    <div class="proveedor-details">
-                        <h3 class="proveedor-name">Componentes Electrónicos Barcelona</h3>
-                        <p class="proveedor-location"><i class="fas fa-map-marker-alt"></i> Barcelona, España</p>
-                    </div>
-                </div>
-                <div class="proveedor-cell proveedor-sector">
-                    <span class="tag tag-industria">Industria</span>
-                </div>
-                <div class="proveedor-cell proveedor-contacto">
-                    <p><i class="fas fa-envelope"></i> ventas@componentesbcn.com</p>
-                    <p><i class="fas fa-phone"></i> +34 933 789 456</p>
-                </div>
-                <div class="proveedor-cell proveedor-pedido">
-                    <p class="pedido-fecha">8 Abril, 2025</p>
-                    <p class="pedido-estado">
-                        <span class="status status-processing">En proceso</span>
-                    </p>
-                </div>
-                <div class="proveedor-cell proveedor-rating">
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <span>5.0</span>
-                    </div>
-                </div>
-                <div class="proveedor-cell proveedor-acciones">
-                    <button class="btn-action btn-view" title="Ver perfil">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn-action btn-order" title="Realizar pedido">
-                        <i class="fas fa-shopping-cart"></i>
-                    </button>
-                    <button class="btn-action btn-chat" title="Enviar mensaje">
-                        <i class="fas fa-comment-alt"></i>
-                    </button>
-                    <button class="btn-action btn-remove" title="Eliminar proveedor">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Proveedor 3 -->
-            <div class="proveedor-row">
-                <div class="proveedor-cell proveedor-info">
-                    <div class="proveedor-avatar">
-                        <img src="../../uploads/logosEmpresas/placeholder.png" alt="Logo Proveedor">
-                    </div>
-                    <div class="proveedor-details">
-                        <h3 class="proveedor-name">Distribuciones Alimentarias Valencia</h3>
-                        <p class="proveedor-location"><i class="fas fa-map-marker-alt"></i> Valencia, España</p>
-                    </div>
-                </div>
-                <div class="proveedor-cell proveedor-sector">
-                    <span class="tag tag-alimentacion">Alimenticio</span>
-                </div>
-                <div class="proveedor-cell proveedor-contacto">
-                    <p><i class="fas fa-envelope"></i> pedidos@distribuciones-av.com</p>
-                    <p><i class="fas fa-phone"></i> +34 960 123 456</p>
-                </div>
-                <div class="proveedor-cell proveedor-pedido">
-                    <p class="pedido-fecha">27 Marzo, 2025</p>
-                    <p class="pedido-estado">
-                        <span class="status status-completed">Completado</span>
-                    </p>
-                </div>
-                <div class="proveedor-cell proveedor-rating">
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                        <span>4.0</span>
-                    </div>
-                </div>
-                <div class="proveedor-cell proveedor-acciones">
-                    <button class="btn-action btn-view" title="Ver perfil">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn-action btn-order" title="Realizar pedido">
-                        <i class="fas fa-shopping-cart"></i>
-                    </button>
-                    <button class="btn-action btn-chat" title="Enviar mensaje">
-                        <i class="fas fa-comment-alt"></i>
-                    </button>
-                    <button class="btn-action btn-remove" title="Eliminar proveedor">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Proveedor 4 -->
-            <div class="proveedor-row">
-                <div class="proveedor-cell proveedor-info">
-                    <div class="proveedor-avatar">
-                        <img src="../../uploads/logosEmpresas/placeholder.png" alt="Logo Proveedor">
-                    </div>
-                    <div class="proveedor-details">
-                        <h3 class="proveedor-name">Consultores Financieros Madrid</h3>
-                        <p class="proveedor-location"><i class="fas fa-map-marker-alt"></i> Madrid, España</p>
-                    </div>
-                </div>
-                <div class="proveedor-cell proveedor-sector">
-                    <span class="tag tag-servicios">Servicios</span>
-                </div>
-                <div class="proveedor-cell proveedor-contacto">
-                    <p><i class="fas fa-envelope"></i> contacto@consultores-fm.com</p>
-                    <p><i class="fas fa-phone"></i> +34 914 789 321</p>
-                </div>
-                <div class="proveedor-cell proveedor-pedido">
-                    <p class="pedido-fecha">20 Marzo, 2025</p>
-                    <p class="pedido-estado">
-                        <span class="status status-cancelled">Cancelado</span>
-                    </p>
-                </div>
-                <div class="proveedor-cell proveedor-rating">
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                        <i class="far fa-star"></i>
-                        <span>3.0</span>
-                    </div>
-                </div>
-                <div class="proveedor-cell proveedor-acciones">
-                    <button class="btn-action btn-view" title="Ver perfil">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn-action btn-order" title="Realizar pedido">
-                        <i class="fas fa-shopping-cart"></i>
-                    </button>
-                    <button class="btn-action btn-chat" title="Enviar mensaje">
-                        <i class="fas fa-comment-alt"></i>
-                    </button>
-                    <button class="btn-action btn-remove" title="Eliminar proveedor">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
+            <?php
+            // Obtener el ID de la empresa actual
+            $idEmpresa = $_SESSION['empresa']['id'];
+            if (is_array($idEmpresa)) {
+                $idEmpresa = $idEmpresa[0]; // Si es un array, tomar el primer elemento
+            }
+            
+            // Obtener los proveedores de la empresa actual
+            $proveedores = obtenerProveedoresDeProveedor($idEmpresa);
+            
+            if (empty($proveedores)) {
+                echo '<div class="empty-state" style="padding: 40px; text-align: center; width: 100%;">
+                    <i class="fas fa-store" style="font-size: 48px; margin-bottom: 20px; color: #cbd5e1;"></i>
+                    <p>No tienes proveedores vinculados actualmente.</p>
+                    <p>Explora nuevos proveedores para establecer relaciones comerciales.</p>
+                    <a href="explorarProveedores.php" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">
+                        Explorar Proveedores
+                    </a>
+                </div>';
+            } else {
+                foreach ($proveedores as $proveedor) {
+                    // Generar iniciales del nombre de la empresa para el avatar
+                    $iniciales = strtoupper(substr($proveedor['nombre'], 0, 2));
+                    
+                    echo '<div class="proveedor-row">
+                        <div class="proveedor-cell proveedor-info">
+                            <div class="proveedor-avatar">';
+                    if (!empty($proveedor['ruta_logo'])) {
+                        echo '<img src="../../' . $proveedor['ruta_logo'] . '" alt="Logo ' . $proveedor['nombre'] . '">';
+                    } else {
+                        echo $iniciales;
+                    }
+                    echo '</div>
+                            <div class="proveedor-details">
+                                <h3 class="proveedor-name">' . $proveedor['nombre'] . '</h3>
+                                <p class="proveedor-location"><i class="fas fa-map-marker-alt"></i> ' . $proveedor['ciudad'] . ', ' . $proveedor['pais'] . '</p>
+                            </div>
+                        </div>
+                        <div class="proveedor-cell proveedor-sector">
+                            <span class="tag tag-' . strtolower($proveedor['sector']) . '">' . $proveedor['sector'] . '</span>
+                        </div>
+                        <div class="proveedor-cell proveedor-contacto">
+                            <p><i class="fas fa-envelope"></i> ' . $proveedor['email'] . '</p>
+                            <p><i class="fas fa-phone"></i> ' . $proveedor['telefono'] . '</p>
+                        </div>
+                        <div class="proveedor-cell proveedor-ubicacion">
+                            <p>' . $proveedor['ciudad'] . ', ' . $proveedor['pais'] . '</p>
+                        </div>
+                        <div class="proveedor-cell proveedor-rating">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span>4.5</span>
+                            </div>
+                        </div>
+                        <div class="proveedor-cell proveedor-acciones">
+                            <button class="btn-action btn-view" title="Ver perfil" data-id="' . $proveedor['id'] . '">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-action btn-order" title="Realizar pedido" data-id="' . $proveedor['id'] . '">
+                                <i class="fas fa-shopping-cart"></i>
+                            </button>
+                            <button class="btn-action btn-chat" title="Enviar mensaje" data-id="' . $proveedor['id'] . '">
+                                <i class="fas fa-comment-alt"></i>
+                            </button>
+                            <button class="btn-action btn-remove" title="Eliminar proveedor" data-id="' . $proveedor['relacion_id'] . '">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>';
+                }
+            }
+            ?>
         </div>
 
         <!-- Vista móvil - Tarjetas de proveedores -->
         <div class="proveedores-cards">
-            <!-- Proveedor 1 -->
-            <div class="proveedor-card">
-                <div class="proveedor-card-header">
-                    <div class="proveedor-avatar">
-                        <img src="../../uploads/logosEmpresas/placeholder.png" alt="Logo Proveedor">
-                    </div>
-                    <div class="proveedor-details">
-                        <h3 class="proveedor-name">Suministros Globales S.L.</h3>
-                        <span class="tag tag-tecnologia">Tecnología</span>
-                        <p class="proveedor-location"><i class="fas fa-map-marker-alt"></i> Madrid, España</p>
-                    </div>
-                </div>
-                <div class="proveedor-card-body">
-                    <div class="card-row">
-                        <span class="card-label">Contacto:</span>
-                        <div class="card-value">
-                            <p><i class="fas fa-envelope"></i> info@suministrosglobales.com</p>
-                            <p><i class="fas fa-phone"></i> +34 912 456 789</p>
+            <?php
+            if (empty($proveedores)) {
+                echo '<div class="empty-state" style="padding: 40px; text-align: center; width: 100%;">
+                    <i class="fas fa-store" style="font-size: 48px; margin-bottom: 20px; color: #cbd5e1;"></i>
+                    <p>No tienes proveedores vinculados actualmente.</p>
+                    <p>Explora nuevos proveedores para establecer relaciones comerciales.</p>
+                    <a href="explorarProveedores.php" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">
+                        Explorar Proveedores
+                    </a>
+                </div>';
+            } else {
+                foreach ($proveedores as $proveedor) {
+                    $iniciales = strtoupper(substr($proveedor['nombre'], 0, 2));
+                    
+                    echo '<div class="proveedor-card">
+                        <div class="proveedor-card-header">
+                            <div class="proveedor-avatar">';
+                    if (!empty($proveedor['ruta_logo'])) {
+                        echo '<img src="../../' . $proveedor['ruta_logo'] . '" alt="Logo ' . $proveedor['nombre'] . '">';
+                    } else {
+                        echo $iniciales;
+                    }
+                    echo '</div>
+                            <div class="proveedor-details">
+                                <h3 class="proveedor-name">' . $proveedor['nombre'] . '</h3>
+                                <span class="tag tag-' . strtolower($proveedor['sector']) . '">' . $proveedor['sector'] . '</span>
+                                <p class="proveedor-location"><i class="fas fa-map-marker-alt"></i> ' . $proveedor['ciudad'] . ', ' . $proveedor['pais'] . '</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-row">
-                        <span class="card-label">Último pedido:</span>
-                        <div class="card-value">
-                            <p>15 Abril, 2025</p>
-                            <p><span class="status status-completed">Completado</span></p>
+                        <div class="proveedor-card-body">
+                            <div class="card-row">
+                                <span class="card-label">Contacto:</span>
+                                <div class="card-value">
+                                    <p><i class="fas fa-envelope"></i> ' . $proveedor['email'] . '</p>
+                                    <p><i class="fas fa-phone"></i> ' . $proveedor['telefono'] . '</p>
+                                </div>
+                            </div>
+                            <div class="card-row">
+                                <span class="card-label">Sitio web:</span>
+                                <div class="card-value">
+                                    <p><i class="fas fa-globe"></i> ' . ($proveedor['sitio_web'] ?: 'No disponible') . '</p>
+                                </div>
+                            </div>
+                            <div class="card-row">
+                                <span class="card-label">Valoración:</span>
+                                <div class="card-value rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span>4.5</span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-row">
-                        <span class="card-label">Valoración:</span>
-                        <div class="card-value rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>4.5</span>
+                        <div class="proveedor-card-footer">
+                            <button class="btn-action btn-view" title="Ver perfil" data-id="' . $proveedor['id'] . '">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-action btn-order" title="Realizar pedido" data-id="' . $proveedor['id'] . '">
+                                <i class="fas fa-shopping-cart"></i>
+                            </button>
+                            <button class="btn-action btn-chat" title="Enviar mensaje" data-id="' . $proveedor['id'] . '">
+                                <i class="fas fa-comment-alt"></i>
+                            </button>
+                            <button class="btn-action btn-remove" title="Eliminar proveedor" data-id="' . $proveedor['relacion_id'] . '">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
-                    </div>
-                </div>
-                <div class="proveedor-card-footer">
-                    <button class="btn-action btn-view" title="Ver perfil">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn-action btn-order" title="Realizar pedido">
-                        <i class="fas fa-shopping-cart"></i>
-                    </button>
-                    <button class="btn-action btn-chat" title="Enviar mensaje">
-                        <i class="fas fa-comment-alt"></i>
-                    </button>
-                    <button class="btn-action btn-remove" title="Eliminar proveedor">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Proveedor 2 -->
-            <div class="proveedor-card">
-                <div class="proveedor-card-header">
-                    <div class="proveedor-avatar">
-                        <img src="../../uploads/logosEmpresas/placeholder.png" alt="Logo Proveedor">
-                    </div>
-                    <div class="proveedor-details">
-                        <h3 class="proveedor-name">Componentes Electrónicos Barcelona</h3>
-                        <span class="tag tag-industria">Industria</span>
-                        <p class="proveedor-location"><i class="fas fa-map-marker-alt"></i> Barcelona, España</p>
-                    </div>
-                </div>
-                <div class="proveedor-card-body">
-                    <div class="card-row">
-                        <span class="card-label">Contacto:</span>
-                        <div class="card-value">
-                            <p><i class="fas fa-envelope"></i> ventas@componentesbcn.com</p>
-                            <p><i class="fas fa-phone"></i> +34 933 789 456</p>
-                        </div>
-                    </div>
-                    <div class="card-row">
-                        <span class="card-label">Último pedido:</span>
-                        <div class="card-value">
-                            <p>8 Abril, 2025</p>
-                            <p><span class="status status-processing">En proceso</span></p>
-                        </div>
-                    </div>
-                    <div class="card-row">
-                        <span class="card-label">Valoración:</span>
-                        <div class="card-value rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span>5.0</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="proveedor-card-footer">
-                    <button class="btn-action btn-view" title="Ver perfil">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn-action btn-order" title="Realizar pedido">
-                        <i class="fas fa-shopping-cart"></i>
-                    </button>
-                    <button class="btn-action btn-chat" title="Enviar mensaje">
-                        <i class="fas fa-comment-alt"></i>
-                    </button>
-                    <button class="btn-action btn-remove" title="Eliminar proveedor">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
+                    </div>';
+                }
+            }
+            ?>
         </div>
 
-        <!-- Paginación -->
+        <!-- Paginación (solo aparece si hay proveedores) -->
+        <?php if (!empty($proveedores)): ?>
         <div class="pagination">
             <button class="page-btn disabled"><i class="fas fa-chevron-left"></i></button>
             <button class="page-btn active">1</button>
@@ -393,6 +239,7 @@ if (!isset($_SESSION['usuario'])) {
             <button class="page-btn">3</button>
             <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
         </div>
+        <?php endif; ?>
     </div>
 
     <!-- Modal para ver detalle del proveedor -->
@@ -403,86 +250,14 @@ if (!isset($_SESSION['usuario'])) {
                 <button class="modal-close"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
-                <!-- Contenido del modal... -->
-                <div class="perfil-header">
-                    <div class="perfil-avatar">
-                        <img src="../../uploads/logosEmpresas/placeholder.png" alt="Logo Proveedor">
-                    </div>
-                    <div class="perfil-info">
-                        <h3>Suministros Globales S.L.</h3>
-                        <div class="perfil-meta">
-                            <span><i class="fas fa-map-marker-alt"></i> Madrid, España</span>
-                            <span><i class="fas fa-tag"></i> Tecnología</span>
-                            <span><i class="fas fa-calendar"></i> Desde 2018</span>
-                        </div>
-                        <div class="perfil-rating">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                                <span>4.5</span>
-                            </div>
-                            <span>(16 valoraciones)</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="perfil-section">
-                    <h4>Descripción</h4>
-                    <p>Suministros Globales S.L. es una empresa líder en la distribución de componentes electrónicos y equipos informáticos para empresas. Con más de 7 años de experiencia en el sector, ofrecemos soluciones completas adaptadas a las necesidades específicas de cada cliente.</p>
-                </div>
-
-                <div class="perfil-section">
-                    <h4>Información de contacto</h4>
-                    <div class="contacto-info">
-                        <div class="contacto-item">
-                            <div class="contacto-icon"><i class="fas fa-envelope"></i></div>
-                            <div class="contacto-text">info@suministrosglobales.com</div>
-                        </div>
-                        <div class="contacto-item">
-                            <div class="contacto-icon"><i class="fas fa-phone"></i></div>
-                            <div class="contacto-text">+34 912 456 789</div>
-                        </div>
-                        <div class="contacto-item">
-                            <div class="contacto-icon"><i class="fas fa-globe"></i></div>
-                            <div class="contacto-text">www.suministrosglobales.com</div>
-                        </div>
-                        <div class="contacto-item">
-                            <div class="contacto-icon"><i class="fas fa-clock"></i></div>
-                            <div class="contacto-text">Lun-Vie: 9:00 - 18:00</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="perfil-section">
-                    <h4>Historial de pedidos</h4>
-                    <div class="historial-pedidos">
-                        <div class="pedido-item">
-                            <div class="pedido-fecha">15 Abril, 2025</div>
-                            <div class="pedido-id">#PED-2025-042</div>
-                            <div class="pedido-monto">1,250.00 €</div>
-                            <div class="pedido-estado"><span class="status status-completed">Completado</span></div>
-                        </div>
-                        <div class="pedido-item">
-                            <div class="pedido-fecha">2 Marzo, 2025</div>
-                            <div class="pedido-id">#PED-2025-028</div>
-                            <div class="pedido-monto">875.50 €</div>
-                            <div class="pedido-estado"><span class="status status-completed">Completado</span></div>
-                        </div>
-                        <div class="pedido-item">
-                            <div class="pedido-fecha">15 Febrero, 2025</div>
-                            <div class="pedido-id">#PED-2025-015</div>
-                            <div class="pedido-monto">2,340.75 €</div>
-                            <div class="pedido-estado"><span class="status status-completed">Completado</span></div>
-                        </div>
-                    </div>
+                <!-- El contenido del modal se cargará dinámicamente por JavaScript -->
+                <div id="perfil-contenido">
+                    <div class="loading-spinner">Cargando información del proveedor...</div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary modal-close">Cerrar</button>
-                <button class="btn btn-primary">Realizar pedido</button>
+                <button class="btn btn-primary btn-realizar-pedido">Realizar pedido</button>
             </div>
         </div>
     </div>
@@ -497,10 +272,11 @@ if (!isset($_SESSION['usuario'])) {
             <div class="modal-body">
                 <p>¿Estás seguro de que deseas eliminar a este proveedor de tu lista?</p>
                 <p>Esta acción no puede deshacerse.</p>
+                <input type="hidden" id="relacion-id-eliminar" value="">
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary modal-close">Cancelar</button>
-                <button class="btn btn-danger">Eliminar</button>
+                <button class="btn btn-danger" id="btn-confirmar-eliminar">Eliminar</button>
             </div>
         </div>
     </div>
@@ -509,25 +285,130 @@ if (!isset($_SESSION['usuario'])) {
     <script>
         // Script básico para manejar la interacción
         document.addEventListener('DOMContentLoaded', function() {
+            // Búsqueda en tiempo real
+            const searchInput = document.querySelector('.search-input');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase().trim();
+                    
+                    // Filtrar en la vista de tabla
+                    const proveedorRows = document.querySelectorAll('.proveedor-row');
+                    proveedorRows.forEach(row => {
+                        const nombreProveedor = row.querySelector('.proveedor-name').textContent.toLowerCase();
+                        const sectorProveedor = row.querySelector('.tag').textContent.toLowerCase();
+                        
+                        if (nombreProveedor.includes(searchTerm) || sectorProveedor.includes(searchTerm)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                    
+                    // Filtrar en la vista de tarjetas
+                    const proveedorCards = document.querySelectorAll('.proveedor-card');
+                    proveedorCards.forEach(card => {
+                        const nombreProveedor = card.querySelector('.proveedor-name').textContent.toLowerCase();
+                        const sectorProveedor = card.querySelector('.tag').textContent.toLowerCase();
+                        
+                        if (nombreProveedor.includes(searchTerm) || sectorProveedor.includes(searchTerm)) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            }
+            
+            // Filtro por sector
+            const sectorFilter = document.getElementById('filter-sector');
+            if (sectorFilter) {
+                sectorFilter.addEventListener('change', function() {
+                    const selectedSector = this.value.toLowerCase();
+                    
+                    // Filtrar en la vista de tabla
+                    const proveedorRows = document.querySelectorAll('.proveedor-row');
+                    proveedorRows.forEach(row => {
+                        const sectorTag = row.querySelector('.tag');
+                        const sectorClase = Array.from(sectorTag.classList)
+                            .find(cls => cls.startsWith('tag-'));
+                        const sectorProveedor = sectorClase ? sectorClase.replace('tag-', '') : '';
+                        
+                        if (!selectedSector || sectorProveedor === selectedSector) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                    
+                    // Filtrar en la vista de tarjetas
+                    const proveedorCards = document.querySelectorAll('.proveedor-card');
+                    proveedorCards.forEach(card => {
+                        const sectorTag = card.querySelector('.tag');
+                        const sectorClase = Array.from(sectorTag.classList)
+                            .find(cls => cls.startsWith('tag-'));
+                        const sectorProveedor = sectorClase ? sectorClase.replace('tag-', '') : '';
+                        
+                        if (!selectedSector || sectorProveedor === selectedSector) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            }
+            
             // Mostrar modal de perfil
             const viewButtons = document.querySelectorAll('.btn-view');
             const modalPerfil = document.getElementById('modal-perfil');
             
             viewButtons.forEach(btn => {
                 btn.addEventListener('click', function() {
+                    const proveedorId = this.getAttribute('data-id');
+                    
+                    // En una implementación real, aquí cargaríamos los datos del proveedor
+                    // mediante una petición AJAX
+                    // Por ahora simulamos con datos estáticos
+                    
+                    // Mostrar el modal
                     modalPerfil.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Evitar scroll en el fondo
                 });
             });
             
             // Mostrar modal de confirmación para eliminar
             const removeButtons = document.querySelectorAll('.btn-remove');
             const modalConfirmar = document.getElementById('modal-confirmar');
+            const inputRelacionId = document.getElementById('relacion-id-eliminar');
             
             removeButtons.forEach(btn => {
                 btn.addEventListener('click', function() {
+                    const relacionId = this.getAttribute('data-id');
+                    inputRelacionId.value = relacionId;
+                    
                     modalConfirmar.classList.add('active');
+                    document.body.style.overflow = 'hidden';
                 });
             });
+            
+            // Eliminar proveedor al confirmar
+            const btnConfirmarEliminar = document.getElementById('btn-confirmar-eliminar');
+            if (btnConfirmarEliminar) {
+                btnConfirmarEliminar.addEventListener('click', function() {
+                    const relacionId = inputRelacionId.value;
+                    
+                    // En una implementación real, aquí enviaríamos una petición AJAX
+                    // para eliminar la relación
+                    console.log('Eliminando relación:', relacionId);
+                    
+                    // Cerrar modal y actualizar la página
+                    modalConfirmar.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                    
+                    // Recargar la página para reflejar el cambio
+                    // En producción es mejor actualizar solo el DOM
+                    window.location.reload();
+                });
+            }
             
             // Cerrar modales
             const closeButtons = document.querySelectorAll('.modal-close');
@@ -536,6 +417,7 @@ if (!isset($_SESSION['usuario'])) {
                 btn.addEventListener('click', function() {
                     const modal = this.closest('.modal');
                     modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
                 });
             });
             
@@ -543,6 +425,7 @@ if (!isset($_SESSION['usuario'])) {
             document.addEventListener('click', function(e) {
                 if (e.target.classList.contains('modal')) {
                     e.target.classList.remove('active');
+                    document.body.style.overflow = 'auto';
                 }
             });
         });
