@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../../public/styles/base.css">
     <link rel="stylesheet" href="../../public/styles/menuLateral.css">
     <link rel="stylesheet" href="../../public/styles/clientes.css">
+    <link rel="stylesheet" href="../../public/styles/solicitudes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
@@ -92,151 +93,143 @@
                         <th>Acciones</th>
                     </tr>
                 </thead>
+                <!-- En php/view/clientes.php, modificar la tabla -->
                 <tbody>
+                    <?php
+                    // Cargar proveedores relacionados con esta empresa
+                    require_once "../dao/RelacionesEmpresaDao.php";
+                    
+                    $idEmpresa = $_SESSION['empresa']['id'];
+                    if (is_array($idEmpresa)) {
+                        $idEmpresa = $idEmpresa[0];
+                    }
+                    
+                    $proveedores = obtenerProveedoresDeCliente($idEmpresa);
+                    
+                    if (empty($proveedores)): ?>
                     <tr>
-                        <td>
-                            <div class="empresa-info">
-                                <div class="empresa-avatar">EG</div>
-                                <div class="empresa-details">
-                                    <div class="empresa-name">Empresa Global S.L.</div>
-                                    <div class="empresa-description">Servicios tecnológicos integrales</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="empresa-contact">
-                                <div>contacto@empresaglobal.com</div>
-                                <div>+34 612 345 678</div>
-                            </div>
-                        </td>
-                        <td><span class="tag tag-tecnologia">Tecnología</span></td>
-                        <td>
-                            <div class="rating">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                                <span>4.5</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="actions-container">
-                                <button class="btn-action btn-view" title="Ver perfil">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="btn-action btn-favorite" title="Añadir a favoritos">
-                                    <i class="far fa-star"></i>
-                                </button>
-                            </div>
-                        </td>
+                        <td colspan="5" class="text-center">No hay clientes o proveedores vinculados. Explora nuevas empresas para establecer relaciones comerciales.</td>
                     </tr>
-
+                    <?php else:
+                        foreach ($proveedores as $proveedor): 
+                            $iniciales = strtoupper(substr($proveedor['nombre'], 0, 2));
+                        ?>
+                        <tr>
+                            <td>
+                                <div class="empresa-info">
+                                    <?php if ($proveedor['ruta_logo']): ?>
+                                    <img src="../../<?php echo $proveedor['ruta_logo']; ?>" alt="Logo <?php echo $proveedor['nombre']; ?>" class="empresa-avatar" />
+                                    <?php else: ?>
+                                    <div class="empresa-avatar"><?php echo $iniciales; ?></div>
+                                    <?php endif; ?>
+                                    <div class="empresa-details">
+                                        <div class="empresa-name"><?php echo $proveedor['nombre']; ?></div>
+                                        <div class="empresa-description"><?php echo substr($proveedor['descripcion'], 0, 50) . (strlen($proveedor['descripcion']) > 50 ? '...' : ''); ?></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="empresa-contact">
+                                    <div><?php echo $proveedor['email']; ?></div>
+                                    <div><?php echo $proveedor['telefono']; ?></div>
+                                </div>
+                            </td>
+                            <td><span class="tag tag-<?php echo strtolower($proveedor['sector']); ?>"><?php echo $proveedor['sector']; ?></span></td>
+                            <td>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span>4.5</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="actions-container">
+                                    <button class="btn-action btn-view" title="Ver perfil" data-empresa-id="<?php echo $proveedor['id']; ?>">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn-action btn-favorite" title="Añadir a favoritos">
+                                        <i class="far fa-star"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php endforeach;
+                    endif; ?>
                 </tbody>
             </table>
         </div>
 
         <!-- Vista de tarjetas para móvil -->
+        <!-- En php/view/clientes.php, modificar la sección de tarjetas para móvil -->
         <div class="empresas-cards">
-            <!-- Empresa 1 -->
-            <div class="empresa-card" data-id="1">
-                <div class="empresa-card-header">
-                    <div class="empresa-info">
-                        <div class="empresa-avatar">EG</div>
-                        <div class="empresa-details">
-                            <div class="empresa-name">Empresa Global S.L.</div>
-                            <div class="empresa-description">Servicios tecnológicos integrales</div>
+            <?php if (empty($proveedores)): ?>
+            <div class="empty-state">
+                <i class="fas fa-users"></i>
+                <p>No hay clientes o proveedores vinculados. Explora nuevas empresas para establecer relaciones comerciales.</p>
+            </div>
+            <?php else:
+                foreach ($proveedores as $proveedor): 
+                    // Calcular iniciales para avatar
+                    $iniciales = strtoupper(substr($proveedor['nombre'], 0, 2));
+                ?>
+                <!-- Empresa card -->
+                <div class="empresa-card" data-id="<?php echo $proveedor['id']; ?>">
+                    <div class="empresa-card-header">
+                        <div class="empresa-info">
+                            <?php if ($proveedor['ruta_logo']): ?>
+                            <img src="../../<?php echo $proveedor['ruta_logo']; ?>" alt="Logo <?php echo $proveedor['nombre']; ?>" class="empresa-avatar" />
+                            <?php else: ?>
+                            <div class="empresa-avatar"><?php echo $iniciales; ?></div>
+                            <?php endif; ?>
+                            <div class="empresa-details">
+                                <div class="empresa-name"><?php echo $proveedor['nombre']; ?></div>
+                                <div class="empresa-description"><?php echo substr($proveedor['descripcion'], 0, 50) . (strlen($proveedor['descripcion']) > 50 ? '...' : ''); ?></div>
+                            </div>
+                        </div>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>4.5</span>
                         </div>
                     </div>
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                        <span>4.5</span>
-                    </div>
-                </div>
-                <div class="empresa-card-body">
-                    <div class="info-row">
-                        <div class="info-label">Email:</div>
-                        <div class="info-value">contacto@empresaglobal.com</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">Teléfono:</div>
-                        <div class="info-value">+34 612 345 678</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">Sector:</div>
-                        <div class="info-value"><span class="tag tag-tecnologia">Tecnología</span></div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">Servicios:</div>
-                        <div class="info-value">Desarrollo web, Consultoría IT, Cloud</div>
-                    </div>
-                </div>
-                <div class="empresa-card-footer">
-                    <button class="btn-action btn-view" title="Ver perfil">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn-action btn-contact" title="Solicitar servicio">
-                        <i class="fas fa-envelope"></i>
-                    </button>
-                    <button class="btn-action btn-favorite" title="Añadir a favoritos">
-                        <i class="far fa-star"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Empresa 2 -->
-            <div class="empresa-card" data-id="2">
-                <div class="empresa-card-header">
-                    <div class="empresa-info">
-                        <div class="empresa-avatar">TP</div>
-                        <div class="empresa-details">
-                            <div class="empresa-name">Tecnologías Profesionales</div>
-                            <div class="empresa-description">Desarrollo de software a medida</div>
+                    <div class="empresa-card-body">
+                        <div class="info-row">
+                            <div class="info-label">Email:</div>
+                            <div class="info-value"><?php echo $proveedor['email']; ?></div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Teléfono:</div>
+                            <div class="info-value"><?php echo $proveedor['telefono']; ?></div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Sector:</div>
+                            <div class="info-value"><span class="tag tag-<?php echo strtolower($proveedor['sector']); ?>"><?php echo $proveedor['sector']; ?></span></div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Ubicación:</div>
+                            <div class="info-value"><?php echo $proveedor['ciudad'] . ', ' . $proveedor['pais']; ?></div>
                         </div>
                     </div>
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <span>5.0</span>
+                    <div class="empresa-card-footer">
+                        <button class="btn-action btn-view" title="Ver perfil" data-empresa-id="<?php echo $proveedor['id']; ?>">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn-action btn-contact" title="Contactar" data-empresa-id="<?php echo $proveedor['id']; ?>">
+                            <i class="fas fa-envelope"></i>
+                        </button>
+                        <button class="btn-action btn-favorite" title="Añadir a favoritos">
+                            <i class="far fa-star"></i>
+                        </button>
                     </div>
                 </div>
-                <div class="empresa-card-body">
-                    <div class="info-row">
-                        <div class="info-label">Email:</div>
-                        <div class="info-value">info@tecnopro.com</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">Teléfono:</div>
-                        <div class="info-value">+34 623 456 789</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">Sector:</div>
-                        <div class="info-value"><span class="tag tag-tecnologia">Tecnología</span></div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">Servicios:</div>
-                        <div class="info-value">Desarrollo de software, Apps móviles</div>
-                    </div>
-                </div>
-                <div class="empresa-card-footer">
-                    <button class="btn-action btn-view" title="Ver perfil">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn-action btn-contact" title="Solicitar servicio">
-                        <i class="fas fa-envelope"></i>
-                    </button>
-                    <button class="btn-action btn-favorite" title="Añadir a favoritos">
-                        <i class="far fa-star"></i>
-                    </button>
-                </div>
-            </div>
+                <?php endforeach;
+            endif; ?>
         </div>
 
 
@@ -348,6 +341,45 @@
         </div>
     </div>
 
+
+
+
+
+    <!-- Modal for viewing solicitudes - add this at the end of clientes.php before closing body tag -->
+    <div id="modal-solicitudes" class="modal">
+        <div class="modal-content modal-solicitudes-content">
+            <div class="modal-header">
+                <h2>Mis Solicitudes</h2>
+                <button class="modal-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="solicitudes-tabs">
+                    <button class="solicitud-tab-btn active" data-tab="enviadas">Enviadas</button>
+                    <button class="solicitud-tab-btn" data-tab="recibidas">Recibidas</button>
+                </div>
+                
+                <div class="solicitudes-content">
+                    <!-- Tab: Solicitudes Enviadas -->
+                    <div class="solicitud-tab-content active" id="tab-enviadas">
+                        <div id="solicitudes-enviadas-container">
+                            <!-- Solicitudes will be loaded here via AJAX -->
+                            <div class="loading-spinner">Cargando solicitudes...</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab: Solicitudes Recibidas -->
+                    <div class="solicitud-tab-content" id="tab-recibidas">
+                        <div id="solicitudes-recibidas-container">
+                            <!-- Solicitudes will be loaded here via AJAX -->
+                            <div class="loading-spinner">Cargando solicitudes...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../../public/js/solicitudes.js"></script>
     <script src="../../public/js/menuLateral.js"></script>
     <script src="../../public/js/clientes.js"></script>
 </body>
