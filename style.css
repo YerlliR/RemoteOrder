@@ -229,6 +229,8 @@
             color: white;
             border: none;
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+            padding: 4px;
+            border-radius: 50px;
         }
 
         .btn-primary:hover {
@@ -1884,3 +1886,4 @@
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
 }
+

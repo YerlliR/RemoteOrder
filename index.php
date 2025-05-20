@@ -7,15 +7,6 @@
     <title>RemoteOrder - Gestión de Pedidos Simplificada</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemoteOrder - Gestión de Pedidos Simplificada</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="public/styles/base.css">
-    <link rel="stylesheet" href="public/styles/index.css">
 </head>
 <body>
     <!-- Formas flotantes decorativas -->
@@ -37,7 +28,7 @@
         
         <ul class="nav-links">
             <li><a href="#features">Características</a></li>
-            <li><a href="#how-it-works">Cómo Funciona</a></li>
+            <!-- <li><a href="#how-it-works">Cómo Funciona</a></li> -->
             <li><a href="#pricing">Precios</a></li>
             <li><a href="#testimonials">Testimonios</a></li>
             <li><a href="#contact">Contacto</a></li>
@@ -59,15 +50,15 @@
                     <i class="fas fa-rocket"></i>
                     Comenzar Ahora
                 </a>
-                <a href="#how-it-works" class="hero-btn btn-secondary">
+                <!-- <a href="#how-it-works" class="hero-btn btn-secondary">
                     <i class="fas fa-play"></i>
                     Ver Demo
-                </a>
+                </a> -->
             </div>
         </div>
         
-        <div class="hero-image">
-            <img src="public/images/dashboard-preview.png" alt="Dashboard de RemoteOrder">
+        <div class="hero-image" style="margin-right: 2rem;">
+            <img src="imgWeb/Dashbord.png" alt="Dashboard de RemoteOrder">
         </div>
         
         <div class="wave-divider">
@@ -81,12 +72,13 @@
     <section class="clients">
         <h2>Empresas que confían en nosotros</h2>
         <div class="clients-grid">
-            <img src="public/images/clients/client1.png" alt="Logo Cliente 1" class="client-logo">
-            <img src="public/images/clients/client2.png" alt="Logo Cliente 2" class="client-logo">
-            <img src="public/images/clients/client3.png" alt="Logo Cliente 3" class="client-logo">
-            <img src="public/images/clients/client4.png" alt="Logo Cliente 4" class="client-logo">
-            <img src="public/images/clients/client5.png" alt="Logo Cliente 5" class="client-logo">
-            <img src="public/images/clients/client6.png" alt="Logo Cliente 6" class="client-logo">
+            <img src="imgWeb/g400-logo.png" alt="Logo Cliente 1" class="client-logo">
+            <img src="imgWeb/Mercadona.svg.png" alt="Logo Cliente 2" class="client-logo">
+            <img src="imgWeb/Fanta_2023.svg" alt="Logo Cliente 6" class="client-logo">
+            <img src="imgWeb/Claude_AI_logo.svg" alt="Logo Cliente 4" class="client-logo">
+            <img src="imgWeb/logo-grefusa-2020-2x.png" alt="Logo Cliente 5" class="client-logo">
+            <img src="imgWeb/logo_footer.2c4cf8d6.svg" alt="Logo Cliente 3" class="client-logo">
+
         </div>
     </section>
     
@@ -107,7 +99,7 @@
                 <p class="stat-label">Aumento de eficiencia (%)</p>
             </div>
             <div class="stat-card">
-                <div class="counter-number" data-target="1500000">0</div>
+                <div class="counter-number" data-target="72000">0</div>
                 <p class="stat-label">Pedidos procesados</p>
             </div>
         </div>
@@ -151,13 +143,13 @@
                 <p>Organiza tu inventario por categorías personalizables. Añade imágenes, detalles técnicos y precios con facilidad para mantener un catálogo actualizado.</p>
             </div>
             
-            <div class="feature-card">
+            <!-- <div class="feature-card">
                 <div class="feature-icon">
                     <i class="fas fa-chart-line"></i>
                 </div>
                 <h3>Análisis y Reportes</h3>
                 <p>Visualiza el rendimiento de tu negocio con paneles intuitivos. Genera informes detallados sobre ventas, pedidos y relaciones con proveedores.</p>
-            </div>
+            </div> -->
             
             <div class="feature-card">
                 <div class="feature-icon">
@@ -178,7 +170,7 @@
     </section>
     
     <!-- How it Works Section -->
-    <section class="how-it-works" id="how-it-works">
+    <!-- <section class="how-it-works" id="how-it-works">
         <div class="section-header">
             <h2>Cómo Funciona</h2>
             <p>Descubre lo sencillo que es implementar y utilizar RemoteOrder en tu negocio con estos simples pasos.</p>
@@ -233,7 +225,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <!-- Pricing Section -->
     <section class="pricing" id="pricing">
