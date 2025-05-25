@@ -217,5 +217,12 @@
     <script src="../../public/js/menuLateral.js"></script>
     <script src="../../public/js/productos.js"></script>
     <script src="../../public/js/categorias.js"></script>
+    <?php
+        // ===== ARCHIVO 10: Ejemplo de uso en una vista con alertas =====
+        // php/view/productos.php - SECCIÓN A AÑADIR AL FINAL ANTES DE </body>
+
+        // Incluir alertas de la sesión
+        include_once '../includes/footer_alerts.php';
+    ?>
 </body>
 </html>
