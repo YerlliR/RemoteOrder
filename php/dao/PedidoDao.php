@@ -184,8 +184,9 @@ function findPedidosRecibidos($idEmpresaProveedor) {
                 $row['direccion_entrega']
             );
             
-            // Agregar información adicional
+            // Agregar información adicional como propiedad pública
             $pedido->nombreCliente = $row['nombre_cliente'];
+            $pedido->tipo = 'recibido'; // Identificar tipo de pedido
             
             $pedidos[] = $pedido;
         }
@@ -230,8 +231,9 @@ function findPedidosEnviados($idEmpresaCliente) {
                 $row['direccion_entrega']
             );
             
-            // Agregar información adicional
+            // Agregar información adicional como propiedad pública
             $pedido->nombreProveedor = $row['nombre_proveedor'];
+            $pedido->tipo = 'enviado'; // Identificar tipo de pedido
             
             $pedidos[] = $pedido;
         }

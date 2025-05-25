@@ -13,6 +13,11 @@ class Pedido {
     private $notas;
     private $direccionEntrega;
     private $lineas; // Array de líneas de pedido
+    
+    // Propiedades públicas adicionales para mostrar información
+    public $nombreCliente;
+    public $nombreProveedor;
+    public $tipo; // 'recibido' o 'enviado'
 
     public function __construct(
         $id = null,
@@ -91,6 +96,15 @@ class Pedido {
         }
 
         $this->total = $this->subtotal + $this->totalIva;
+    }
+    
+    // Métodos para obtener nombres de empresas
+    public function getNombreCliente() {
+        return $this->nombreCliente ?? 'Cliente';
+    }
+    
+    public function getNombreProveedor() {
+        return $this->nombreProveedor ?? 'Proveedor';
     }
 }
 
