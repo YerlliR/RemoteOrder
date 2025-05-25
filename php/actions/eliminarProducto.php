@@ -1,5 +1,7 @@
 <?php 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once '../db/conexionDb.php';
 require_once '../dao/ProductoDao.php';
 require_once '../includes/alert_helper.php';

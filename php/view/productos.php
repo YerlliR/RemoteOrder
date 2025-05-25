@@ -1,5 +1,15 @@
+
 <?php
-session_start();
+// Incluir helper de sesión y verificar autenticación
+require_once '../includes/session_helper.php';
+if (!verificarAutenticacion()) {
+    header('Location: login.php');
+    exit;
+}
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 include_once '../dao/CategoriaDao.php';
 include_once '../model/Empresa.php';
 include_once '../dao/ProductoDao.php';
@@ -19,11 +29,7 @@ include_once '../dao/CategoriaDao.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    <!-- Formas flotantes decorativas -->
-    <div class="floating-shape shape1"></div>
-    <div class="floating-shape shape2"></div>
-
-    <!-- Sidebar / Menú lateral -->
+    <!-- Contenido de la página -->
     <?php include 'elements/menuLateral.php'; ?>
 
     <!-- Contenido principal - Productos -->

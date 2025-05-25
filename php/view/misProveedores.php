@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 // Si no hay sesión activa, redirigir al login
 if (!isset($_SESSION['usuario'])) {
     header('Location: ../../index.php');
@@ -433,5 +435,7 @@ require_once "../model/Empresa.php";
             });
         });
     </script>
+        <?php include_once '../includes/footer_alerts.php'; ?>
+
 </body>
 </html>

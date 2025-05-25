@@ -1,6 +1,7 @@
 <?php
-    session_start();
-    // Aquí iría la lógica para cargar las empresas disponibles
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -382,5 +383,7 @@
     <script src="../../public/js/solicitudes.js"></script>
     <script src="../../public/js/menuLateral.js"></script>
     <script src="../../public/js/clientes.js"></script>
+        <?php include_once '../includes/footer_alerts.php'; ?>
+
 </body>
 </html>

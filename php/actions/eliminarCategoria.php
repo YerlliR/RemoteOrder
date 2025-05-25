@@ -1,8 +1,9 @@
 <?php 
 require_once '../dao/categoriaDao.php';
 require_once '../includes/alert_helper.php'; // ← NUEVA LÍNEA
-session_start();
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 header('Content-Type: application/json');
 
 if (isset($_POST['idCategoria'])) {

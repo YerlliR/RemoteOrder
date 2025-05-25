@@ -1,18 +1,20 @@
 <?php
-/**
- * Sistema de Alertas para RemoteOrder
- * Archivo: php/includes/alert_helper.php
- */
-
 class AlertHelper {
+    
+    /**
+     * Inicializar sesión de forma segura
+     */
+    private static function iniciarSesion() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+    }
     
     /**
      * Añadir alerta a la sesión para mostrar en la siguiente página
      */
     public static function addAlert($type, $message, $title = '') {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        self::iniciarSesion();
         
         if (!isset($_SESSION['alerts'])) {
             $_SESSION['alerts'] = [];
@@ -49,9 +51,7 @@ class AlertHelper {
      * Obtener alertas y limpiar la sesión
      */
     public static function getAlerts() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        self::iniciarSesion();
         
         if (!isset($_SESSION['alerts'])) {
             return [];
@@ -73,20 +73,24 @@ class AlertHelper {
         
         $script = '<script>';
         $script .= 'document.addEventListener("DOMContentLoaded", function() {';
-        $script .= 'if (window.showAlert) {';
+        $script .= 'if (typeof showAlert === "function") {';
         
         foreach ($alerts as $alert) {
             $message = addslashes($alert['message']);
             $title = addslashes($alert['title']);
             $type = $alert['type'];
             
+            $script .= "setTimeout(() => {";
             $script .= "showAlert({";
             $script .= "type: '{$type}',";
             $script .= "title: '{$title}',";
             $script .= "message: '{$message}'";
             $script .= "});";
+            $script .= "}, 500);";
         }
         
+        $script .= '} else {';
+        $script .= 'console.warn("Sistema de alertas no disponible");';
         $script .= '}';
         $script .= '});';
         $script .= '</script>';
@@ -101,15 +105,13 @@ class AlertHelper {
         $response = [
             'success' => $success,
             'message' => $message,
-            'data' => $data
+            'data' => $data,
+            'alert_type' => $success ? 'success' : 'error'
         ];
         
         if ($title) {
             $response['title'] = $title;
         }
-        
-        // Determinar tipo de alerta basado en el éxito
-        $response['alert_type'] = $success ? 'success' : 'error';
         
         return json_encode($response);
     }
@@ -118,9 +120,7 @@ class AlertHelper {
      * Limpiar alertas antiguas (más de 1 hora)
      */
     public static function cleanOldAlerts() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        self::iniciarSesion();
         
         if (!isset($_SESSION['alerts'])) {
             return;
@@ -132,4 +132,3 @@ class AlertHelper {
         });
     }
 }
-?>

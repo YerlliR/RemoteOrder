@@ -1,9 +1,11 @@
 <?php
-session_start();
 require_once '../constantes/constantesRutas.php';
 require_once RUTA_DB;
 require_once '../dao/PedidoDao.php';
 require_once '../includes/alert_helper.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Verificar autenticación
 if (!isset($_SESSION['usuario']) || !isset($_SESSION['empresa']['id'])) {

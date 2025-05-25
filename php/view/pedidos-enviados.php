@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 // Si no hay sesión activa, redirigir al login
 if (!isset($_SESSION['usuario'])) {
     header('Location: ../../index.php');

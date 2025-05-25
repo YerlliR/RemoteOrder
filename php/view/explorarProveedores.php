@@ -1,6 +1,7 @@
 <?php
-session_start();
-// Si no hay sesión activa, redirigir al login
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if (!isset($_SESSION['usuario'])) {
     header('Location: ../../index.php');
     exit;
@@ -394,5 +395,7 @@ include_once "../model/Empresa.php";
             echo json_encode($empresasData);
         ?>;
     </script>
+        <?php include_once '../includes/footer_alerts.php'; ?>
+
 </body>
 </html>

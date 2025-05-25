@@ -1,6 +1,7 @@
 <?php
-session_start();
-// Si no hay sesión activa, redirigir al login
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}// Si no hay sesión activa, redirigir al login
 if (!isset($_SESSION['usuario'])) {
     header('Location: ../../index.php');
     exit;
@@ -173,5 +174,7 @@ $pedidosRecibidos = findPedidosRecibidos($idEmpresa);
 
     <script src="../../public/js/menuLateral.js"></script>
     <script src="../../public/js/pedidos-vista.js"></script>
+        <?php include_once '../includes/footer_alerts.php'; ?>
+
 </body>
 </html>

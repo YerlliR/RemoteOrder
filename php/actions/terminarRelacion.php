@@ -1,6 +1,8 @@
 <?php
-session_start();
-require_once '../constantes/constantesRutas.php';
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    require_once '../constantes/constantesRutas.php';
 require_once RUTA_DB;
 require_once '../dao/RelacionesEmpresaDao.php';
 require_once '../includes/alert_helper.php'; // ← NUEVA LÍNEA

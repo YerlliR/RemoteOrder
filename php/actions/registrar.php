@@ -5,8 +5,9 @@ include_once RUTA_USUARIO_MODEL;
 include_once RUTA_USUARIO_DAO;
 include_once '../includes/alert_helper.php'; // ← NUEVA LÍNEA
 
-session_start(); // Para las alertas
-
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
 // Comprobamos si se han enviado los datos del formulario
 if($_SERVER["REQUEST_METHOD"] == "POST") {
     // Verificamos que todos los campos necesarios existen

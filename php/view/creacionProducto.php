@@ -1,7 +1,9 @@
 <?php 
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     include_once '../dao/categoriaDao.php';
-        include_once '../model/categoria.php';
+    include_once '../model/categoria.php';
 ?>
 
 <!DOCTYPE html>
@@ -104,5 +106,7 @@
 
     <script src="../../public/js/creacionProducto.js"></script>
     <script src="../../public/js/menuLateral.js"></script>
+        <?php include_once '../includes/footer_alerts.php'; ?>
+
 </body>
 </html>

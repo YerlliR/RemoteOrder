@@ -1,6 +1,8 @@
 <?php
-session_start();
-require_once '../model/Producto.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+    require_once '../model/Producto.php';
 require_once '../dao/ProductoDao.php';
 require_once '../includes/alert_helper.php'; // ← NUEVA LÍNEA
 
