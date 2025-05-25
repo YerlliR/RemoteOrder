@@ -1,12 +1,20 @@
+
 <?php
-
+// Incluir helper de sesión y verificar autenticación
+require_once '../includes/session_helper.php';
+if (!verificarAutenticacion()) {
+    header('Location: login.php');
+    exit;
+}
+if (session_status() === PHP_SESSION_NONE) {
     session_start();
-    include_once '../dao/CategoriaDao.php';
-    include_once '../model/Empresa.php';
-    include_once '../dao/ProductoDao.php';
-    include_once '../model/Producto.php';
-    include_once '../dao/CategoriaDao.php';
+}
 
+include_once '../dao/CategoriaDao.php';
+include_once '../model/Empresa.php';
+include_once '../dao/ProductoDao.php';
+include_once '../model/Producto.php';
+include_once '../dao/CategoriaDao.php';
 ?>
 
 <!DOCTYPE html>
@@ -21,11 +29,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    <!-- Formas flotantes decorativas -->
-    <div class="floating-shape shape1"></div>
-    <div class="floating-shape shape2"></div>
-
-    <!-- Sidebar / Menú lateral -->
+    <!-- Contenido de la página -->
     <?php include 'elements/menuLateral.php'; ?>
 
     <!-- Contenido principal - Productos -->
@@ -48,29 +52,6 @@
             </div>
         </div>
 
-        <!-- <div class="filters-container">
-            <select class="filter-select">
-                <option value="">Todas las categorías</option>
-                <option value="electronicos">Electrónicos</option>
-                <option value="hogar">Hogar</option>
-                <option value="oficina">Oficina</option>
-                <option value="alimentos">Alimentos</option>
-            </select>
-            <select class="filter-select">
-                <option value="">Todos los precios</option>
-                <option value="0-50">0€ - 50€</option>
-                <option value="50-100">50€ - 100€</option>
-                <option value="100-500">100€ - 500€</option>
-                <option value="500">+500€</option>
-            </select>
-            <select class="filter-select">
-                <option value="">Disponibilidad</option>
-                <option value="stock">En stock</option>
-                <option value="low-stock">Stock bajo</option>
-                <option value="out-stock">Sin stock</option>
-            </select>
-        </div> -->
-
         <div class="productos-grid">
             <!-- Tarjeta para añadir nuevo producto -->
             <div class="add-producto-card">
@@ -81,7 +62,6 @@
             </div>
 
             <?php
-
                 $productos = findByEmpresaId();
 
                 foreach ($productos as $producto) {
@@ -120,23 +100,8 @@
                 }
             ?>
         </div>
-
-
-        <!-- Paginación -->
-        <!-- <div class="pagination">
-            <div class="page-item disabled">
-                <i class="fas fa-chevron-left"></i>
-            </div>
-            <div class="page-item active">1</div>
-            <div class="page-item">2</div>
-            <div class="page-item">3</div>
-            <div class="page-item">4</div>
-            <div class="page-item">
-                <i class="fas fa-chevron-right"></i>
-            </div>
-        </div> -->
-
     </div>
+    
     <!-- Modal para categorías -->
     <div id="modal-categoria" class="modal">
         <div class="modal-content">
@@ -161,9 +126,8 @@
                                     </div>';
                             }
                             if (count($categorias) == 0) {
-                                echo 'SIN CATEGORIAS';
+                                echo '<p class="empty-state">No hay categorías creadas aún</p>';
                             }
-
                         ?>
                     </div>
                 </div>
@@ -213,9 +177,17 @@
         </div>
     </div>
 
-
+    <!-- Incluir el sistema de alertas ANTES de otros scripts -->
+    <script src="../../public/js/alertSystem.js"></script>
+    
+    <!-- Scripts específicos de la página -->
     <script src="../../public/js/menuLateral.js"></script>
     <script src="../../public/js/productos.js"></script>
     <script src="../../public/js/categorias.js"></script>
+    
+    <?php
+        // Incluir alertas de la sesión
+        include_once '../includes/footer_alerts.php';
+    ?>
 </body>
 </html>

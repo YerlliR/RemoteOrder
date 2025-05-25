@@ -1,6 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
     session_start();
-
+}
     include_once '../constantes/constantesRutas.php';
     include_once RUTA_DB;
     include_once RUTA_EMPRESA_MODEL;
@@ -50,5 +51,7 @@
         </div>
     </div>
     <script src="../../public/js/seleccionEmpresa.js"></script>
+        <?php include_once '../includes/footer_alerts.php'; ?>
+
 </body>
 </html>

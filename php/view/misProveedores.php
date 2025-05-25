@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 // Si no hay sesión activa, redirigir al login
 if (!isset($_SESSION['usuario'])) {
     header('Location: ../../index.php');
@@ -20,6 +22,9 @@ require_once "../model/Empresa.php";
     <link rel="stylesheet" href="../../public/styles/base.css">
     <link rel="stylesheet" href="../../public/styles/menuLateral.css">
     <link rel="stylesheet" href="../../public/styles/misProveedores.css">
+    <script src="../../public/js/menuLateral.js"></script>
+    <script src="../../public/js/pedidos.js"></script>
+    <link rel="stylesheet" href="../../public/styles/pedidos.css">
 </head>
 <body>
     <?php include_once 'elements/menuLateral.php'; ?>
@@ -430,5 +435,7 @@ require_once "../model/Empresa.php";
             });
         });
     </script>
+        <?php include_once '../includes/footer_alerts.php'; ?>
+
 </body>
 </html>

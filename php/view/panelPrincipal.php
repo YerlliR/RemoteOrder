@@ -1,3 +1,10 @@
+<?php
+
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -152,5 +159,7 @@
 
     <!-- Incluir el archivo JavaScript del menú lateral -->
     <script src="../../public/js/menuLateral.js"></script>
+        <?php include_once '../includes/footer_alerts.php'; ?>
+
 </body>
 </html>

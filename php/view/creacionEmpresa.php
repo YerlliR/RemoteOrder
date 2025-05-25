@@ -1,6 +1,7 @@
 <?php
-session_start();
-
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
 // Verify user is logged in
 if (!isset($_SESSION['usuario']) || !isset($_SESSION['usuario']['id'])) {
     // Redirect to login if not logged in
@@ -273,5 +274,7 @@ if (!isset($_SESSION['usuario']) || !isset($_SESSION['usuario']['id'])) {
             }
         });
     </script>
+        <?php include_once '../includes/footer_alerts.php'; ?>
+
 </body>
 </html>
