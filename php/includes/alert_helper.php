@@ -1,6 +1,8 @@
 <?php
-// Ejemplo de integración del sistema de alertas en PHP
-// Archivo: php/includes/alert_helper.php
+/**
+ * Sistema de Alertas para RemoteOrder
+ * Archivo: php/includes/alert_helper.php
+ */
 
 class AlertHelper {
     
@@ -8,6 +10,10 @@ class AlertHelper {
      * Añadir alerta a la sesión para mostrar en la siguiente página
      */
     public static function addAlert($type, $message, $title = '') {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['alerts'])) {
             $_SESSION['alerts'] = [];
         }
@@ -43,6 +49,10 @@ class AlertHelper {
      * Obtener alertas y limpiar la sesión
      */
     public static function getAlerts() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['alerts'])) {
             return [];
         }
@@ -63,6 +73,7 @@ class AlertHelper {
         
         $script = '<script>';
         $script .= 'document.addEventListener("DOMContentLoaded", function() {';
+        $script .= 'if (window.showAlert) {';
         
         foreach ($alerts as $alert) {
             $message = addslashes($alert['message']);
@@ -76,6 +87,7 @@ class AlertHelper {
             $script .= "});";
         }
         
+        $script .= '}';
         $script .= '});';
         $script .= '</script>';
         
@@ -101,92 +113,23 @@ class AlertHelper {
         
         return json_encode($response);
     }
-}
-
-// Ejemplo de uso en actions/crearProducto.php - MODIFICADO
-if (isset($_POST['nombre_producto'])) {
-    // ... lógica de validación ...
     
-    if (findByCodigoSeguimiento($codigoSeguimiento) == false) {
-        // ... lógica de creación ...
-        
-        $producto = new Producto(/* ... parámetros ... */);
-        $resultado = crearProducto($producto);
-        
-        if ($resultado) {
-            AlertHelper::success('El producto se ha creado correctamente', 'Producto Creado');
-            header('Location: ../view/productos.php');
-        } else {
-            AlertHelper::error('No se pudo crear el producto. Intenta de nuevo.', 'Error al Crear');
-            header('Location: ../view/creacionProducto.php');
+    /**
+     * Limpiar alertas antiguas (más de 1 hora)
+     */
+    public static function cleanOldAlerts() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
         }
-    } else {
-        AlertHelper::warning('El código de seguimiento ya existe. Usa uno diferente.', 'Código Duplicado');
-        header('Location: ../view/creacionProducto.php');
-    }
-}
-
-// Ejemplo de uso en actions/eliminarProducto.php - MODIFICADO
-if (isset($_POST['idProducto'])) {
-    $idProducto = $_POST['idProducto'];
-    $result = eliminarProducto($idProducto);
-
-    if ($result) {
-        AlertHelper::success('El producto se ha eliminado correctamente');
-        echo AlertHelper::jsonResponse(true, 'Producto eliminado correctamente');
-    } else {
-        AlertHelper::error('No se pudo eliminar el producto');
-        echo AlertHelper::jsonResponse(false, 'Error al eliminar el producto');
-    }
-} else {
-    echo AlertHelper::jsonResponse(false, 'ID de producto no proporcionado');
-}
-
-// Ejemplo de uso en actions/crearPedido.php - MODIFICADO
-try {
-    // ... lógica de creación de pedido ...
-    
-    $pedidoId = crearPedido($pedido);
-    
-    if ($pedidoId) {
-        header('Content-Type: application/json');
-        echo AlertHelper::jsonResponse(
-            true, 
-            'Pedido creado correctamente. Número de pedido: #' . $pedido->getNumeroPedido(),
-            ['pedidoId' => $pedidoId],
-            'Pedido Enviado'
-        );
-    } else {
-        header('Content-Type: application/json');
-        echo AlertHelper::jsonResponse(false, 'Error al procesar el pedido. Intenta de nuevo.');
-    }
-} catch (Exception $e) {
-    header('Content-Type: application/json');
-    echo AlertHelper::jsonResponse(false, 'Error del servidor: ' . $e->getMessage());
-}
-
-// Ejemplo de uso en actions/actualizarEstadoPedido.php - MODIFICADO
-try {
-    $resultado = actualizarEstadoPedido($pedidoId, $nuevoEstado);
-    
-    if ($resultado) {
-        $mensajes = [
-            'procesando' => 'El pedido está siendo procesado',
-            'completado' => 'El pedido se ha completado exitosamente',
-            'cancelado' => 'El pedido ha sido cancelado'
-        ];
         
-        $mensaje = $mensajes[$nuevoEstado] ?? 'Estado actualizado correctamente';
+        if (!isset($_SESSION['alerts'])) {
+            return;
+        }
         
-        header('Content-Type: application/json');
-        echo AlertHelper::jsonResponse(true, $mensaje, [], 'Estado Actualizado');
-    } else {
-        header('Content-Type: application/json');
-        echo AlertHelper::jsonResponse(false, 'No se pudo actualizar el estado del pedido');
+        $currentTime = time();
+        $_SESSION['alerts'] = array_filter($_SESSION['alerts'], function($alert) use ($currentTime) {
+            return ($currentTime - $alert['timestamp']) < 3600; // 1 hora
+        });
     }
-} catch (Exception $e) {
-    header('Content-Type: application/json');
-    echo AlertHelper::jsonResponse(false, 'Error: ' . $e->getMessage());
 }
-
 ?>
