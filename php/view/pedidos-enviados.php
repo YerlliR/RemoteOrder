@@ -142,9 +142,6 @@ $pedidosEnviados = findPedidosEnviados($idEmpresa);
                                 <i class="fas fa-times"></i> Cancelar
                             </button>
                             <?php endif; ?>
-                            <button class="btn-pedido btn-imprimir" onclick="imprimirPedido(<?php echo $pedido->getId(); ?>)">
-                                <i class="fas fa-print"></i> Imprimir
-                            </button>
                         </div>
                     </div>
                 <?php endforeach; ?>

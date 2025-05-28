@@ -1,48 +1,36 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // References to DOM elements
     const btnMisSolicitudes = document.getElementById('btn-mis-solicitudes');
     const modalSolicitudes = document.getElementById('modal-solicitudes');
     const tabButtons = document.querySelectorAll('.solicitud-tab-btn');
     const closeButtons = document.querySelectorAll('.modal-close');
     
-    // Open solicitudes modal
+    // Abrir modal
     if (btnMisSolicitudes) {
         btnMisSolicitudes.addEventListener('click', function() {
             modalSolicitudes.classList.add('active');
             document.body.style.overflow = 'hidden';
-            
-            showAlert({
-                type: 'info',
-                title: 'Cargando solicitudes',
-                message: 'Obteniendo tus solicitudes...',
-                duration: 2000
-            });
-            
-            loadSolicitudes('enviadas'); // Load enviadas by default
+            loadSolicitudes('enviadas');
         });
     }
     
-    // Tab switching
+    // Cambio de tabs
     tabButtons.forEach(btn => {
         btn.addEventListener('click', function() {
             const tabType = this.dataset.tab;
             
-            // Update active tab button
             tabButtons.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
-            // Show corresponding tab content
             document.querySelectorAll('.solicitud-tab-content').forEach(content => {
                 content.classList.remove('active');
             });
             document.getElementById(`tab-${tabType}`).classList.add('active');
             
-            // Load solicitudes for the selected tab
             loadSolicitudes(tabType);
         });
     });
     
-    // Close modal
+    // Cerrar modal
     closeButtons.forEach(btn => {
         btn.addEventListener('click', function() {
             modalSolicitudes.classList.remove('active');
@@ -50,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Click outside to close
     modalSolicitudes.addEventListener('click', function(e) {
         if (e.target === modalSolicitudes) {
             modalSolicitudes.classList.remove('active');
@@ -58,67 +45,40 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Function to load solicitudes
+    // Cargar solicitudes
     function loadSolicitudes(type) {
         const container = document.getElementById(`solicitudes-${type}-container`);
-        container.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Cargando solicitudes...</div>';
+        container.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Cargando...</div>';
         
-        // Fetch solicitudes from the server
         fetch(`../../php/actions/obtenerSolicitudes.php?tipo=${type}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     renderSolicitudes(container, data.solicitudes, type);
-                    
-                    showAlert({
-                        type: 'success',
-                        title: 'Solicitudes cargadas',
-                        message: `Se encontraron ${data.solicitudes.length} solicitudes ${type}`,
-                        duration: 2000
-                    });
                 } else {
                     container.innerHTML = `<div class="empty-state">
                         <i class="fas fa-inbox"></i>
                         <p>${data.mensaje || 'No se pudieron cargar las solicitudes'}</p>
                     </div>`;
-                    
-                    showAlert({
-                        type: 'warning',
-                        title: 'Sin solicitudes',
-                        message: data.mensaje || 'No se encontraron solicitudes',
-                        duration: 3000
-                    });
                 }
             })
             .catch(error => {
-                console.error('Error fetching solicitudes:', error);
+                console.error('Error:', error);
                 container.innerHTML = `<div class="empty-state">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <p>Ocurrió un error al cargar las solicitudes</p>
+                    <p>Error al cargar las solicitudes</p>
                     <button class="btn btn-secondary" onclick="loadSolicitudes('${type}')">Reintentar</button>
                 </div>`;
-                
-                showAlert({
-                    type: 'error',
-                    title: 'Error de conexión',
-                    message: 'No se pudo conectar con el servidor. Verifica tu conexión a internet.'
-                });
             });
     }
     
-    // Function to render solicitudes
+    // Renderizar solicitudes
     function renderSolicitudes(container, solicitudes, type) {
         if (!solicitudes || solicitudes.length === 0) {
             const tipoTexto = type === 'enviadas' ? 'enviadas' : 'recibidas';
             container.innerHTML = `<div class="empty-state">
                 <i class="fas fa-inbox"></i>
                 <p>No tienes solicitudes ${tipoTexto} actualmente</p>
-                <p class="text-muted">${type === 'enviadas' ? 'Explora proveedores para enviar nuevas solicitudes' : 'Las solicitudes que recibas aparecerán aquí'}</p>
             </div>`;
             return;
         }
@@ -153,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="solicitud-footer">`;
             
-            // Add action buttons only for received requests that are pending
+            // Botones de acción solo para solicitudes recibidas pendientes
             if (!isEnviada && solicitud.estado === 'pendiente') {
                 html += `
                         <div class="solicitud-acciones">
@@ -170,15 +130,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>`;
             }
             
-            html += `
-                    </div>
-                </div>`;
+            html += `</div></div>`;
         });
         
         html += '</div>';
         container.innerHTML = html;
         
-        // Add event listeners for action buttons
+        // Event listeners para botones de acción
         const actionButtons = container.querySelectorAll('.btn-solicitud');
         actionButtons.forEach(btn => {
             btn.addEventListener('click', function() {
@@ -192,75 +150,43 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Function to update solicitud estado with enhanced alerts
+    // Actualizar estado de solicitud
     function updateSolicitudEstado(id, action, empresaNombre) {
         const actionText = action === 'aceptar' ? 'aceptar' : 'rechazar';
         const mensaje = `¿Estás seguro de que deseas ${actionText} la solicitud de "${empresaNombre}"?`;
         
-        confirmarAccionConAlerta({
-            type: 'warning',
-            title: `Confirmar ${actionText}`,
-            message: mensaje
-        }).then(confirmed => {
-            if (confirmed) {
-                const loadingId = showAlert({
-                    type: 'loading',
-                    title: `${actionText.charAt(0).toUpperCase() + actionText.slice(1)}ando solicitud...`,
-                    message: `Procesando la solicitud de "${empresaNombre}"`,
-                    persistent: true
-                });
-                
-                fetch('../../php/actions/actualizarSolicitud.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: `id=${id}&accion=${action}`
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    hideAlert(loadingId);
+        if (confirm(mensaje)) {
+            fetch('../../php/actions/actualizarSolicitud.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `id=${id}&accion=${action}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message || 'Solicitud procesada correctamente');
+                    const activeTab = document.querySelector('.solicitud-tab-btn.active').dataset.tab;
+                    loadSolicitudes(activeTab);
                     
-                    handleAjaxResponse(data, () => {
-                        // Success callback
-                        const activeTab = document.querySelector('.solicitud-tab-btn.active').dataset.tab;
-                        loadSolicitudes(activeTab);
-                        
-                        // Show additional info for accepted requests
-                        if (action === 'aceptar') {
-                            setTimeout(() => {
-                                showAlert({
-                                    type: 'info',
-                                    title: 'Relación establecida',
-                                    message: `"${empresaNombre}" ahora aparecerá en tu lista de clientes`,
-                                    duration: 5000
-                                });
-                            }, 1000);
-                        }
-                    });
-                })
-                .catch(error => {
-                    hideAlert(loadingId);
-                    console.error('Error updating solicitud:', error);
-                    showAlert({
-                        type: 'error',
-                        title: 'Error de conexión',
-                        message: 'No se pudo procesar la solicitud. Verifica tu conexión e inténtalo de nuevo.'
-                    });
-                });
-            }
-        });
+                    if (action === 'aceptar') {
+                        setTimeout(() => {
+                            alert(`"${empresaNombre}" ahora aparecerá en tu lista de clientes`);
+                        }, 1000);
+                    }
+                } else {
+                    alert('Error: ' + (data.mensaje || 'No se pudo procesar la solicitud'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error de conexión');
+            });
+        }
     }
     
-    // Make loadSolicitudes available globally for retry buttons
-    window.loadSolicitudes = loadSolicitudes;
-    
-    // Helper function: Get initials from name
+    // Funciones auxiliares
     function getInitials(name) {
         if (!name) return '??';
         return name.split(' ')
@@ -270,7 +196,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .toUpperCase();
     }
     
-    // Helper function: Format date
     function formatDate(dateString) {
         const date = new Date(dateString);
         const now = new Date();
@@ -290,18 +215,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Helper function: Capitalize first letter
     function capitalizeFirst(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
     
-    // Helper function: Truncate text
     function truncateText(text, maxLength) {
         if (text.length <= maxLength) return text;
         return text.substring(0, maxLength) + '...';
     }
     
-    // Helper function: Get status text for solicitudes
     function getSolicitudStatusText(estado, isEnviada) {
         if (estado === 'pendiente') {
             return isEnviada ? 'Esperando respuesta del proveedor' : 'Pendiente de respuesta';
@@ -313,11 +235,5 @@ document.addEventListener('DOMContentLoaded', function() {
         return '';
     }
     
-    // Helper function: Confirm action with alerts
-    function confirmarAccionConAlerta(config) {
-        return new Promise((resolve) => {
-            const confirmed = confirm(config.message || '¿Estás seguro de que deseas continuar?');
-            resolve(confirmed);
-        });
-    }
+    window.loadSolicitudes = loadSolicitudes;
 });

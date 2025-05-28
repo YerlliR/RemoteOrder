@@ -1,5 +1,5 @@
-// Sistema de Alertas Global para RemoteOrder
-// Archivo: public/js/alertSystem.js
+// ===== SISTEMA DE ALERTAS MEJORADO =====
+// public/js/alertSystem.js
 
 class AlertSystem {
     constructor() {
@@ -11,16 +11,13 @@ class AlertSystem {
     }
 
     init() {
-        // Crear contenedor de alertas si no existe
         this.createContainer();
-        
-        // Inyectar estilos CSS
         this.injectStyles();
         
-        // Hacer el sistema disponible globalmente
+        // Hacer disponible globalmente
         window.showAlert = this.show.bind(this);
         window.hideAlert = this.hide.bind(this);
-        window.clearAlerts = this.clearAll.bind(this);
+        window.handleAjaxResponse = this.handleAjaxResponse.bind(this);
     }
 
     createContainer() {
@@ -70,17 +67,6 @@ class AlertSystem {
                 backdrop-filter: blur(10px);
             }
 
-            .alert::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 2px;
-                background: linear-gradient(90deg, transparent, currentColor, transparent);
-                opacity: 0.3;
-            }
-
             .alert.show {
                 transform: translateX(0);
                 opacity: 1;
@@ -90,10 +76,8 @@ class AlertSystem {
                 transform: translateX(100%);
                 opacity: 0;
                 margin-top: -80px;
-                margin-bottom: 0;
             }
 
-            /* Tipos de alerta */
             .alert.success {
                 border-left-color: #10b981;
                 background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
@@ -124,7 +108,6 @@ class AlertSystem {
                 color: #581c87;
             }
 
-            /* Iconos */
             .alert-icon {
                 width: 24px;
                 height: 24px;
@@ -139,28 +122,15 @@ class AlertSystem {
                 margin-top: 2px;
             }
 
-            .alert.success .alert-icon {
-                background: #10b981;
-            }
-
-            .alert.error .alert-icon {
-                background: #ef4444;
-            }
-
-            .alert.warning .alert-icon {
-                background: #f59e0b;
-            }
-
-            .alert.info .alert-icon {
-                background: #3b82f6;
-            }
-
-            .alert.loading .alert-icon {
+            .alert.success .alert-icon { background: #10b981; }
+            .alert.error .alert-icon { background: #ef4444; }
+            .alert.warning .alert-icon { background: #f59e0b; }
+            .alert.info .alert-icon { background: #3b82f6; }
+            .alert.loading .alert-icon { 
                 background: #8b5cf6;
                 animation: spin 1s linear infinite;
             }
 
-            /* Contenido */
             .alert-content {
                 flex: 1;
                 display: flex;
@@ -182,7 +152,6 @@ class AlertSystem {
                 margin: 0;
             }
 
-            /* Botón de cerrar */
             .alert-close {
                 background: none;
                 border: none;
@@ -205,81 +174,17 @@ class AlertSystem {
                 background: rgba(0, 0, 0, 0.1);
             }
 
-            /* Barra de progreso */
-            .alert-progress {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                height: 2px;
-                background: currentColor;
-                opacity: 0.3;
-                transition: width linear;
-            }
-
-            /* Animaciones */
             @keyframes spin {
                 from { transform: rotate(0deg); }
                 to { transform: rotate(360deg); }
             }
 
-            @keyframes pulse {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.05); }
-            }
-
-            .alert.pulse {
-                animation: pulse 0.6s ease-in-out;
-            }
-
-            /* Responsive */
             @media (max-width: 768px) {
                 .alert-container {
                     top: 10px;
                     right: 10px;
                     left: 10px;
                     max-width: none;
-                }
-
-                .alert {
-                    padding: 14px 16px;
-                    gap: 10px;
-                }
-
-                .alert-title {
-                    font-size: 13px;
-                }
-
-                .alert-message {
-                    font-size: 12px;
-                }
-            }
-
-            /* Tema oscuro */
-            @media (prefers-color-scheme: dark) {
-                .alert {
-                    background: #1f2937;
-                    color: #f9fafb;
-                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-                }
-
-                .alert.success {
-                    background: linear-gradient(135deg, #064e3b 0%, #1f2937 100%);
-                }
-
-                .alert.error {
-                    background: linear-gradient(135deg, #7f1d1d 0%, #1f2937 100%);
-                }
-
-                .alert.warning {
-                    background: linear-gradient(135deg, #78350f 0%, #1f2937 100%);
-                }
-
-                .alert.info {
-                    background: linear-gradient(135deg, #1e3a8a 0%, #1f2937 100%);
-                }
-
-                .alert.loading {
-                    background: linear-gradient(135deg, #581c87 0%, #1f2937 100%);
                 }
             }
         `;
@@ -297,7 +202,6 @@ class AlertSystem {
             message: '',
             duration: this.defaultDuration,
             persistent: false,
-            action: null,
             ...options
         };
 
@@ -317,7 +221,6 @@ class AlertSystem {
 
         // Auto-hide si no es persistente
         if (!config.persistent && config.duration > 0) {
-            this.startProgress(alert, config.duration);
             alert.timeout = setTimeout(() => {
                 this.hide(alert.id);
             }, config.duration);
@@ -342,21 +245,11 @@ class AlertSystem {
                 <div class="alert-message">${this.escapeHtml(config.message)}</div>
             </div>
             <button class="alert-close" type="button" aria-label="Cerrar">×</button>
-            ${!config.persistent && config.duration > 0 ? '<div class="alert-progress"></div>' : ''}
         `;
 
         // Event listeners
         const closeBtn = element.querySelector('.alert-close');
         closeBtn.addEventListener('click', () => this.hide(id));
-
-        // Acción personalizada
-        if (config.action) {
-            element.style.cursor = 'pointer';
-            element.addEventListener('click', (e) => {
-                if (e.target === closeBtn) return;
-                config.action();
-            });
-        }
 
         return {
             id,
@@ -366,29 +259,16 @@ class AlertSystem {
         };
     }
 
-    startProgress(alert, duration) {
-        const progressBar = alert.element.querySelector('.alert-progress');
-        if (progressBar) {
-            progressBar.style.width = '100%';
-            setTimeout(() => {
-                progressBar.style.width = '0%';
-                progressBar.style.transition = `width ${duration}ms linear`;
-            }, 50);
-        }
-    }
-
     hide(alertId) {
         const alertIndex = this.alerts.findIndex(a => a.id === alertId);
         if (alertIndex === -1) return;
 
         const alert = this.alerts[alertIndex];
         
-        // Limpiar timeout si existe
         if (alert.timeout) {
             clearTimeout(alert.timeout);
         }
 
-        // Animación de salida
         alert.element.classList.add('hide');
         
         setTimeout(() => {
@@ -399,16 +279,39 @@ class AlertSystem {
         }, 400);
     }
 
-    clearAll() {
-        this.alerts.forEach(alert => {
-            if (alert.timeout) {
-                clearTimeout(alert.timeout);
+    handleAjaxResponse(response, successCallback = null, errorCallback = null) {
+        try {
+            const data = typeof response === 'string' ? JSON.parse(response) : response;
+            
+            if (data.success) {
+                this.show({
+                    type: data.alert_type || 'success',
+                    title: data.title || 'Éxito',
+                    message: data.message
+                });
+                
+                if (successCallback) {
+                    successCallback(data);
+                }
+            } else {
+                this.show({
+                    type: data.alert_type || 'error',
+                    title: data.title || 'Error',
+                    message: data.message
+                });
+                
+                if (errorCallback) {
+                    errorCallback(data);
+                }
             }
-            if (alert.element.parentNode) {
-                alert.element.parentNode.removeChild(alert.element);
-            }
-        });
-        this.alerts = [];
+        } catch (error) {
+            console.error('Error parsing response:', error);
+            this.show({
+                type: 'error',
+                title: 'Error',
+                message: 'Error al procesar la respuesta del servidor'
+            });
+        }
     }
 
     getIcon(type) {
@@ -457,20 +360,10 @@ class AlertSystem {
 }
 
 // Inicializar el sistema cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => {
-    window.alertSystem = new AlertSystem();
-});
-
-// También inicializar inmediatamente si el DOM ya está listo
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         window.alertSystem = new AlertSystem();
     });
 } else {
     window.alertSystem = new AlertSystem();
-}
-
-// Exportar para uso en módulos
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = AlertSystem;
 }

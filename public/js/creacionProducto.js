@@ -1,15 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Imagen Upload Functionality
     const imageUploadContainer = document.getElementById('imageUploadContainer');
     const inputImagen = document.getElementById('imagen');
     const previewImage = document.getElementById('previewImage');
 
-    // Cuando se hace clic en el contenedor de carga de imagen, activa el input de archivo
+    if (!imageUploadContainer || !inputImagen || !previewImage) return;
+
+    // Click en el contenedor para abrir selector de archivo
     imageUploadContainer.addEventListener('click', () => {
         inputImagen.click();
     });
 
-    // Cuando se selecciona un archivo, muestra la vista previa
+    // Vista previa al seleccionar archivo
     inputImagen.addEventListener('change', (event) => {
         const file = event.target.files[0];
         
@@ -19,8 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.onload = (e) => {
                 previewImage.src = e.target.result;
                 previewImage.style.display = 'block';
-                
-                // Cambia el estilo del contenedor para mostrar que tiene una imagen
                 imageUploadContainer.classList.add('has-image');
             };
             
@@ -28,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Opcional: Arrastrar y soltar archivos
+    // Drag and drop
     imageUploadContainer.addEventListener('dragover', (e) => {
         e.preventDefault();
         imageUploadContainer.classList.add('drag-over');

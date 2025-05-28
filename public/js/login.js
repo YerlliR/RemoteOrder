@@ -1,9 +1,7 @@
 function switchTab(tab) {
-    // Reset all tabs
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
 
-    // Activate selected tab
     if (tab === 'login') {
         document.querySelector('.tab:nth-child(2)').classList.add('active');
         document.getElementById('login-form').classList.add('active');
