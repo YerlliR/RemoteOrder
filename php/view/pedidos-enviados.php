@@ -82,12 +82,6 @@ $pedidosEnviados = findPedidosEnviados($idEmpresa);
                 <option value="completado">Completado</option>
                 <option value="cancelado">Cancelado</option>
             </select>
-            <select class="filter-select" id="filter-fecha">
-                <option value="">Todas las fechas</option>
-                <option value="hoy">Hoy</option>
-                <option value="semana">Esta semana</option>
-                <option value="mes">Este mes</option>
-            </select>
         </div>
 
         <!-- Lista de pedidos -->
@@ -143,9 +137,6 @@ $pedidosEnviados = findPedidosEnviados($idEmpresa);
                         </div>
                         
                         <div class="pedido-footer">
-                            <button class="btn-pedido btn-ver-detalle" onclick="verDetallePedido(<?php echo $pedido->getId(); ?>)">
-                                <i class="fas fa-eye"></i> Ver Detalle
-                            </button>
                             <?php if ($pedido->getEstado() == 'pendiente'): ?>
                             <button class="btn-pedido btn-cancelar" onclick="cambiarEstadoPedido(<?php echo $pedido->getId(); ?>, 'cancelado')">
                                 <i class="fas fa-times"></i> Cancelar

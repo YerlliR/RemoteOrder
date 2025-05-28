@@ -55,18 +55,6 @@ require_once "../model/Empresa.php";
                 <option value="agricola">Agrícola</option>
                 <option value="alimenticio">Alimenticio</option>
             </select>
-            <select class="filter-select" id="filter-rating">
-                <option value="">Todas las valoraciones</option>
-                <option value="5">5 estrellas</option>
-                <option value="4">4+ estrellas</option>
-                <option value="3">3+ estrellas</option>
-            </select>
-            <select class="filter-select" id="filter-sort">
-                <option value="recent">Recientes primero</option>
-                <option value="name-asc">Nombre (A-Z)</option>
-                <option value="name-desc">Nombre (Z-A)</option>
-                <option value="rating">Mejor valorados</option>
-            </select>
         </div>
 
         <!-- Vista de lista de proveedores -->
@@ -76,7 +64,6 @@ require_once "../model/Empresa.php";
                 <div class="header-cell">Sector</div>
                 <div class="header-cell">Contacto</div>
                 <div class="header-cell">Ubicación</div>
-                <div class="header-cell">Valoración</div>
                 <div class="header-cell">Acciones</div>
             </div>
 
@@ -128,25 +115,9 @@ require_once "../model/Empresa.php";
                         <div class="proveedor-cell proveedor-ubicacion">
                             <p>' . $proveedor['ciudad'] . ', ' . $proveedor['pais'] . '</p>
                         </div>
-                        <div class="proveedor-cell proveedor-rating">
-                            <div class="rating">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                                <span>4.5</span>
-                            </div>
-                        </div>
                         <div class="proveedor-cell proveedor-acciones">
-                            <button class="btn-action btn-view" title="Ver perfil" data-id="' . $proveedor['id'] . '">
-                                <i class="fas fa-eye"></i>
-                            </button>
                             <button class="btn-action btn-order" title="Realizar pedido" data-id="' . $proveedor['id'] . '">
                                 <i class="fas fa-shopping-cart"></i>
-                            </button>
-                            <button class="btn-action btn-chat" title="Enviar mensaje" data-id="' . $proveedor['id'] . '">
-                                <i class="fas fa-comment-alt"></i>
                             </button>
                             <button class="btn-action btn-remove" title="Eliminar proveedor" data-id="' . $proveedor['relacion_id'] . '">
                                 <i class="fas fa-trash"></i>
@@ -235,16 +206,6 @@ require_once "../model/Empresa.php";
             ?>
         </div>
 
-        <!-- Paginación (solo aparece si hay proveedores) -->
-        <?php if (!empty($proveedores)): ?>
-        <div class="pagination">
-            <button class="page-btn disabled"><i class="fas fa-chevron-left"></i></button>
-            <button class="page-btn active">1</button>
-            <button class="page-btn">2</button>
-            <button class="page-btn">3</button>
-            <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
-        </div>
-        <?php endif; ?>
     </div>
 
     <!-- Modal para ver detalle del proveedor -->

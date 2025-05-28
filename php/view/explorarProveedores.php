@@ -26,21 +26,10 @@ include_once "../model/Empresa.php";
     <?php include_once 'elements/menuLateral.php'; ?>
     
     <div class="marketplace-container">
-        <!-- Hero section -->
-        <div class="marketplace-hero">
-            <div class="hero-content">
-                <h1>Descubre proveedores de confianza</h1>
-                <p>Conecta con los mejores proveedores para impulsar tu negocio</p>
-                <div class="search-box">
-                    <input type="text" id="hero-search" placeholder="Busca proveedores por nombre, sector o producto...">
-                    <button class="search-button">Buscar</button>
-                </div>
-            </div>
-        </div>
 
         <!-- Categorías principales -->
         <div class="categories-section">
-            <h2>Explora por categoría</h2>
+            <h2 style="margin-top: 5rem;">Explora por categoría</h2>
             <div class="categories-grid">
                 <div class="category-card" data-category="tecnologia">
                     <div class="category-icon">
@@ -173,77 +162,6 @@ include_once "../model/Empresa.php";
                         </label>
                     </div>
                 </div>
-                
-                <div class="filter-group">
-                    <h4>Valoración</h4>
-                    <div class="filter-options">
-                        <label class="filter-option">
-                            <input type="radio" name="rating" value="5"> 
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </label>
-                        <label class="filter-option">
-                            <input type="radio" name="rating" value="4"> 
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="far fa-star"></i>
-                                <span>y superior</span>
-                            </div>
-                        </label>
-                        <label class="filter-option">
-                            <input type="radio" name="rating" value="3"> 
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="far fa-star"></i>
-                                <i class="far fa-star"></i>
-                                <span>y superior</span>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="filter-group">
-                    <h4>Años de experiencia</h4>
-                    <div class="filter-options">
-                        <label class="filter-option">
-                            <input type="checkbox" name="experience" value="1-3"> 1-3 años
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" name="experience" value="4-7"> 4-7 años
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" name="experience" value="8+"> 8+ años
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="filter-group">
-                    <h4>Servicios adicionales</h4>
-                    <div class="filter-options">
-                        <label class="filter-option">
-                            <input type="checkbox" name="services" value="delivery"> Entrega en 24h
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" name="services" value="installation"> Instalación
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" name="services" value="support"> Soporte técnico
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" name="services" value="warranty"> Garantía extendida
-                        </label>
-                    </div>
-                </div>
             </div>
             
             <!-- Proveedores -->
@@ -251,19 +169,7 @@ include_once "../model/Empresa.php";
                 <div class="providers-header">
                     <div class="results-info">
                         <h2>Proveedores <span id="category-title"></span></h2>
-                        <p>Mostrando <span id="results-count">25</span> resultados</p>
-                    </div>
-                    <div class="providers-actions">
-                        <div class="view-toggle">
-                            <button class="toggle-btn active" data-view="grid"><i class="fas fa-th-large"></i></button>
-                            <button class="toggle-btn" data-view="list"><i class="fas fa-list"></i></button>
-                        </div>
-                        <select class="sort-select" id="sort-providers">
-                            <option value="relevance">Relevancia</option>
-                            <option value="rating-desc">Mejor valorados</option>
-                            <option value="name-asc">Nombre (A-Z)</option>
-                            <option value="name-desc">Nombre (Z-A)</option>
-                        </select>
+                        <p>Mostrando todos los resultados</p>
                     </div>
                 </div>
                 
@@ -277,22 +183,8 @@ include_once "../model/Empresa.php";
                             if($empresa->getId() != $_SESSION['empresa']['id']){
                                 echo '
                                     <div class="provider-card" data-id="'.$empresa->getId().'">
-                                        <div class="provider-favorite">
-                                            <button class="btn-favorite "><i class="far fa-heart"></i></button>
-                                        </div>
                                         <div class="provider-header">
                                             <div class="provider-logo"><img src="../../'.$empresa->getRutaLogo().'" alt="Logo de la empresa '.$empresa->getNombre().'" class="provider-logo"></div>
-                                            <div style="margin-right: 2.3rem;" class="provider-rating">
-                                                <div class="stars">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star-half-alt"></i>
-                                                </div>
-                                                <span>4.5</span>
-
-                                            </div>
                                         </div>
                                         <div class="provider-body">
                                             <h3>'.$empresa->getNombre().'</h3>
@@ -319,15 +211,7 @@ include_once "../model/Empresa.php";
                 </div>
                 
                 <!-- Paginación -->
-                <div class="pagination">
-                    <button class="page-btn disabled"><i class="fas fa-chevron-left"></i></button>
-                    <button class="page-btn active">1</button>
-                    <button class="page-btn">2</button>
-                    <button class="page-btn">3</button>
-                    <button class="page-btn">4</button>
-                    <button class="page-btn">5</button>
-                    <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
-                </div>
+
             </div>
         </div>
     </div>
