@@ -1,6 +1,3 @@
-
-/* Estilos específicos para formulario de creación/edición de producto */
-
 .form-container {
     width: 100%;
     max-width: 800px;
@@ -36,7 +33,6 @@
     border-radius: 50px;
 }
 
-/* Estilos para el área de carga de imagen */
 .image-upload {
     position: relative;
     min-height: 150px;
@@ -83,30 +79,26 @@
     color: var(--text-light);
 }
 
-/* Cuando hay una imagen seleccionada */
 .image-upload.has-image .image-upload-icon,
 .image-upload.has-image .image-upload-text,
 .image-upload.has-image .image-upload-hint {
     display: none;
 }
 
-/* Estilo para cuando se arrastra un archivo sobre el área */
 .image-upload.drag-over {
     background-color: #e0f2fe;
     border-color: var(--primary-color);
 }
 
-/* Mejora para la imagen de preview */
 .preview-image {
     margin-top: 10px;
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-md);
     max-height: 200px;
     object-fit: contain;
-    display: none; /* Se mostrará cuando se seleccione una imagen */
+    display: none;
 }
 
-/* Acciones del formulario */
 .form-actions {
     display: flex;
     gap: 15px;
@@ -115,15 +107,4 @@
 
 .form-actions .btn {
     flex: 1;
-}
-
-@media (max-width: 768px) {
-    .form-container {
-        padding: 25px 15px;
-        margin: 15px auto;
-    }
-    
-    .form-actions {
-        flex-direction: column;
-    }
 }

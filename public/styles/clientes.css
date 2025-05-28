@@ -1,4 +1,3 @@
-
 /* Estilos específicos para el explorador de empresas/clientes */
 
 .empresas-container {
@@ -58,10 +57,6 @@
     margin-right: 8px;
 }
 
-.btn-view-favorites i.fa-star {
-    color: #FFC107;
-}
-
 .btn-view-favorites:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
@@ -119,7 +114,7 @@
 .empresas-table th {
     background-color: var(--bg-color);
     font-weight: 600;
-    color: var(--dark-gray);
+    color: var(--text-color);
     position: relative;
 }
 
@@ -173,7 +168,7 @@
 
 .empresa-description {
     font-size: 13px;
-    color: var(--dark-gray);
+    color: var(--text-light);
 }
 
 .empresa-contact {
@@ -189,7 +184,7 @@
 
 .empresa-contact div:last-child {
     font-size: 13px;
-    color: var(--dark-gray);
+    color: var(--text-light);
 }
 
 /* Etiquetas de categoría */
@@ -210,11 +205,6 @@
 .tag-servicios {
     background-color: #fef3c7;
     color: #d97706;
-}
-
-.tag-logistica {
-    background-color: #e0e7ff;
-    color: #4f46e5;
 }
 
 .tag-industria {
@@ -243,52 +233,6 @@
     margin-left: 5px;
     font-weight: 600;
     color: var(--text-color);
-}
-
-/* Acciones de tabla */
-.actions-container {
-    display: flex;
-    gap: 8px;
-}
-
-.btn-action {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: none;
-    background-color: transparent;
-}
-
-.btn-view {
-    background-color: #f1f5f9;
-    color: #64748b;
-}
-
-.btn-view:hover {
-    background-color: #e2e8f0;
-}
-
-.btn-contact {
-    background-color: #e0f2fe;
-    color: #0284c7;
-}
-
-.btn-contact:hover {
-    background-color: #bae6fd;
-}
-
-.btn-favorite {
-    background-color: #fef3c7;
-    color: #d97706;
-}
-
-.btn-favorite:hover {
-    background-color: #fde68a;
 }
 
 /* Vista de tarjetas (móvil) */
@@ -331,7 +275,7 @@
 .info-label {
     width: 100px;
     font-weight: 600;
-    color: var(--dark-gray);
+    color: var(--text-light);
 }
 
 .info-value {
@@ -348,194 +292,48 @@
     background-color: var(--bg-color);
 }
 
-/* Paginación */
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-    gap: 8px;
-}
-
-.page-item {
-    width: 40px;
-    height: 40px;
+/* Botones de acción */
+.btn-action {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: var(--border-radius-md);
-    background-color: white;
-    color: var(--text-color);
-    font-weight: 500;
-    box-shadow: var(--shadow-sm);
     cursor: pointer;
     transition: all 0.2s ease;
+    border: none;
+    background-color: transparent;
 }
 
-.page-item:hover {
-    background-color: var(--bg-color);
+.btn-view {
+    background-color: #f1f5f9;
+    color: #64748b;
 }
 
-.page-item.active {
-    background: var(--primary-gradient);
-    color: white;
-    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.25);
+.btn-view:hover {
+    background-color: #e2e8f0;
 }
 
-.page-item.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.btn-contact {
+    background-color: #e0f2fe;
+    color: #0284c7;
 }
 
-/* Perfil detallado en modal */
-.perfil-header {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 25px;
+.btn-contact:hover {
+    background-color: #bae6fd;
 }
 
-.perfil-avatar {
-    width: 80px;
-    height: 80px;
-    font-size: 28px;
+.btn-favorite {
+    background-color: #fef3c7;
+    color: #d97706;
 }
 
-.perfil-info h3 {
-    font-size: 24px;
-    color: var(--text-color);
-    margin-bottom: 8px;
-}
-
-.perfil-rating {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    color: var(--dark-gray);
-}
-
-.perfil-metadata {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-
-.metadata-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    color: var(--dark-gray);
-    font-size: 14px;
-}
-
-.perfil-section {
-    margin-bottom: 25px;
-}
-
-.perfil-section h4 {
-    font-size: 18px;
-    color: var(--primary-color);
-    margin-bottom: 12px;
-    font-weight: 600;
-}
-
-.perfil-section p {
-    color: var(--text-color);
-    line-height: 1.6;
-}
-
-.servicios-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.service-tag {
-    padding: 6px 14px;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 500;
-}
-
-.contacto-info {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.contacto-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.contacto-item i {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--bg-color);
-    color: var(--primary-color);
-    border-radius: 8px;
-}
-
-/* Valoraciones en el perfil */
-.valoraciones {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-top: 10px;
-}
-
-.valoracion-item {
-    background-color: var(--bg-color);
-    padding: 16px;
-    border-radius: var(--border-radius-md);
-}
-
-.valoracion-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
-}
-
-.valoracion-autor {
-    font-weight: 600;
-    color: var(--text-color);
-}
-
-.valoracion-fecha {
-    font-size: 12px;
-    color: var(--dark-gray);
-    margin-bottom: 8px;
-}
-
-.valoracion-texto {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text-color);
-}
-
-/* Animaciones */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.btn-favorite:hover {
+    background-color: #fde68a;
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
-    .empresa-contact div:last-child {
-        display: none;
-    }
-}
-
 @media (max-width: 768px) {
     .empresas-header {
         flex-direction: column;
@@ -572,16 +370,6 @@
         flex-direction: column;
         gap: 0;
     }
-    
-    .perfil-header {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-    
-    .perfil-metadata {
-        justify-content: center;
-    }
 }
 
 @media (max-width: 576px) {
@@ -596,15 +384,5 @@
     .modal-content {
         width: 95%;
         padding: 15px;
-    }
-    
-    .perfil-avatar {
-        width: 60px;
-        height: 60px;
-        font-size: 22px;
-    }
-    
-    .perfil-info h3 {
-        font-size: 20px;
     }
 }

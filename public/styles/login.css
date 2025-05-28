@@ -1,20 +1,18 @@
-
-/* Estilos específicos para login y registro */
 body {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    background-color: #f5f9ff; /* O el color de fondo que prefieras */
+    background-color: #f5f9ff;
     position: relative;
     overflow-x: hidden;
 }
 
-/* Opcional: ajusta la posición de las formas flotantes para que se vean bien con el centrado */
 .floating-shape {
-    position: fixed; /* Cambiado de absolute a fixed para mantener posición relativa a la ventana */
+    position: fixed;
 }
+
 .container {
     width: 100%;
     max-width: 460px;
@@ -79,7 +77,6 @@ body {
     border-radius: 50px;
 }
 
-/* Tabs para cambiar entre login y registro */
 .tabs {
     display: flex;
     margin-bottom: 35px;
@@ -127,68 +124,8 @@ body {
     display: block;
 }
 
-.forgot-password {
-    display: block;
-    text-align: right;
-    font-size: 14px;
-    color: var(--text-light);
-    text-decoration: none;
-    margin-top: -12px;
-    margin-bottom: 28px;
-    transition: color 0.3s ease;
-}
-
-.forgot-password:hover {
-    color: var(--primary-color);
-}
-
 .btn {
     width: 100%;
     padding: 16px;
     margin-top: 10px;
-}
-
-.divider {
-    display: flex;
-    align-items: center;
-    margin: 30px 0;
-}
-
-.divider-line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, rgba(203, 213, 225, 0), rgba(203, 213, 225, 1), rgba(203, 213, 225, 0));
-}
-
-.divider-text {
-    padding: 0 16px;
-    font-size: 14px;
-    color: var(--text-light);
-}
-
-.switch-form {
-    text-align: center;
-    font-size: 14px;
-    color: var(--text-light);
-    margin-top: 30px;
-}
-
-.switch-link {
-    color: var(--primary-color);
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.switch-link:hover {
-    text-decoration: underline;
-    color: var(--primary-dark);
-}
-
-@media (max-width: 480px) {
-    .container {
-        padding: 30px 20px;
-        max-width: 90%;
-    }
 }

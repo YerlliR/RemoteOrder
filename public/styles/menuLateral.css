@@ -120,7 +120,7 @@
 }
 
 .submenu-item::before {
-    content: '•';
+    content: '>';
     position: absolute;
     left: 36px;
     color: rgba(255, 255, 255, 0.5);

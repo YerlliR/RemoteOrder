@@ -34,7 +34,6 @@
                     <div class="form-group">
                         <label for="codigo_seguimiento">Código de Seguimiento *</label>
                         <input type="number" id="codigo_seguimiento" name="codigo_seguimiento" class="form-control" placeholder="Ej: 1234567890" required>
-                        <span class="form-hint">Código único para seguimiento del producto</span>
                     </div>
                     
                     <div class="form-group">
@@ -67,13 +66,11 @@
                     <div class="form-group">
                         <label for="precio">Precio (€)</label>
                         <input type="number" id="precio" name="precio" class="form-control" placeholder="0.00" step="0.01" min="0" required>
-                        <i class="fas fa-euro-sign input-icon"></i>
                     </div>
                     
                     <div class="form-group">
                         <label for="iva">IVA (%)</label>
                         <input type="number" id="iva" name="iva" class="form-control" placeholder="21" step="0.01" min="0" max="100">
-                        <i class="fas fa-percent input-icon"></i>
                     </div>
                 </div>
                 
