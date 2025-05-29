@@ -217,40 +217,267 @@ include_once "../model/Empresa.php";
     </div>
     
     <!-- Modal de Contacto -->
-    <div class="modal" id="modal-contact">
-        <div class="modal-content">
-            <button class="modal-close"><i class="fas fa-times"></i></button>
-            
-            <div class="modal-header">
-                <h2>Contactar con <span id="contact-provider-name">Proveedor</span></h2>
-            </div>
-            
-            <div class="modal-body">
-                <div class="contact-form">
-                    <div class="form-group">
-                        <label for="modal-contact-name">Nombre</label>
-                        <input type="text" id="modal-contact-name" placeholder="Tu nombre completo">
+    <!-- ===== MODAL DE CONTACTO CORREGIDO ===== -->
+<!-- Agregar este HTML al final de explorarProveedores.php, antes del cierre de </body> -->
+
+<div class="modal" id="modal-contact">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Contactar con <span id="contact-provider-name">Proveedor</span></h2>
+            <button class="modal-close" type="button" aria-label="Cerrar modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="modal-body">
+            <div class="contact-form">
+                <div class="form-group">
+                    <label for="modal-contact-subject">
+                        Asunto <span style="color: #dc2626;">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="modal-contact-subject" 
+                        class="form-control"
+                        placeholder="Ej: Solicitud de presupuesto, Consulta sobre servicios..."
+                        maxlength="100"
+                        required
+                    >
+                    <small class="form-hint">Mínimo 5 caracteres, máximo 100</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="modal-contact-message">
+                        Mensaje <span style="color: #dc2626;">*</span>
+                    </label>
+                    <textarea 
+                        id="modal-contact-message" 
+                        class="form-control textarea-control"
+                        rows="6" 
+                        placeholder="Describe tu consulta o solicitud de forma detallada...&#10;&#10;Por favor, incluye:&#10;- Qué productos o servicios te interesan&#10;- Plazos estimados&#10;- Cualquier información relevante"
+                        maxlength="1000"
+                        required
+                    ></textarea>
+                    <small class="form-hint">
+                        Mínimo 20 caracteres, máximo 1000 
+                        (<span id="message-counter">0</span>/1000)
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <div class="contact-info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="info-content">
+                            <h4>¿Qué sucede después?</h4>
+                            <ul>
+                                <li>Tu solicitud se enviará directamente al proveedor</li>
+                                <li>Recibirás una notificación cuando respondan</li>
+                                <li>Si aceptan, se establecerá una relación comercial</li>
+                                <li>Podrás realizar pedidos directamente</li>
+                            </ul>
+                        </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="modal-contact-subject">Asunto</label>
-                        <input type="text" id="modal-contact-subject" placeholder="Asunto del mensaje">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="modal-contact-message">Mensaje</label>
-                        <textarea id="modal-contact-message" rows="5" placeholder="Escribe tu mensaje..."></textarea>
-                    </div>
-                    
                 </div>
             </div>
-            
-            <div class="modal-footer">
-                <button class="btn-secondary" id="btn-cancel-contact">Cancelar</button>
-                <button class="btn-primary" id="btn-send-modal-message">Enviar mensaje</button>
-            </div>
+        </div>
+        
+        <div class="modal-footer">
+            <button 
+                type="button" 
+                class="btn btn-secondary" 
+                id="btn-cancel-contact"
+            >
+                <i class="fas fa-times"></i>
+                Cancelar
+            </button>
+            <button 
+                type="button" 
+                class="btn btn-primary" 
+                id="btn-send-modal-message"
+            >
+                <i class="fas fa-paper-plane"></i>
+                Enviar Solicitud
+            </button>
         </div>
     </div>
+</div>
+
+<!-- Estilos adicionales para el modal mejorado -->
+<style>
+.contact-form .form-group {
+    margin-bottom: 20px;
+}
+
+.contact-form label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+    color: var(--text-color);
+}
+
+.contact-form .form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.contact-form .form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.contact-form .form-control.error {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.contact-form .textarea-control {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.5;
+}
+
+.form-hint {
+    display: block;
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 4px;
+}
+
+.error-message {
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.error-message::before {
+    content: "⚠";
+}
+
+.contact-info-card {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border: 1px solid #bae6fd;
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 10px;
+    display: flex;
+    gap: 12px;
+}
+
+.info-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.info-content h4 {
+    margin: 0 0 8px 0;
+    color: var(--primary-color);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.info-content ul {
+    margin: 0;
+    padding-left: 16px;
+    font-size: 13px;
+    color: var(--text-color);
+    line-height: 1.4;
+}
+
+.info-content li {
+    margin-bottom: 4px;
+}
+
+#message-counter {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Estados del botón */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.btn:disabled:hover {
+    transform: none !important;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .contact-info-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+    }
+}
+</style>
+
+<!-- Script adicional para funcionalidades del modal -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Contador de caracteres para el mensaje
+    const messageTextarea = document.getElementById('modal-contact-message');
+    const messageCounter = document.getElementById('message-counter');
+    
+    if (messageTextarea && messageCounter) {
+        messageTextarea.addEventListener('input', function() {
+            const length = this.value.length;
+            messageCounter.textContent = length;
+            
+            // Cambiar color según la proximidad al límite
+            if (length > 900) {
+                messageCounter.style.color = '#dc2626';
+            } else if (length > 800) {
+                messageCounter.style.color = '#d97706';
+            } else {
+                messageCounter.style.color = 'var(--primary-color)';
+            }
+        });
+    }
+    
+    // Limpiar estilos de error al escribir
+    const formInputs = document.querySelectorAll('#modal-contact input, #modal-contact textarea');
+    formInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            this.style.borderColor = '';
+            
+            // Remover mensajes de error
+            const errorMsg = this.parentNode.querySelector('.error-message');
+            if (errorMsg) {
+                errorMsg.remove();
+            }
+        });
+    });
+});
+</script>
 
     <script src="../../public/js/menuLateral.js"></script>
     <script src="../../public/js/exploradorProveedores.js"></script>
