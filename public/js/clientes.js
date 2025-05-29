@@ -1,61 +1,4 @@
-// public/js/clientes.js - VERSIÓN MEJORADA
-
-// Función para terminar relación con cliente (desde la perspectiva del proveedor)
-function terminarRelacionCliente(relacionId, empresaNombre) {
-    if (confirm(`¿Estás seguro de que deseas terminar la relación comercial con "${empresaNombre}"? Esta acción no se puede deshacer.`)) {
-        
-        // Mostrar indicador de carga
-        const btn = document.querySelector(`[data-relacion-id="${relacionId}"]`);
-        if (btn) {
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Eliminando...';
-        }
-        
-        // Preparar datos
-        const formData = new FormData();
-        formData.append('relacionId', relacionId);
-        
-        // Enviar solicitud
-        fetch('../../php/actions/terminarRelacion.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Eliminar elementos del DOM
-                const elementos = document.querySelectorAll(`[data-relacion-id="${relacionId}"]`);
-                elementos.forEach(elemento => {
-                    const fila = elemento.closest('tr, .empresa-card');
-                    if (fila) {
-                        fila.style.opacity = '0';
-                        fila.style.transform = 'translateX(-20px)';
-                        setTimeout(() => fila.remove(), 300);
-                    }
-                });
-                
-                // Mostrar mensaje de éxito
-                alert('Relación comercial terminada correctamente');
-            } else {
-                // Restaurar botón en caso de error
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-trash"></i>';
-                }
-                alert('Error: ' + (data.message || 'No se pudo terminar la relación'));
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            // Restaurar botón
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-trash"></i>';
-            }
-            alert('Error de conexión. Inténtalo de nuevo.');
-        });
-    }
-}
+// public/js/clientes.js - VERSIÓN ACTUALIZADA CON ELIMINACIÓN DE CLIENTES
 
 document.addEventListener('DOMContentLoaded', function() {
     // Función para inicializar después de que el sistema de alertas esté disponible
@@ -69,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const viewButtons = document.querySelectorAll('.btn-view');
         const favoriteButtons = document.querySelectorAll('.btn-favorite');
         const contactButtons = document.querySelectorAll('.btn-contact');
-        const removeButtons = document.querySelectorAll('.btn-remove'); // Para clientes que se puedan eliminar
+        const removeButtons = document.querySelectorAll('.btn-remove');
         
         // ===== BÚSQUEDA DE EMPRESAS =====
         if (searchInput) {
@@ -78,19 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 filtrarEmpresas(searchTerm);
             });
         }
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('.btn-terminar-relacion')) {
-                e.preventDefault();
-                const btn = e.target.closest('.btn-terminar-relacion');
-                const relacionId = btn.getAttribute('data-relacion-id');
-                const empresaNombre = btn.getAttribute('data-empresa-nombre');
-                
-                if (relacionId && empresaNombre) {
-                    terminarRelacionCliente(relacionId, empresaNombre);
-                }
-            }
-        });
-            
+        
         function filtrarEmpresas(searchTerm) {
             // Filtrar en la tabla
             const tableRows = document.querySelectorAll('.empresas-table tbody tr');
@@ -318,24 +249,31 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
         
-        // ===== ELIMINAR RELACIÓN (SI EXISTE) =====
+        // ===== ELIMINAR RELACIÓN CON CLIENTE =====
         removeButtons.forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 
-                const relacionId = this.getAttribute('data-id');
+                const relacionId = this.getAttribute('data-relacion-id');
+                const empresaName = this.getAttribute('data-empresa-nombre');
                 const empresaRow = this.closest('tr');
                 const empresaCard = this.closest('.empresa-card');
-                const empresaName = empresaRow ? 
-                    empresaRow.querySelector('.empresa-name')?.textContent :
-                    empresaCard?.querySelector('.empresa-name')?.textContent;
                 
-                // Mostrar confirmación
+                if (!relacionId || !empresaName) {
+                    showAlert({
+                        type: 'error',
+                        title: 'Error',
+                        message: 'No se pudo obtener la información necesaria para eliminar la relación'
+                    });
+                    return;
+                }
+                
+                // Mostrar confirmación personalizada
                 mostrarConfirmacionEliminar(
-                    `¿Estás seguro de que deseas eliminar la relación con "${empresaName}"?`,
-                    'Esta acción terminará la relación comercial y ya no aparecerá en tu lista.',
-                    () => eliminarRelacion(relacionId, empresaRow || empresaCard, empresaName)
+                    `¿Estás seguro de que deseas terminar la relación comercial con "${empresaName}"?`,
+                    'Esta acción eliminará la relación y ya no aparecerá en tu lista de clientes. Esta acción no se puede deshacer.',
+                    () => eliminarRelacionCliente(relacionId, empresaRow || empresaCard, empresaName)
                 );
             });
         });
@@ -357,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="modal-footer">
                             <button class="btn btn-secondary" id="btn-cancelar-eliminar-cliente">Cancelar</button>
                             <button class="btn" id="btn-confirmar-eliminar-cliente" style="background: #dc2626; color: white;">
-                                <i class="fas fa-trash"></i> Eliminar
+                                <i class="fas fa-trash"></i> Terminar Relación
                             </button>
                         </div>
                     </div>
@@ -392,11 +330,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
-        function eliminarRelacion(relacionId, element, empresaName) {
+        function eliminarRelacionCliente(relacionId, element, empresaName) {
             const loadingId = showAlert({
                 type: 'loading',
-                title: 'Eliminando relación...',
-                message: `Terminando relación con ${empresaName}`,
+                title: 'Terminando relación...',
+                message: `Eliminando relación comercial con ${empresaName}`,
                 persistent: true
             });
             
@@ -414,11 +352,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success) {
                     showAlert({
                         type: 'success',
-                        title: 'Relación eliminada',
-                        message: data.message || `La relación con ${empresaName} ha sido terminada`,
+                        title: 'Relación terminada',
+                        message: data.message || `La relación comercial con ${empresaName} ha sido terminada correctamente`,
                         duration: 5000
                     });
                     
+                    // Eliminar el elemento del DOM con animación
                     if (element) {
                         element.style.transition = 'all 0.5s ease';
                         element.style.opacity = '0';
@@ -432,8 +371,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     showAlert({
                         type: 'error',
-                        title: 'Error al eliminar',
-                        message: data.message || 'No se pudo eliminar la relación. Inténtalo de nuevo.'
+                        title: 'Error al terminar relación',
+                        message: data.message || 'No se pudo terminar la relación comercial. Inténtalo de nuevo.'
                     });
                 }
             })
@@ -443,7 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 showAlert({
                     type: 'error',
                     title: 'Error de conexión',
-                    message: 'No se pudo conectar con el servidor. Verifica tu conexión.'
+                    message: 'No se pudo conectar con el servidor. Verifica tu conexión e inténtalo de nuevo.'
                 });
             });
         }
@@ -452,7 +391,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const filasVisibles = document.querySelectorAll('.empresas-table tbody tr:not([style*="display: none"])');
             const tarjetasVisibles = document.querySelectorAll('.empresa-card:not([style*="display: none"])');
             
-            if (filasVisibles.length === 0 && tarjetasVisibles.length === 0) {
+            // Verificar si solo queda la fila de "no hay datos" o no hay filas
+            const filasConDatos = Array.from(filasVisibles).filter(fila => 
+                !fila.textContent.includes('No hay clientes vinculados')
+            );
+            
+            if (filasConDatos.length === 0 && tarjetasVisibles.length === 0) {
                 const contenedorTabla = document.querySelector('.empresas-table tbody');
                 const contenedorTarjetas = document.querySelector('.empresas-cards');
                 
@@ -460,10 +404,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="empty-state" style="padding: 40px; text-align: center; width: 100%;">
                         <i class="fas fa-users" style="font-size: 48px; margin-bottom: 20px; color: #cbd5e1;"></i>
                         <p>No hay clientes vinculados actualmente.</p>
-                        <p>Explora nuevas empresas para establecer relaciones comerciales.</p>
-                        <a href="explorarProveedores.php" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">
-                            <i class="fas fa-search"></i> Explorar Empresas
-                        </a>
+                        <p>Las empresas que te contraten como proveedor aparecerán aquí.</p>
                     </div>
                 `;
                 
@@ -492,6 +433,11 @@ document.addEventListener('DOMContentLoaded', function() {
             // Aplicar a tabla
             const tableRows = document.querySelectorAll('.empresas-table tbody tr');
             tableRows.forEach(row => {
+                // Evitar filtrar la fila de "no hay datos"
+                if (row.textContent.includes('No hay clientes vinculados')) {
+                    return;
+                }
+                
                 const empresaName = row.querySelector('.empresa-name')?.textContent.toLowerCase() || '';
                 const empresaSector = row.querySelector('.tag')?.textContent.toLowerCase() || '';
                 

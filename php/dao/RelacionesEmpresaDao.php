@@ -5,7 +5,6 @@ if (!defined('RUTA_DB')) {
 }
 include_once RUTA_DB;
 
-
 function crearRelacionEmpresa($idCliente, $idProveedor, $solicitudId) {
     try {
         $db = new conexionDb();
@@ -51,7 +50,8 @@ function obtenerClientesDeProveedor($idProveedor) {
                 FROM empresas e 
                 INNER JOIN relaciones_empresa r ON e.id = r.id_empresa_cliente 
                 WHERE r.id_empresa_proveedor = :id_proveedor 
-                AND r.estado = 'activa'";
+                AND r.estado = 'activa'
+                ORDER BY r.fecha_inicio DESC";
         
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':id_proveedor', $idProveedor);
@@ -69,7 +69,6 @@ function obtenerClientesDeProveedor($idProveedor) {
     return $clientes;
 }
 
-
 function obtenerProveedoresDeCliente($idCliente) {
     $proveedores = [];
     try {
@@ -79,8 +78,9 @@ function obtenerProveedoresDeCliente($idCliente) {
         $sql = "SELECT e.*, r.fecha_inicio, r.id as relacion_id 
                 FROM empresas e 
                 INNER JOIN relaciones_empresa r ON e.id = r.id_empresa_proveedor 
-                WHERE r.id_empresa_proveedor = :id_cliente 
-                AND r.estado = 'activa'";
+                WHERE r.id_empresa_cliente = :id_cliente 
+                AND r.estado = 'activa'
+                ORDER BY r.fecha_inicio DESC";
         
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':id_cliente', $idCliente);
@@ -104,25 +104,19 @@ function terminarRelacionEmpresa($relacionId) {
         $conn = $db->getConnection();
         
         // Primero verificar que la relación existe
-        $stmt = $conn->prepare("SELECT id FROM relaciones_empresa WHERE id = :id");
+        $stmt = $conn->prepare("SELECT id FROM relaciones_empresa WHERE id = :id AND estado = 'activa'");
         $stmt->bindParam(':id', $relacionId);
         $stmt->execute();
         
         if (!$stmt->fetch()) {
             $db->closeConnection();
-            return false; // La relación no existe
+            return false; // La relación no existe o ya está terminada
         }
         
-        // Actualizar el estado a 'terminada' o eliminar completamente
-        // Opción 1: Marcar como terminada (recomendado para mantener historial)
-        $stmt = $conn->prepare("UPDATE relaciones_empresa SET estado = 'terminada' WHERE id = :id");
+        // Actualizar el estado a 'terminada'
+        $stmt = $conn->prepare("UPDATE relaciones_empresa SET estado = 'terminada', fecha_fin = NOW() WHERE id = :id");
         $stmt->bindParam(':id', $relacionId);
         $resultado = $stmt->execute();
-        
-        // Opción 2: Eliminar completamente (descomentar si prefieres eliminar)
-        // $stmt = $conn->prepare("DELETE FROM relaciones_empresa WHERE id = :id");
-        // $stmt->bindParam(':id', $relacionId);
-        // $resultado = $stmt->execute();
         
         $db->closeConnection();
         return $resultado;
@@ -132,9 +126,7 @@ function terminarRelacionEmpresa($relacionId) {
     }
 }
 
-// Si decides eliminar completamente, también deberías actualizar las consultas
-// para obtener proveedores para que solo muestren relaciones activas:
-
+// Función corregida para obtener proveedores de un cliente
 function obtenerProveedoresDeProveedor($idCliente) {
     $proveedores = [];
     try {
@@ -145,7 +137,8 @@ function obtenerProveedoresDeProveedor($idCliente) {
                 FROM empresas e 
                 INNER JOIN relaciones_empresa r ON e.id = r.id_empresa_proveedor 
                 WHERE r.id_empresa_cliente = :id_cliente 
-                AND r.estado = 'activa'"; // Solo relaciones activas
+                AND r.estado = 'activa'
+                ORDER BY r.fecha_inicio DESC"; 
         
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':id_cliente', $idCliente);
@@ -162,5 +155,91 @@ function obtenerProveedoresDeProveedor($idCliente) {
     
     return $proveedores;
 }
-?>
+
+// Función para verificar si existe una relación activa entre dos empresas
+function existeRelacionActiva($idEmpresa1, $idEmpresa2) {
+    try {
+        $db = new conexionDb();
+        $conn = $db->getConnection();
+        
+        $sql = "SELECT COUNT(*) as total FROM relaciones_empresa 
+                WHERE ((id_empresa_cliente = :id1 AND id_empresa_proveedor = :id2) 
+                    OR (id_empresa_cliente = :id2 AND id_empresa_proveedor = :id1))
+                AND estado = 'activa'";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id1', $idEmpresa1);
+        $stmt->bindParam(':id2', $idEmpresa2);
+        $stmt->execute();
+        
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        $db->closeConnection();
+        
+        return $resultado['total'] > 0;
+    } catch (Exception $e) {
+        error_log("Error al verificar relación: " . $e->getMessage());
+        return false;
+    }
+}
+
+// Función para obtener detalles de una relación específica
+function obtenerDetalleRelacion($relacionId) {
+    try {
+        $db = new conexionDb();
+        $conn = $db->getConnection();
+        
+        $sql = "SELECT r.*, 
+                       ec.nombre as nombre_cliente, ec.email as email_cliente,
+                       ep.nombre as nombre_proveedor, ep.email as email_proveedor
+                FROM relaciones_empresa r
+                INNER JOIN empresas ec ON r.id_empresa_cliente = ec.id
+                INNER JOIN empresas ep ON r.id_empresa_proveedor = ep.id
+                WHERE r.id = :relacion_id";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':relacion_id', $relacionId);
+        $stmt->execute();
+        
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        $db->closeConnection();
+        
+        return $resultado;
+    } catch (Exception $e) {
+        error_log("Error al obtener detalle de relación: " . $e->getMessage());
+        return false;
+    }
+}
+
+// Función para obtener estadísticas de relaciones de una empresa
+function obtenerEstadisticasRelaciones($idEmpresa) {
+    try {
+        $db = new conexionDb();
+        $conn = $db->getConnection();
+        
+        $sql = "SELECT 
+                    COUNT(CASE WHEN id_empresa_cliente = :id_empresa THEN 1 END) as total_proveedores,
+                    COUNT(CASE WHEN id_empresa_proveedor = :id_empresa THEN 1 END) as total_clientes,
+                    COUNT(*) as total_relaciones
+                FROM relaciones_empresa 
+                WHERE (id_empresa_cliente = :id_empresa OR id_empresa_proveedor = :id_empresa)
+                AND estado = 'activa'";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id_empresa', $idEmpresa);
+        $stmt->execute();
+        
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        $db->closeConnection();
+        
+        return $resultado;
+    } catch (Exception $e) {
+        error_log("Error al obtener estadísticas de relaciones: " . $e->getMessage());
+        return [
+            'total_proveedores' => 0,
+            'total_clientes' => 0,
+            'total_relaciones' => 0
+        ];
+    }
+}
+
 ?>

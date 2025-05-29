@@ -153,6 +153,13 @@
     justify-content: center;
     font-weight: 600;
     font-size: 14px;
+    overflow: hidden;
+}
+
+.empresa-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .empresa-details {
@@ -187,6 +194,13 @@
     color: var(--text-light);
 }
 
+/* Contenedor de acciones */
+.acciones-container {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
 /* Etiquetas de categoría */
 .tag {
     display: inline-block;
@@ -215,6 +229,71 @@
 .tag-comercio {
     background-color: #fce7f3;
     color: #db2777;
+}
+
+.tag-agricola {
+    background-color: #f0fdf4;
+    color: #16a34a;
+}
+
+.tag-alimenticio {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.tag-educacion {
+    background-color: #e3f2fd;
+    color: #1e88e5;
+}
+
+.tag-energia {
+    background-color: #fffde7;
+    color: #fbc02d;
+}
+
+.tag-finanzas {
+    background-color: #e3f2fd;
+    color: #0288d1;
+}
+
+.tag-industrial {
+    background-color: #f3e5f5;
+    color: #8e24aa;
+}
+
+.tag-inmobiliario {
+    background-color: #f1f8e9;
+    color: #33691e;
+}
+
+.tag-manufactura {
+    background-color: #f0f4c3;
+    color: #827717;
+}
+
+.tag-marketing {
+    background-color: #f9fbe7;
+    color: #afb42b;
+}
+
+.tag-salud {
+    background-color: #e0f7fa;
+    color: #00695c;
+}
+
+.tag-transporte {
+    background-color: #fff3e0;
+    color: #ef6c00;
+}
+
+.tag-turismo {
+    background-color: #ffebee;
+    color: #d32f2f;
+}
+
+.tag-otros {
+    background-color: #ede7f6;
+    color: #5e35b1;
 }
 
 /* Estrellas de valoración */
@@ -333,6 +412,39 @@
     background-color: #fde68a;
 }
 
+.btn-remove {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.btn-remove:hover {
+    background-color: #fecaca;
+    color: #b91c1c;
+}
+
+/* Estado vacío */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-light);
+}
+
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.text-center {
+    text-align: center;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .empresas-header {
@@ -369,6 +481,36 @@
     .form-row {
         flex-direction: column;
         gap: 0;
+    }
+    
+    .acciones-container {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .btn-action {
+        width: 100%;
+        height: 36px;
+        border-radius: var(--border-radius-sm);
+        justify-content: flex-start;
+        padding-left: 12px;
+        font-size: 13px;
+    }
+    
+    .btn-action i {
+        margin-right: 8px;
+    }
+    
+    .btn-view::after {
+        content: 'Ver perfil';
+    }
+    
+    .btn-contact::after {
+        content: 'Contactar';
+    }
+    
+    .btn-remove::after {
+        content: 'Terminar relación';
     }
 }
 
