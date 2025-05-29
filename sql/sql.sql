@@ -1,6 +1,4 @@
 
-
-
 CREATE TABLE `categorias` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `nombre_categoria` varchar(100) NOT NULL,
@@ -9,7 +7,7 @@ CREATE TABLE `categorias` (
   `id_empresa` int(11) NOT NULL,
   `fecha_creacion` date DEFAULT curdate(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `empresas` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -28,6 +26,42 @@ CREATE TABLE `empresas` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `pedidos` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id_empresa_cliente` int(11) NOT NULL,
+  `id_empresa_proveedor` int(11) NOT NULL,
+  `numero_pedido` varchar(50) NOT NULL,
+  `fecha_pedido` datetime NOT NULL DEFAULT current_timestamp(),
+  `fecha_entrega_estimada` date DEFAULT NULL,
+  `estado` varchar(50) NOT NULL DEFAULT 'pendiente',
+  `subtotal` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `total_iva` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `total` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `notas` text DEFAULT NULL,
+  `direccion_entrega` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `numero_pedido` (`numero_pedido`),
+  KEY `idx_empresa_cliente` (`id_empresa_cliente`),
+  KEY `idx_empresa_proveedor` (`id_empresa_proveedor`),
+  KEY `idx_estado` (`estado`),
+  KEY `idx_fecha_pedido` (`fecha_pedido`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `pedidos_lineas` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id_pedido` bigint(20) unsigned NOT NULL,
+  `id_producto` bigint(20) unsigned NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `precio_unitario` decimal(10,2) NOT NULL,
+  `iva` decimal(5,2) NOT NULL DEFAULT 0.00,
+  `subtotal` decimal(10,2) NOT NULL,
+  `total` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_pedido` (`id_pedido`),
+  KEY `idx_producto` (`id_producto`),
+  CONSTRAINT `pedidos_lineas_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE `productos` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `codigo_seguimiento` bigint(20) NOT NULL,
@@ -42,7 +76,7 @@ CREATE TABLE `productos` (
   `activo` tinyint(1) DEFAULT 1,
   `eliminado` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `relaciones_empresa` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -64,7 +98,7 @@ CREATE TABLE `solicitudes` (
   `id_empresa_solicitante` int(11) DEFAULT NULL,
   `id_empresa_proveedor` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `usuarios` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -75,4 +109,3 @@ CREATE TABLE `usuarios` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `correo` (`correo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-

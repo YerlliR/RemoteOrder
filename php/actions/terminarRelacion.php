@@ -1,11 +1,12 @@
 <?php
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-    require_once '../constantes/constantesRutas.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+require_once '../constantes/constantesRutas.php';
 require_once RUTA_DB;
 require_once '../dao/RelacionesEmpresaDao.php';
-require_once '../includes/alert_helper.php'; // ← NUEVA LÍNEA
+require_once '../includes/alert_helper.php';
 
 // Verificar que el usuario está autenticado
 if (!isset($_SESSION['usuario']) || !isset($_SESSION['empresa']['id'])) {
@@ -21,19 +22,54 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Obtener el ID de la relación
-$relacionId = isset($_POST['relacionId']) ? (int)$_POST['relacionId'] : 0;
+// Obtener el ID de la relación desde POST o JSON
+$relacionId = null;
+
+// Primero intentar obtener desde form-data
+if (isset($_POST['relacionId'])) {
+    $relacionId = (int)$_POST['relacionId'];
+} else {
+    // Si no está en POST, intentar desde JSON
+    $input = file_get_contents('php://input');
+    if ($input) {
+        $data = json_decode($input, true);
+        if (isset($data['relacionId'])) {
+            $relacionId = (int)$data['relacionId'];
+        }
+    }
+}
 
 // Validar input
-if (!$relacionId) {
+if (!$relacionId || $relacionId <= 0) {
     header('Content-Type: application/json');
     echo AlertHelper::jsonResponse(false, 'ID de relación no válido o faltante', [], 'Datos Inválidos');
     exit;
 }
 
 try {
+    // Obtener ID de la empresa actual
+    $idEmpresa = $_SESSION['empresa']['id'];
+    if (is_array($idEmpresa)) {
+        $idEmpresa = $idEmpresa[0];
+    }
+    
     // Verificar que la relación existe y pertenece a la empresa actual
-    // (Aquí podrías añadir una validación adicional para verificar permisos)
+    $db = new conexionDb();
+    $conn = $db->getConnection();
+    
+    $stmt = $conn->prepare("SELECT * FROM relaciones_empresa WHERE id = :id AND (id_empresa_cliente = :empresa OR id_empresa_proveedor = :empresa)");
+    $stmt->bindParam(':id', $relacionId);
+    $stmt->bindParam(':empresa', $idEmpresa);
+    $stmt->execute();
+    
+    $relacion = $stmt->fetch(PDO::FETCH_ASSOC);
+    $db->closeConnection();
+    
+    if (!$relacion) {
+        header('Content-Type: application/json');
+        echo AlertHelper::jsonResponse(false, 'No tienes permisos para eliminar esta relación o la relación no existe', [], 'Sin Permisos');
+        exit;
+    }
     
     // Terminar la relación
     $resultado = terminarRelacionEmpresa($relacionId);

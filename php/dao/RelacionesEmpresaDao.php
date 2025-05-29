@@ -98,18 +98,54 @@ function obtenerProveedoresDeCliente($idCliente) {
     return $proveedores;
 }
 
+function terminarRelacionEmpresa($relacionId) {
+    try {
+        $db = new conexionDb();
+        $conn = $db->getConnection();
+        
+        // Primero verificar que la relación existe
+        $stmt = $conn->prepare("SELECT id FROM relaciones_empresa WHERE id = :id");
+        $stmt->bindParam(':id', $relacionId);
+        $stmt->execute();
+        
+        if (!$stmt->fetch()) {
+            $db->closeConnection();
+            return false; // La relación no existe
+        }
+        
+        // Actualizar el estado a 'terminada' o eliminar completamente
+        // Opción 1: Marcar como terminada (recomendado para mantener historial)
+        $stmt = $conn->prepare("UPDATE relaciones_empresa SET estado = 'terminada' WHERE id = :id");
+        $stmt->bindParam(':id', $relacionId);
+        $resultado = $stmt->execute();
+        
+        // Opción 2: Eliminar completamente (descomentar si prefieres eliminar)
+        // $stmt = $conn->prepare("DELETE FROM relaciones_empresa WHERE id = :id");
+        // $stmt->bindParam(':id', $relacionId);
+        // $resultado = $stmt->execute();
+        
+        $db->closeConnection();
+        return $resultado;
+    } catch (Exception $e) {
+        error_log("Error al terminar relación: " . $e->getMessage());
+        return false;
+    }
+}
+
+// Si decides eliminar completamente, también deberías actualizar las consultas
+// para obtener proveedores para que solo muestren relaciones activas:
+
 function obtenerProveedoresDeProveedor($idCliente) {
     $proveedores = [];
     try {
         $db = new conexionDb();
         $conn = $db->getConnection();
         
-        // Consulta SQL corregida - ahora filtra correctamente por id_empresa_cliente
         $sql = "SELECT e.*, r.fecha_inicio, r.id as relacion_id 
                 FROM empresas e 
                 INNER JOIN relaciones_empresa r ON e.id = r.id_empresa_proveedor 
                 WHERE r.id_empresa_cliente = :id_cliente 
-                AND r.estado = 'activa'";
+                AND r.estado = 'activa'"; // Solo relaciones activas
         
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':id_cliente', $idCliente);
@@ -126,22 +162,5 @@ function obtenerProveedoresDeProveedor($idCliente) {
     
     return $proveedores;
 }
-
-
-function terminarRelacionEmpresa($relacionId) {
-    try {
-        $db = new conexionDb();
-        $conn = $db->getConnection();
-        
-        $stmt = $conn->prepare("UPDATE relaciones_empresa SET estado = 'terminada' WHERE id = :id");
-        $stmt->bindParam(':id', $relacionId);
-        $resultado = $stmt->execute();
-        
-        $db->closeConnection();
-        return $resultado;
-    } catch (Exception $e) {
-        error_log("Error al terminar relación: " . $e->getMessage());
-        return false;
-    }
-}
+?>
 ?>

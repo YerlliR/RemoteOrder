@@ -46,7 +46,6 @@
             </select>
         </div>
 
-        <!-- Vista de tabla para escritorio -->
         <div class="empresas-table-container">
             <table class="empresas-table">
                 <thead>
@@ -111,6 +110,7 @@
                                 </div>
                             </td>
                             <td><span class="tag tag-<?php echo strtolower($proveedor['sector']); ?>"><?php echo $proveedor['sector']; ?></span></td>
+
                         </tr>
                         <?php endforeach;
                     endif; ?>
