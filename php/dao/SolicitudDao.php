@@ -1,6 +1,12 @@
 <?php
 // ===== ARCHIVO: php/dao/SolicitudDao.php (FUNCIÓN CORREGIDA) =====
 
+if (!defined('RUTA_DB')) {
+    include_once '../constantes/constantesRutas.php';
+}
+include_once RUTA_DB;
+include_once '../model/Solicitud.php';
+
 // Función corregida para guardar solicitud
 function guardarSolicitud($solicitud) {
     try {
@@ -62,6 +68,60 @@ function guardarSolicitud($solicitud) {
         if (isset($db)) {
             $db->closeConnection();
         }
+        return false;
+    }
+}
+
+// Función para encontrar solicitud por ID
+function findSolicitudById($id) {
+    try {
+        $db = new conexionDb();
+        $conn = $db->getConnection();
+        
+        $stmt = $conn->prepare("SELECT * FROM solicitudes WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $db->closeConnection();
+        
+        if ($row) {
+            return new Solicitud(
+                $row['id'],
+                $row['id_empresa_solicitante'],
+                $row['id_empresa_proveedor'],
+                $row['asunto'],
+                $row['mensaje'],
+                $row['estado'],
+                $row['fecha_creacion']
+            );
+        }
+        
+        return null;
+        
+    } catch (Exception $e) {
+        error_log("Error al buscar solicitud por ID: " . $e->getMessage());
+        return null;
+    }
+}
+
+// Función para actualizar estado de solicitud
+function actualizarEstadoSolicitud($id, $nuevoEstado) {
+    try {
+        $db = new conexionDb();
+        $conn = $db->getConnection();
+        
+        $stmt = $conn->prepare("UPDATE solicitudes SET estado = :estado, fecha_respuesta = NOW() WHERE id = :id");
+        $resultado = $stmt->execute([
+            ':estado' => $nuevoEstado,
+            ':id' => $id
+        ]);
+        
+        $db->closeConnection();
+        return $resultado;
+        
+    } catch (Exception $e) {
+        error_log("Error al actualizar estado de solicitud: " . $e->getMessage());
         return false;
     }
 }
